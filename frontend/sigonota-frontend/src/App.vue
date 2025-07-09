@@ -145,5 +145,4 @@ export default {
 </script>
 
 <style>
-/* Custom styles if needed */
 </style>

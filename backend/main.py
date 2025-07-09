@@ -1,22 +1,47 @@
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, File, UploadFile, Form
 from fastapi.middleware.cors import CORSMiddleware
+from typing import List
+import os
+from utils.xml_parser import parse_nfe
+from utils.excel_handler import salvar_em_excel
+import shutil
 
 app = FastAPI()
 
-# Libera CORS para o frontend
+# CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
+    allow_origins=["*"],  # depois troca pro frontend em produção
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-@app.get("/")
-def ping():
-    return {"message": "Sigonota backend rodando"}
+PLANILHA_DIR = "planilhas"
+os.makedirs(PLANILHA_DIR, exist_ok=True)
 
-@app.post("/processar/")
-async def processar_nfes(xmls: list[UploadFile] = File(...), planilha: UploadFile = File(...)):
-    # Aqui vai a lógica que você já tem no parse_nfe e salvar_em_excel
-    return {"sucesso": True, "mensagem": "Arquivos processados com sucesso"}
+@app.post("/processar")
+async def processar(
+    xmls: List[UploadFile] = File(...),
+    planilha: str = Form(...)
+):
+    todos_itens = []
+
+    for xml in xmls:
+        contents = await xml.read()
+        temp_path = f"temp_{xml.filename}"
+        with open(temp_path, "wb") as f:
+            f.write(contents)
+        itens = parse_nfe(temp_path)
+        todos_itens.extend(itens)
+        os.remove(temp_path)
+
+    caminho_planilha = os.path.join(PLANILHA_DIR, f"{planilha}.xlsx")
+    qtd = salvar_em_excel(todos_itens, caminho_planilha)
+
+    return {"qtd": qtd}
+
+@app.get("/planilhas")
+def listar_planilhas():
+    arquivos = os.listdir(PLANILHA_DIR)
+    nomes = [arq.replace(".xlsx", "") for arq in arquivos if arq.endswith(".xlsx")]
+    return nomes
