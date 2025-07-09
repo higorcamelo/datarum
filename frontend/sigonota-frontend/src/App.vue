@@ -76,7 +76,8 @@
         </section>
 
         <!-- Mensagem -->
-        <section v-if="mensagem" class="p-4 rounded-lg text-center font-semibold shadow-sm mb-4" :class="mensagem.includes('✅') ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'">
+        <section v-if="mensagem" class="p-4 rounded-lg text-left font-semibold shadow-sm whitespace-pre-line mb-4"
+         :class="mensagem.includes('✅') ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'">
           {{ mensagem }}
         </section>
 
@@ -134,7 +135,12 @@ export default {
 
         if (!response.ok) throw new Error('Falha ao enviar arquivos');
         const resultado = await response.json();
-        this.mensagem = `✅ ${resultado.qtd} itens processados com sucesso!`;
+        this.mensagem = [
+          `✅ ${resultado.itens_processados} itens processados com sucesso!`,
+          `📄 Planilha: ${resultado.planilha_destino}`,
+          `📦 Notas incluídas: ${resultado.notas_encontradas.join(', ')}`,
+          `🏢 Emitentes: ${resultado.emitentes.join(', ')}`
+        ].join('\n');
 
       } catch (err) {
         this.mensagem = `❌ Erro: ${err.message}`;

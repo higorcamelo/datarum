@@ -38,7 +38,16 @@ async def processar(
     caminho_planilha = os.path.join(PLANILHA_DIR, f"{planilha}.xlsx")
     qtd = salvar_em_excel(todos_itens, caminho_planilha)
 
-    return {"qtd": qtd}
+    # Resumo para feedback
+    numeros_nfe = list({item["numero_nf"] for item in todos_itens if "numero_nf" in item})
+    emitentes = list({item["emitente"] for item in todos_itens if "emitente" in item})
+
+    return {
+        "itens_processados": qtd,
+        "notas_encontradas": numeros_nfe,
+        "emitentes": emitentes,
+        "planilha_destino": f"{planilha}.xlsx"
+    }
 
 @app.get("/planilhas")
 def listar_planilhas():
