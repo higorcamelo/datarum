@@ -1,4 +1,5 @@
 from fastapi import FastAPI, File, UploadFile, Form
+from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List
 import os
@@ -54,3 +55,10 @@ def listar_planilhas():
     arquivos = os.listdir(PLANILHA_DIR)
     nomes = [arq.replace(".xlsx", "") for arq in arquivos if arq.endswith(".xlsx")]
     return nomes
+
+@app.get("/download/{nome}")
+def baixar_planilha(nome: str):
+    caminho = os.path.join(PLANILHA_DIR, f"{nome}.xlsx")
+    if os.path.exists(caminho):
+        return FileResponse(path=caminho, filename=f"{nome}.xlsx", media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    return {"erro": "Arquivo não encontrado."}

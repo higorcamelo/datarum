@@ -114,7 +114,11 @@ export default {
       this.selectedFiles = Array.from(event.target.files);
     },
     criarNovaPlanilha() {
-      const nome = prompt('Nome da nova planilha:');
+      const now = new Date();
+      const nomeGerado = `sigonota_${now.getFullYear()}${(now.getMonth()+1).toString().padStart(2, '0')}${now.getDate().toString().padStart(2, '0')}_${now.getHours()}h${now.getMinutes()}`
+
+      const nome = prompt("Nome da nova planilha:", nomeGerado);
+
       if (nome && !this.planilhas.includes(nome)) {
         this.planilhas.push(nome);
         this.planilhaSelecionada = nome;
@@ -134,6 +138,7 @@ export default {
         });
 
         if (!response.ok) throw new Error('Falha ao enviar arquivos');
+        
         const resultado = await response.json();
         this.mensagem = [
           `✅ ${resultado.itens_processados} itens processados com sucesso!`,
@@ -142,11 +147,16 @@ export default {
           `🏢 Emitentes: ${resultado.emitentes.join(', ')}`
         ].join('\n');
 
+        // Espera 1 segundo para o backend terminar de salvar a planilha e abre o download
+        setTimeout(() => {
+          window.open(`http://localhost:8000/download/${resultado.planilha_destino.replace('.xlsx', '')}`, '_blank');
+        }, 1000);
+
       } catch (err) {
         this.mensagem = `❌ Erro: ${err.message}`;
       }
     }
-  }
+  },
 }
 </script>
 
