@@ -48,26 +48,39 @@
           </ul>
         </section>
 
-        <!-- Seleção/criação de planilha -->
+        <!-- Criar nova planilha -->
         <section class="mb-8">
-          <label for="planilha" class="block text-sm font-semibold text-blue-700 mb-2">Escolha uma planilha</label>
-          <div class="flex gap-2">
-            <select id="planilha" v-model="planilhaSelecionada" class="flex-1 rounded-lg border-blue-200 focus:border-blue-500 focus:ring-blue-500 text-sm shadow-sm">
-              <option disabled value="">Selecione...</option>
-              <option v-for="planilha in planilhas" :key="planilha" :value="planilha">{{ planilha }}</option>
-            </select>
-            <button @click="criarNovaPlanilha" class="bg-green-100 text-green-700 px-3 py-1 rounded-lg font-semibold hover:bg-green-200 transition-colors flex items-center gap-1">
-              <svg xmlns='http://www.w3.org/2000/svg' class='h-4 w-4' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M12 4v16m8-8H4'/></svg>
-              Nova
+          <label for="nomePlanilha" class="block text-sm font-semibold text-blue-700 mb-2">
+            Nome da nova planilha
+          </label>
+          <div class="relative rounded-lg shadow-sm">
+            <input 
+              type="text" 
+              id="nomePlanilha"
+              v-model="nomePlanilha"
+              placeholder="ex: Notas Recebidas"
+              class="block w-full rounded-lg border border-blue-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-sm p-3 pr-36 transition"
+              aria-describedby="sugestaoPlanilha"
+            />
+            <button 
+              v-if="!nomePlanilha"
+              @click="usarSugestao"
+              type="button"
+              class="absolute right-2 top-1/2 -translate-y-1/2 bg-blue-50 text-blue-600 px-3 py-1 text-xs rounded-md hover:bg-blue-100 transition"
+            >
+              Usar sugestão
             </button>
           </div>
+          <p id="sugestaoPlanilha" class="text-xs text-gray-500 mt-1">
+            Dica: dê um nome claro. Ou clique em <strong>"Usar sugestão"</strong> para gerar um nome automático.
+          </p>
         </section>
 
         <!-- Botão de envio -->
         <section class="mb-8">
           <button 
             @click="enviarArquivos" 
-            :disabled="!selectedFiles.length || !planilhaSelecionada"
+            :disabled="!selectedFiles.length || !nomePlanilha.trim()"
             class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all font-bold shadow-md flex items-center justify-center gap-2 text-lg"
           >
             <svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 13l4 4L19 7'/></svg>
@@ -105,41 +118,60 @@ export default {
     return {
       selectedFiles: [],
       mensagem: '',
-      planilhas: ['Planilha 2025', 'Notas Recebidas', 'Financeiro'],
-      planilhaSelecionada: ''
+      nomePlanilha: ''
     };
   },
   methods: {
     handleFileChange(event) {
       this.selectedFiles = Array.from(event.target.files);
     },
-    criarNovaPlanilha() {
-      const now = new Date();
-      const nomeGerado = `sigonota_${now.getFullYear()}${(now.getMonth()+1).toString().padStart(2, '0')}${now.getDate().toString().padStart(2, '0')}_${now.getHours()}h${now.getMinutes()}`
-
-      const nome = prompt("Nome da nova planilha:", nomeGerado);
-
-      if (nome && !this.planilhas.includes(nome)) {
-        this.planilhas.push(nome);
-        this.planilhaSelecionada = nome;
-      }
+    usarSugestao() {
+      const agora = new Date();
+      const pad = (n) => n.toString().padStart(2, '0');
+      const sugestao = `sigonota_${agora.getFullYear()}-${pad(agora.getMonth()+1)}-${pad(agora.getDate())}_${pad(agora.getHours())}${pad(agora.getMinutes())}`;
+      this.nomePlanilha = sugestao;
     },
     async enviarArquivos() {
-      if (!this.selectedFiles.length || !this.planilhaSelecionada) return;
+      if (!this.selectedFiles.length || !this.nomePlanilha.trim()) return;
 
       const formData = new FormData();
       this.selectedFiles.forEach(file => formData.append('xmls', file));
-      formData.append('planilha', this.planilhaSelecionada);
+      formData.append('planilha', this.nomePlanilha.trim());
 
       try {
-        const response = await fetch('http://localhost:8000/processar', {
+        // 📊 Primeiro: obter informações sobre o processamento
+        const formDataInfo = new FormData();
+        this.selectedFiles.forEach(file => formDataInfo.append('xmls', file));
+        formDataInfo.append('planilha', this.nomePlanilha.trim());
+
+        const infoResponse = await fetch('http://localhost:8000/processar-info', {
+          method: 'POST',
+          body: formDataInfo
+        });
+
+        if (!infoResponse.ok) throw new Error('Falha ao processar os arquivos');
+        const resultado = await infoResponse.json();
+
+        // � Segundo: fazer download do arquivo
+        const downloadResponse = await fetch('http://localhost:8000/processar', {
           method: 'POST',
           body: formData
         });
 
-        if (!response.ok) throw new Error('Falha ao enviar arquivos');
-        
-        const resultado = await response.json();
+        if (!downloadResponse.ok) throw new Error('Falha ao gerar arquivo');
+
+        // �🔽 Força o download
+        const blob = await downloadResponse.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${this.nomePlanilha.trim()}.xlsx`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+
+        // ✅ Feedback rico como antes
         this.mensagem = [
           `✅ ${resultado.itens_processados} itens processados com sucesso!`,
           `📄 Planilha: ${resultado.planilha_destino}`,
@@ -147,17 +179,12 @@ export default {
           `🏢 Emitentes: ${resultado.emitentes.join(', ')}`
         ].join('\n');
 
-        // Espera 1 segundo para o backend terminar de salvar a planilha e abre o download
-        setTimeout(() => {
-          window.open(`http://localhost:8000/download/${resultado.planilha_destino.replace('.xlsx', '')}`, '_blank');
-        }, 1000);
-
       } catch (err) {
         this.mensagem = `❌ Erro: ${err.message}`;
       }
     }
-  },
-}
+  }
+};
 </script>
 
 <style>

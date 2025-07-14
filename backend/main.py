@@ -37,14 +37,37 @@ async def processar(
         os.remove(temp_path)
 
     caminho_planilha = os.path.join(PLANILHA_DIR, f"{planilha}.xlsx")
-    qtd = salvar_em_excel(todos_itens, caminho_planilha)
+    salvar_em_excel(todos_itens, caminho_planilha)
+
+    return FileResponse(
+        path=caminho_planilha,
+        filename=f"{planilha}.xlsx",
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+
+@app.post("/processar-info")
+async def processar_info(
+    xmls: List[UploadFile] = File(...),
+    planilha: str = Form(...)
+):
+    """Retorna apenas informações sobre o processamento, sem arquivo"""
+    todos_itens = []
+
+    for xml in xmls:
+        contents = await xml.read()
+        temp_path = f"temp_{xml.filename}"
+        with open(temp_path, "wb") as f:
+            f.write(contents)
+        itens = parse_nfe(temp_path)
+        todos_itens.extend(itens)
+        os.remove(temp_path)
 
     # Resumo para feedback
     numeros_nfe = list({item["numero_nf"] for item in todos_itens if "numero_nf" in item})
     emitentes = list({item["emitente"] for item in todos_itens if "emitente" in item})
 
     return {
-        "itens_processados": qtd,
+        "itens_processados": len(todos_itens),
         "notas_encontradas": numeros_nfe,
         "emitentes": emitentes,
         "planilha_destino": f"{planilha}.xlsx"
