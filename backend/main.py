@@ -20,9 +20,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-PLANILHA_DIR = "planilhas"
-os.makedirs(PLANILHA_DIR, exist_ok=True)
-
 @app.post("/processar")
 async def processar(
     xmls: List[UploadFile] = File(...),
@@ -39,7 +36,7 @@ async def processar(
     
     todos_itens = []
 
-    # Usar diretório temporário seguro
+    # Usar diretório temporário seguro para XMLs
     with tempfile.TemporaryDirectory() as temp_dir:
         for xml in xmls:
             # Validar tipo de arquivo
@@ -61,14 +58,38 @@ async def processar(
             except Exception as e:
                 raise HTTPException(status_code=400, detail=f"Erro ao processar {xml.filename}: {str(e)}")
 
-    caminho_planilha = os.path.join(PLANILHA_DIR, f"{planilha}.xlsx")
-    salvar_em_excel(todos_itens, caminho_planilha)
+    # Criar arquivo temporário para Excel que não será deletado automaticamente
+    temp_excel_fd, temp_excel_path = tempfile.mkstemp(suffix='.xlsx', prefix=f'{planilha}_')
+    os.close(temp_excel_fd)  # Fechar o file descriptor
+    
+    try:
+        salvar_em_excel(todos_itens, temp_excel_path)
 
-    return FileResponse(
-        path=caminho_planilha,
-        filename=f"{planilha}.xlsx",
-        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    )
+        # Criar uma response que deleta o arquivo após o envio
+        class FileResponseWithCleanup(FileResponse):
+            def __init__(self, *args, **kwargs):
+                self.temp_path = kwargs.pop('temp_path', None)
+                super().__init__(*args, **kwargs)
+            
+            async def __call__(self, scope, receive, send):
+                try:
+                    await super().__call__(scope, receive, send)
+                finally:
+                    # Deletar arquivo temporário após envio
+                    if self.temp_path and os.path.exists(self.temp_path):
+                        os.unlink(self.temp_path)
+
+        return FileResponseWithCleanup(
+            path=temp_excel_path,
+            filename=f"{planilha}.xlsx",
+            media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            temp_path=temp_excel_path
+        )
+    except Exception as e:
+        # Se der erro, limpar o arquivo temporário
+        if os.path.exists(temp_excel_path):
+            os.unlink(temp_excel_path)
+        raise e
 
 @app.post("/processar-info")
 async def processar_info(
@@ -78,14 +99,15 @@ async def processar_info(
     """Retorna apenas informações sobre o processamento, sem arquivo"""
     todos_itens = []
 
-    for xml in xmls:
-        contents = await xml.read()
-        temp_path = f"temp_{xml.filename}"
-        with open(temp_path, "wb") as f:
-            f.write(contents)
-        itens = parse_nfe(temp_path)
-        todos_itens.extend(itens)
-        os.remove(temp_path)
+    # Usar diretório temporário seguro
+    with tempfile.TemporaryDirectory() as temp_dir:
+        for xml in xmls:
+            contents = await xml.read()
+            temp_file = Path(temp_dir) / f"{uuid.uuid4()}.xml"
+            temp_file.write_bytes(contents)
+            
+            itens = parse_nfe(temp_file)
+            todos_itens.extend(itens)
 
     # Resumo para feedback
     numeros_nfe = list({item["numero_nf"] for item in todos_itens if "numero_nf" in item})
@@ -97,16 +119,3 @@ async def processar_info(
         "emitentes": emitentes,
         "planilha_destino": f"{planilha}.xlsx"
     }
-
-@app.get("/planilhas")
-def listar_planilhas():
-    arquivos = os.listdir(PLANILHA_DIR)
-    nomes = [arq.replace(".xlsx", "") for arq in arquivos if arq.endswith(".xlsx")]
-    return nomes
-
-@app.get("/download/{nome}")
-def baixar_planilha(nome: str):
-    caminho = os.path.join(PLANILHA_DIR, f"{nome}.xlsx")
-    if os.path.exists(caminho):
-        return FileResponse(path=caminho, filename=f"{nome}.xlsx", media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    return {"erro": "Arquivo não encontrado."}

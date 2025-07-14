@@ -3,8 +3,7 @@ from pathlib import Path
 
 def salvar_em_excel(dados: list[dict], caminho_planilha: str):
     """
-    Salva os dados extraídos no final da planilha existente.
-    Se a planilha não existir, cria com os dados.
+    Salva os dados extraídos em uma nova planilha Excel.
     Agora com ordenação e tratamento de tipos.
     """
     if not dados:
@@ -80,18 +79,7 @@ def salvar_em_excel(dados: list[dict], caminho_planilha: str):
 
     # Somente manter colunas que existem
     colunas_finais = [col for col in ordem if col in df_novos.columns]
-    df_novos = df_novos[colunas_finais]
-
-    # Concatenar com planilha existente
-    if caminho.exists():
-        try:
-            df_existente = pd.read_excel(caminho)
-            df_final = pd.concat([df_existente, df_novos], ignore_index=True)
-        except Exception as e:
-            print(f"Erro ao ler planilha existente: {e}")
-            df_final = df_novos
-    else:
-        df_final = df_novos
+    df_final = df_novos[colunas_finais]
 
     # Criar diretório se não existir
     caminho.parent.mkdir(parents=True, exist_ok=True)
