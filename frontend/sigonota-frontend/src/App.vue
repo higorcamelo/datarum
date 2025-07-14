@@ -29,23 +29,79 @@
           <p class="text-gray-500 mb-2 text-center">Faça upload dos arquivos XML para processar suas notas fiscais.</p>
         </div>
 
-        <!-- Área de upload -->
+        <!-- Área de upload com drag & drop -->
         <section class="mb-8">
-          <label for="xmlUpload" class="block text-sm font-semibold text-blue-700 mb-2">Selecione arquivos XML</label>
-          <input 
-            type="file" 
-            id="xmlUpload" 
-            multiple 
-            accept=".xml" 
-            @change="handleFileChange" 
-            class="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 border border-blue-200 shadow-sm"
-          />
-          <ul class="mt-3 space-y-1">
-            <li v-for="(file, index) in selectedFiles" :key="index" class="text-sm text-blue-700 flex items-center gap-2">
-              <svg xmlns='http://www.w3.org/2000/svg' class='h-4 w-4 text-blue-400' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M12 4v16m8-8H4'/></svg>
-              {{ file.name }}
-            </li>
-          </ul>
+          <label class="block text-sm font-semibold text-blue-700 mb-2">
+            Selecione arquivos XML (máx. 50 arquivos, 5MB cada)
+          </label>
+          <div 
+            @dragover.prevent="dragOver = true"
+            @dragleave.prevent="dragOver = false"
+            @drop.prevent="handleDrop"
+            :class="[
+              'relative border-2 border-dashed rounded-lg p-8 transition-all duration-200 cursor-pointer',
+              dragOver ? 'border-blue-400 bg-blue-50 scale-105' : 'border-blue-200 hover:border-blue-300'
+            ]"
+          >
+            <input 
+              type="file" 
+              id="xmlUpload" 
+              multiple 
+              accept=".xml" 
+              @change="handleFileChange" 
+              class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+            />
+            <div class="text-center">
+              <svg class="mx-auto h-12 w-12 text-blue-400 mb-4" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <p class="text-lg font-medium text-blue-600 mb-1">
+                <span class="underline">Clique para selecionar</span> ou arraste arquivos XML aqui
+              </p>
+              <p class="text-sm text-gray-500">Máximo 50 arquivos, 5MB cada</p>
+            </div>
+          </div>
+          
+          <!-- Lista de arquivos selecionados -->
+          <div v-if="selectedFiles.length" class="mt-4 space-y-2">
+            <div class="flex items-center justify-between text-sm text-blue-700 font-medium">
+              <span>{{ selectedFiles.length }} arquivo(s) selecionado(s)</span>
+              <button @click="clearFiles" class="text-red-500 hover:text-red-700 transition-colors">
+                Limpar tudo
+              </button>
+            </div>
+            <ul class="space-y-2 max-h-32 overflow-y-auto">
+              <li v-for="(file, index) in selectedFiles" :key="index" 
+                  :class="[
+                    'flex items-center justify-between p-2 rounded border text-sm',
+                    getFileStatus(file).valid ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'
+                  ]">
+                <div class="flex items-center gap-2 flex-1 min-w-0">
+                  <svg :class="[
+                    'h-4 w-4 flex-shrink-0',
+                    getFileStatus(file).valid ? 'text-green-500' : 'text-red-500'
+                  ]" fill="currentColor" viewBox="0 0 20 20">
+                    <path v-if="getFileStatus(file).valid" fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                    <path v-else fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                  </svg>
+                  <span class="truncate font-medium">{{ file.name }}</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs text-gray-500">{{ formatFileSize(file.size) }}</span>
+                  <button @click="removeFile(index)" class="text-red-400 hover:text-red-600 transition-colors">
+                    <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                    </svg>
+                  </button>
+                </div>
+              </li>
+            </ul>
+            <!-- Avisos de validação -->
+            <div v-if="validationMessage" class="p-2 rounded text-sm"
+                 :class="validationMessage.type === 'error' ? 'bg-red-50 text-red-700' : 'bg-yellow-50 text-yellow-700'">
+              {{ validationMessage.text }}
+            </div>
+          </div>
         </section>
 
         <!-- Criar nova planilha -->
@@ -124,12 +180,77 @@ export default {
       mensagem: '',
       nomePlanilha: '',
       loading: false,
-      progress: 0
+      progress: 0,
+      dragOver: false,
+      validationMessage: null
     };
   },
   methods: {
     handleFileChange(event) {
-      this.selectedFiles = Array.from(event.target.files);
+      const files = Array.from(event.target.files);
+      this.processFiles(files);
+    },
+    handleDrop(event) {
+      this.dragOver = false;
+      const files = Array.from(event.dataTransfer.files);
+      this.processFiles(files);
+    },
+    processFiles(files) {
+      // Filtrar apenas arquivos XML
+      const xmlFiles = files.filter(file => file.name.toLowerCase().endsWith('.xml'));
+      
+      if (xmlFiles.length !== files.length) {
+        this.showValidation('warning', `${files.length - xmlFiles.length} arquivo(s) ignorado(s) (apenas XML aceitos)`);
+      }
+      
+      // Limitar a 50 arquivos
+      if (xmlFiles.length > 50) {
+        this.showValidation('error', 'Máximo 50 arquivos permitidos. Alguns foram removidos.');
+        this.selectedFiles = xmlFiles.slice(0, 50);
+      } else {
+        this.selectedFiles = xmlFiles;
+      }
+      
+      this.validateFiles();
+    },
+    validateFiles() {
+      const oversizedFiles = this.selectedFiles.filter(file => file.size > 5 * 1024 * 1024);
+      
+      if (oversizedFiles.length > 0) {
+        this.showValidation('error', `${oversizedFiles.length} arquivo(s) muito grande(s) (máx. 5MB)`);
+      } else if (this.selectedFiles.length > 0) {
+        this.validationMessage = null;
+      }
+    },
+    showValidation(type, text) {
+      this.validationMessage = { type, text };
+      setTimeout(() => {
+        this.validationMessage = null;
+      }, 5000);
+    },
+    getFileStatus(file) {
+      const isXml = file.name.toLowerCase().endsWith('.xml');
+      const isValidSize = file.size <= 5 * 1024 * 1024;
+      return {
+        valid: isXml && isValidSize,
+        reason: !isXml ? 'Não é XML' : !isValidSize ? 'Muito grande' : null
+      };
+    },
+    formatFileSize(bytes) {
+      if (bytes === 0) return '0 B';
+      const k = 1024;
+      const sizes = ['B', 'KB', 'MB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+    },
+    removeFile(index) {
+      this.selectedFiles.splice(index, 1);
+      this.validateFiles();
+    },
+    clearFiles() {
+      this.selectedFiles = [];
+      this.validationMessage = null;
+      document.getElementById('xmlUpload').value = '';
     },
     usarSugestao() {
       const agora = new Date();
@@ -139,6 +260,10 @@ export default {
     },
     async enviarArquivos() {
       if (!this.selectedFiles.length || !this.nomePlanilha.trim()) return;
+
+      this.isLoading = true;
+      this.mensagem = '';
+      this.validationMessage = null;
 
       const formData = new FormData();
       this.selectedFiles.forEach(file => formData.append('xmls', file));
@@ -155,7 +280,10 @@ export default {
           body: formDataInfo
         });
 
-        if (!infoResponse.ok) throw new Error('Falha ao processar os arquivos');
+        if (!infoResponse.ok) {
+          const errorData = await infoResponse.json().catch(() => ({}));
+          throw new Error(errorData.detail || 'Falha ao processar os arquivos');
+        }
         const resultado = await infoResponse.json();
 
         // � Segundo: fazer download do arquivo
@@ -164,7 +292,10 @@ export default {
           body: formData
         });
 
-        if (!downloadResponse.ok) throw new Error('Falha ao gerar arquivo');
+        if (!downloadResponse.ok) {
+          const errorData = await downloadResponse.json().catch(() => ({}));
+          throw new Error(errorData.detail || 'Falha ao gerar arquivo');
+        }
 
         // �🔽 Força o download
         const blob = await downloadResponse.blob();
@@ -185,8 +316,18 @@ export default {
           `🏢 Emitentes: ${resultado.emitentes.join(', ')}`
         ].join('\n');
 
+        // 🧹 Auto-limpeza após sucesso
+        setTimeout(() => {
+          this.clearFiles();
+          this.nomePlanilha = '';
+          this.mensagem = '';
+        }, 8000);
+
       } catch (err) {
         this.mensagem = `❌ Erro: ${err.message}`;
+        this.showValidation('error', 'Erro no processamento. Verifique os arquivos e tente novamente.');
+      } finally {
+        this.isLoading = false;
       }
     }
   }
