@@ -154,13 +154,16 @@
           {{ mensagem }}
         </section>
 
-        <!-- Histórico (placeholder) -->
+        <!-- Histórico/Preview (melhorado) -->
         <section class="mt-8">
           <h2 class="text-lg font-bold text-blue-700 mb-2 flex items-center gap-2">
-            <svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5 text-blue-400' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M8 17l4 4 4-4m0-5V3m-8 9V3'/></svg>
-            Histórico de importações
+            <svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5 text-blue-400' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'/></svg>
+            Últimos Processamentos
           </h2>
-          <div class="text-gray-400 text-sm italic">Em breve você verá aqui o histórico das últimas importações.</div>
+          <div class="text-gray-400 text-sm italic">
+            Versão 1.0 - Funcionalidade básica de conversão XML → Excel<br>
+            <span class="text-xs">💡 Em breve: histórico, templates personalizados e mais automações</span>
+          </div>
         </section>
       </div>
     </main>
@@ -308,13 +311,40 @@ export default {
         a.remove();
         window.URL.revokeObjectURL(url);
 
-        // ✅ Feedback rico como antes
-        this.mensagem = [
+        // ✅ Feedback rico com estatísticas avançadas
+        const feedback = [
           `✅ ${resultado.itens_processados} itens processados com sucesso!`,
           `📄 Planilha: ${resultado.planilha_destino}`,
-          `📦 Notas incluídas: ${resultado.notas_encontradas.join(', ')}`,
-          `🏢 Emitentes: ${resultado.emitentes.join(', ')}`
-        ].join('\n');
+          `📦 ${resultado.arquivos_processados} arquivos XML processados`
+        ];
+
+        if (resultado.notas_encontradas && resultado.notas_encontradas.length > 0) {
+          const notasTexto = resultado.notas_encontradas.length > 5 
+            ? `${resultado.notas_encontradas.slice(0, 5).join(', ')}... (+${resultado.notas_encontradas.length - 5} mais)`
+            : resultado.notas_encontradas.join(', ');
+          feedback.push(`🧾 Notas: ${notasTexto}`);
+        }
+
+        if (resultado.emitentes && resultado.emitentes.length > 0) {
+          const emitentesTexto = resultado.emitentes.length > 3
+            ? `${resultado.emitentes.slice(0, 3).join(', ')}... (+${resultado.emitentes.length - 3} mais)`
+            : resultado.emitentes.join(', ');
+          feedback.push(`🏢 Emitentes: ${emitentesTexto}`);
+        }
+
+        if (resultado.versoes_nfe && resultado.versoes_nfe.length > 0) {
+          feedback.push(`📋 Versões NFe: ${resultado.versoes_nfe.join(', ')}`);
+        }
+
+        if (resultado.periodo && resultado.periodo.inicio) {
+          feedback.push(`📅 Período: ${resultado.periodo.inicio} a ${resultado.periodo.fim}`);
+        }
+
+        if (resultado.valor_total && resultado.valor_total > 0) {
+          feedback.push(`💰 Valor Total: R$ ${resultado.valor_total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`);
+        }
+
+        this.mensagem = feedback.join('\n');
 
         // 🧹 Auto-limpeza após sucesso
         setTimeout(() => {

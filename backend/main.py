@@ -9,7 +9,11 @@ from pathlib import Path
 from utils.xml_parser import parse_nfe
 from utils.excel_handler import salvar_em_excel
 
-app = FastAPI()
+app = FastAPI(
+    title="Sigonota API",
+    description="API para conversão de XMLs de NFe em planilhas Excel",
+    version="1.0.0"
+)
 
 # CORS - Configuração mais restritiva
 app.add_middleware(
@@ -19,6 +23,26 @@ app.add_middleware(
     allow_methods=["GET", "POST"],  # Apenas métodos necessários
     allow_headers=["*"],
 )
+
+@app.get("/")
+async def root():
+    """Endpoint raiz com informações da API"""
+    return {
+        "name": "Sigonota API",
+        "version": "1.0.0",
+        "description": "Conversor de XMLs de NFe para Excel",
+        "status": "online",
+        "endpoints": {
+            "processar": "POST /processar - Processa XMLs e retorna Excel",
+            "processar-info": "POST /processar-info - Retorna estatísticas sem arquivo",
+            "health": "GET /health - Status da API"
+        }
+    }
+
+@app.get("/health")
+async def health_check():
+    """Health check da API"""
+    return {"status": "healthy", "timestamp": "2025-07-16"}
 
 @app.post("/processar")
 async def processar(
@@ -109,13 +133,36 @@ async def processar_info(
             itens = parse_nfe(temp_file)
             todos_itens.extend(itens)
 
-    # Resumo para feedback
+    # Resumo para feedback com estatísticas avançadas
     numeros_nfe = list({item["numero_nf"] for item in todos_itens if "numero_nf" in item})
     emitentes = list({item["emitente"] for item in todos_itens if "emitente" in item})
+    versoes_nfe = list({item["versao_nfe"] for item in todos_itens if "versao_nfe" in item})
+    
+    # Calcular período das notas
+    datas = [item.get("data_emissao") for item in todos_itens if item.get("data_emissao")]
+    datas_validas = [d for d in datas if d and d != ""]
+    
+    periodo = {}
+    if datas_validas:
+        periodo = {
+            "inicio": min(datas_validas),
+            "fim": max(datas_validas)
+        }
+    
+    # Calcular valor total
+    try:
+        valores = [float(item.get("valor_total_nf", 0)) for item in todos_itens if item.get("valor_total_nf")]
+        valor_total = sum(v for v in valores if v > 0)
+    except:
+        valor_total = 0
 
     return {
         "itens_processados": len(todos_itens),
+        "arquivos_processados": len(xmls),
         "notas_encontradas": numeros_nfe,
         "emitentes": emitentes,
+        "versoes_nfe": versoes_nfe,
+        "periodo": periodo,
+        "valor_total": round(valor_total, 2) if valor_total > 0 else 0,
         "planilha_destino": f"{planilha}.xlsx"
     }

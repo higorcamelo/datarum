@@ -2,6 +2,43 @@ import xmltodict
 from pathlib import Path
 from typing import Union, List, Dict
 
+def validate_nfe_version(xml_dict: dict) -> dict:
+    """
+    Valida se é uma NFe válida e identifica a versão.
+    Retorna informações sobre a versão e validade.
+    """
+    # Tentar encontrar a estrutura NFe
+    nfe_root = xml_dict.get("NFe") \
+        or xml_dict.get("nfeProc", {}).get("NFe") \
+        or xml_dict.get("nfeProc", {}).get("nfe:NFe")
+    
+    if not nfe_root:
+        return {
+            "valid": False,
+            "version": None,
+            "error": "Estrutura NFe não encontrada"
+        }
+    
+    # Tentar identificar versão pelo atributo
+    inf_nfe = nfe_root.get("infNFe") or nfe_root.get("nfe:infNFe", {})
+    version = inf_nfe.get("@versao") or inf_nfe.get("@versão")
+    
+    # Se não encontrar versão, tentar inferir pela estrutura
+    if not version:
+        ide = inf_nfe.get("ide", {})
+        if "dhEmi" in ide:  # Data/hora de emissão (versões mais novas)
+            version = "4.00"  # Provável versão 4.00
+        elif "dEmi" in ide:  # Apenas data (versões antigas)
+            version = "3.10"  # Provável versão 3.10 ou anterior
+        else:
+            version = "Desconhecida"
+    
+    return {
+        "valid": True,
+        "version": version,
+        "error": None
+    }
+
 def parse_nfe(xml_path: Union[str, Path]) -> List[Dict]:
     """
     Extrai informações estruturadas de uma NF-e (versões 1.10, 2.00, 3.10, 4.00).
@@ -11,6 +48,11 @@ def parse_nfe(xml_path: Union[str, Path]) -> List[Dict]:
     with open(xml_path, 'rb') as file:
         raw = file.read()
         xml_dict = xmltodict.parse(raw)
+
+    # Valida versão da NFe
+    validacao = validate_nfe_version(xml_dict)
+    if not validacao["valid"]:
+        raise ValueError(f"NFe inválida: {validacao['error']}")
 
     # A nota pode estar aninhada de formas diferentes
     nfe_root = xml_dict.get("NFe") \
@@ -43,6 +85,7 @@ def parse_nfe(xml_path: Union[str, Path]) -> List[Dict]:
         "tipo_operacao": g(ide, "tpNF"),
         "finalidade": g(ide, "finNFe"),
         "natureza_operacao": g(ide, "natOp"),
+        "versao_nfe": validacao["version"],  # Adicionar versão NFe
 
         "cnpj_emitente": g(emit, "CNPJ"),
         "emitente": g(emit, "xNome"),

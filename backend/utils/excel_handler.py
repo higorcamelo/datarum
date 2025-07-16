@@ -18,6 +18,7 @@ def salvar_em_excel(dados: list[dict], caminho_planilha: str):
         "serie": "Série",
         "data_emissao": "Data de Emissão",
         "modelo": "Modelo",
+        "versao_nfe": "Versão NFe",
         "tipo_operacao": "Tipo Op.",
         "finalidade": "Finalidade",
         "natureza_operacao": "Natureza da Operação",
@@ -67,7 +68,7 @@ def salvar_em_excel(dados: list[dict], caminho_planilha: str):
 
     # Ordenar colunas por bloco lógico
     ordem = [
-        "Nº NF", "Série", "Data de Emissão", "Modelo", "Tipo Op.", "Finalidade", "Natureza da Operação",
+        "Nº NF", "Série", "Data de Emissão", "Modelo", "Versão NFe", "Tipo Op.", "Finalidade", "Natureza da Operação",
         "CNPJ Emitente", "Emitente", "Cidade Emitente", "UF Emitente",
         "CNPJ Destinatário", "Destinatário", "Cidade Destinatário", "UF Destinatário",
         "Código Produto", "Produto", "CFOP", "Quantidade", "Unidade", "Valor Unitário", "Total Item",
