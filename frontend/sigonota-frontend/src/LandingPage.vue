@@ -472,24 +472,22 @@
           </div>
           <p class="text-gray-600 mb-6 max-w-2xl mx-auto">
             Esta versão está disponível <strong>gratuitamente por tempo limitado</strong> durante nosso período de testes. 
-            Precisamos da sua experiência para tornar o Datarum ainda melhor.
+            Clique no botão abaixo para acessar nosso formulário de feedback e nos ajudar a melhorar o Datarum.
           </p>
-          <div class="grid md:grid-cols-2 gap-4 mb-6">
-            <button class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition font-semibold flex items-center justify-center gap-2">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/>
+          <div class="mb-6">
+            <button @click="openGoogleForms()" 
+                    class="bg-purple-600 text-white px-8 py-4 rounded-lg hover:bg-purple-700 transition font-semibold text-lg flex items-center justify-center gap-3 mx-auto shadow-lg">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/>
               </svg>
-              Gostei! Sugerir melhorias
-            </button>
-            <button class="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition font-semibold flex items-center justify-center gap-2">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.865-.833-2.635 0L4.182 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+              Enviar Feedback
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
               </svg>
-              Relatar problemas
             </button>
           </div>
           <p class="text-sm text-gray-500">
-            💡 <strong>Dica:</strong> Seus comentários definem quais recursos priorizamos na v1.1 (primeira versão paga)
+            💡 <strong>Dica:</strong> O formulário possui seções diferentes para sugestões e problemas - você escolhe no primeiro campo
           </p>
         </div>
       </div>
@@ -545,12 +543,26 @@
         </div>
       </div>
     </footer>
+
+    <!-- Toast de Confirmação -->
+    <div v-if="showFeedbackToast" 
+         class="fixed bottom-4 right-4 bg-purple-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 flex items-center gap-2">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+      </svg>
+      Redirecionando para o formulário...
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   name: 'LandingPage',
+  data() {
+    return {
+      showFeedbackToast: false
+    };
+  },
   methods: {
     scrollTo(elementId) {
       const element = document.getElementById(elementId);
@@ -560,6 +572,24 @@ export default {
     },
     goToApp() {
       this.$emit('goToApp');
+    },
+    openGoogleForms() {
+      // URL do seu Google Forms
+      const formsUrl = 'https://forms.gle/w4NigAgBfVFv3saG8';
+      
+      // Mostrar feedback visual
+      this.showFeedbackToast = true;
+      
+      // Auto-ocultar toast
+      setTimeout(() => {
+        this.showFeedbackToast = false;
+      }, 2000);
+      
+      // Abrir o Google Forms em nova aba
+      window.open(formsUrl, '_blank');
+      
+      // Log para desenvolvimento
+      console.log('📝 Redirecionando para formulário de feedback');
     }
   }
 };

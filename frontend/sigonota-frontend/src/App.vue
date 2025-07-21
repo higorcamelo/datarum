@@ -17,13 +17,11 @@
       <div class="flex items-center gap-4">
         <!-- Indicador de versão -->
         <div class="hidden md:flex items-center gap-2 bg-purple-50 px-3 py-1 rounded-full">
-          <div class="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
-          <span class="text-xs font-medium text-purple-600">v1.0 Online</span>
+          <span class="text-xs font-medium text-purple-600">v1.0 Beta</span>
         </div>
         <button @click="currentView = 'landing'" class="text-purple-600 hover:text-purple-700 text-sm font-medium transition">
           ← Voltar ao início
         </button>
-        <span class="w-9 h-9 rounded-full bg-purple-200 flex items-center justify-center text-purple-700 font-bold">H</span>
       </div>
     </header>
 
