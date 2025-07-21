@@ -1,31 +1,34 @@
-# 📊 Sigonota
+# 📊 Datarum
 
-Sistema web para processamento automático de arquivos XML de Notas Fiscais Eletrônicas (NFe), convertendo-os para planilhas Excel formatadas.
+**Automação fiscal com inteligência e clareza**
+
+Sistema web profissional para processamento automático de arquivos XML de Notas Fiscais Eletrônicas (NFe), convertendo-os para planilhas Excel formatadas com inteligência de dados.
 
 ## 🎯 **Sobre o Projeto**
 
-O Sigonota automatiza o processo de extração e organização de dados de NFes, eliminando a necessidade de processamento manual e oferecendo uma interface moderna e intuitiva.
+O Datarum revoluciona o processo de extração e organização de dados de NFes, eliminando a necessidade de processamento manual e oferecendo uma interface moderna e intuitiva que transforma dados brutos em insights valiosos.
 
 ### **Funcionalidades**
 - ✅ Upload de múltiplos arquivos XML via drag & drop
 - ✅ Validação automática de arquivos e tamanhos
-- ✅ Processamento de dados de NFe com parsing XML
-- ✅ Geração de planilhas Excel formatadas
-- ✅ Interface responsiva e moderna
-- ✅ Feedback visual de progresso e erros
+- ✅ Processamento inteligente de dados de NFe com parsing XML
+- ✅ Geração de planilhas Excel formatadas profissionalmente
+- ✅ Interface responsiva e moderna com feedback rico
+- ✅ Estatísticas em tempo real e análise de dados
+- ✅ Suporte para múltiplas versões de NFe (1.10, 2.00, 3.10, 4.00)
 
 ## 🛠️ **Tecnologias Utilizadas**
 
 ### **Frontend**
-- **Vue.js 3** - Framework JavaScript reativo
-- **Tailwind CSS** - Framework CSS utilitário
-- **Vite** - Bundler e servidor de desenvolvimento
+- **Vue.js 3** - Framework JavaScript reativo moderno
+- **Tailwind CSS** - Framework CSS utilitário com design system
+- **Vite** - Bundler e servidor de desenvolvimento ultra-rápido
 
 ### **Backend**
-- **FastAPI** - Framework Python para APIs
-- **Pandas** - Manipulação e análise de dados
-- **OpenPyXL** - Geração de arquivos Excel
-- **XML parsing** - Extração de dados estruturados
+- **FastAPI** - Framework Python para APIs de alta performance
+- **Pandas** - Manipulação e análise avançada de dados
+- **OpenPyXL** - Geração de arquivos Excel com formatação profissional
+- **XML parsing** - Extração inteligente de dados estruturados
 
 ## 🚀 **Como Executar**
 
@@ -108,16 +111,25 @@ A interface oferece uma experiência moderna com:
 
 ## 💡 **Próximas Funcionalidades**
 
+- [ ] Dashboard analítico com insights avançados
 - [ ] Suporte a outros tipos de XML fiscal
 - [ ] Templates personalizados de planilha
-- [ ] Relatórios de análise de dados
+- [ ] Relatórios automáticos de análise de dados
 - [ ] API para integrações externas
+- [ ] Histórico de processamentos
+- [ ] Alertas e notificações inteligentes
+
+## 🎨 **Identidade Visual**
+
+O Datarum utiliza uma paleta de cores profissional baseada em tons de índigo e cinza, transmitindo confiança, tecnologia e inteligência. A interface foi projetada para ser limpa, moderna e focada na experiência do usuário.
 
 ## 📄 **Licença**
 
-Projeto desenvolvido para fins educacionais e de portfólio.
+© 2024 Datarum. Projeto desenvolvido para transformar dados em inteligência.
 
 ---
+
+**Datarum** - *Automação fiscal com inteligência e clareza*
 
 **Desenvolvido com ❤️ por Higor Camelo**
 
