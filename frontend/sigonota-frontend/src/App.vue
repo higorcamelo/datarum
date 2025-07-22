@@ -29,12 +29,13 @@
 
     <!-- Conteúdo principal -->
     <main class="flex-1 flex justify-center px-4 py-8">
-      <div class="w-full max-w-7xl flex gap-8">
+      <div class="w-full max-w-7xl flex flex-col lg:flex-row gap-6 lg:gap-8">
         
         <!-- Sidebar Esquerda -->
-        <aside class="hidden lg:block w-72 space-y-6">
+        <aside class="w-full lg:w-72 order-2 lg:order-1">
+          <div class="flex lg:flex-col gap-4 lg:gap-6 overflow-x-auto lg:overflow-x-visible">
           <!-- Stats Card -->
-          <div class="bg-white/90 rounded-2xl shadow-lg p-6 border border-purple-100">
+          <div class="bg-white/90 rounded-2xl shadow-lg p-4 lg:p-6 border border-purple-100 flex-shrink-0 w-64 lg:w-full">
             <div class="flex items-center gap-3 mb-4">
               <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
                 <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -60,7 +61,7 @@
           </div>
 
           <!-- Dicas Card -->
-          <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl shadow-lg p-6 border border-purple-200">
+          <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl shadow-lg p-4 lg:p-6 border border-purple-200 flex-shrink-0 w-64 lg:w-full">
             <div class="flex items-center gap-3 mb-4">
               <div class="w-10 h-10 bg-purple-200 rounded-lg flex items-center justify-center">
                 <svg class="w-5 h-5 text-purple-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -86,7 +87,7 @@
           </div>
 
           <!-- Versões NFe -->
-          <div class="bg-white/90 rounded-2xl shadow-lg p-6 border border-purple-100">
+          <div class="bg-white/90 rounded-2xl shadow-lg p-6 border border-purple-100 flex-shrink-0 w-64 lg:w-full">
             <div class="flex items-center gap-3 mb-4">
               <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
                 <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -114,10 +115,11 @@
               </div>
             </div>
           </div>
+          </div>
         </aside>
 
         <!-- Conteúdo Principal -->
-        <div class="flex-1 max-w-2xl mx-auto">
+        <div class="flex-1 max-w-2xl mx-auto order-1 lg:order-2">
           <div class="bg-white/90 rounded-3xl shadow-2xl p-10 border border-purple-100">
         <div class="flex flex-col items-center mb-8">
           <div class="bg-gradient-to-br from-purple-200 to-purple-400 rounded-full p-4 shadow-lg mb-4">
@@ -252,134 +254,8 @@
           {{ mensagem }}
         </section>
 
-        <!-- Histórico/Preview simplificado -->
-        <section class="mt-8">
-          <div class="bg-gradient-to-r from-purple-50 to-purple-100 rounded-2xl p-6 border border-purple-200">
-            <h2 class="text-lg font-bold text-purple-700 mb-4 flex items-center gap-2">
-              <div class="w-8 h-8 bg-purple-200 rounded-lg flex items-center justify-center">
-                <svg xmlns='http://www.w3.org/2000/svg' class='h-4 w-4 text-purple-700' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'/></svg>
-              </div>
-              Informações
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div class="bg-white rounded-lg p-4 border border-purple-200">
-                <div class="text-sm text-purple-600 font-medium">Versão</div>
-                <div class="text-lg font-bold text-purple-700">1.0</div>
-                <div class="text-xs text-purple-500">NFe XML → Excel</div>
-              </div>
-              <div class="bg-white rounded-lg p-4 border border-purple-200">
-                <div class="text-sm text-purple-600 font-medium">Suporte</div>
-                <div class="text-lg font-bold text-purple-700">Multi-versão</div>
-                <div class="text-xs text-purple-500">NFe 1.10 até 4.00</div>
-              </div>
-            </div>
-            <div class="mt-4 text-center">
-              <span class="text-xs text-purple-600 bg-white px-3 py-1 rounded-full border border-purple-200">
-                💡 Converta seus XMLs em planilhas organizadas
-              </span>
-            </div>
-          </div>
-        </section>
           </div>
         </div>
-
-        <!-- Sidebar Direita -->
-        <aside class="hidden lg:block w-72 space-y-6">
-          <!-- Preview Card -->
-          <div class="bg-white/90 rounded-2xl shadow-lg p-6 border border-purple-100">
-            <div class="flex items-center gap-3 mb-4">
-              <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                </svg>
-              </div>
-              <h3 class="font-bold text-purple-700">Preview da Planilha</h3>
-            </div>
-            <div class="bg-gray-50 rounded-lg p-4 border">
-              <div class="text-xs text-gray-600 mb-2">Colunas que serão extraídas:</div>
-              <div class="space-y-1 text-xs">
-                <div class="flex items-center gap-2">
-                  <div class="w-2 h-2 bg-purple-400 rounded-full"></div>
-                  <span>Número da Nota</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <div class="w-2 h-2 bg-purple-400 rounded-full"></div>
-                  <span>Data de Emissão</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <div class="w-2 h-2 bg-purple-400 rounded-full"></div>
-                  <span>CNPJ/CPF Emitente</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <div class="w-2 h-2 bg-purple-400 rounded-full"></div>
-                  <span>Razão Social</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <div class="w-2 h-2 bg-purple-400 rounded-full"></div>
-                  <span>Valor Total</span>
-                </div>
-                <div class="text-purple-600 text-xs mt-2">+ 15 campos adicionais</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Processo Card -->
-          <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl shadow-lg p-6 border border-purple-200">
-            <div class="flex items-center gap-3 mb-4">
-              <div class="w-10 h-10 bg-purple-200 rounded-lg flex items-center justify-center">
-                <svg class="w-5 h-5 text-purple-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
-                </svg>
-              </div>
-              <h3 class="font-bold text-purple-700">Como Funciona</h3>
-            </div>
-            <div class="space-y-3">
-              <div class="flex items-center gap-3">
-                <div class="w-6 h-6 bg-purple-200 rounded-full flex items-center justify-center text-xs font-bold text-purple-700">1</div>
-                <span class="text-sm text-purple-600">Upload dos XMLs</span>
-              </div>
-              <div class="flex items-center gap-3">
-                <div class="w-6 h-6 bg-purple-200 rounded-full flex items-center justify-center text-xs font-bold text-purple-700">2</div>
-                <span class="text-sm text-purple-600">Análise automática</span>
-              </div>
-              <div class="flex items-center gap-3">
-                <div class="w-6 h-6 bg-purple-200 rounded-full flex items-center justify-center text-xs font-bold text-purple-700">3</div>
-                <span class="text-sm text-purple-600">Geração do Excel</span>
-              </div>
-              <div class="flex items-center gap-3">
-                <div class="w-6 h-6 bg-purple-200 rounded-full flex items-center justify-center text-xs font-bold text-purple-700">4</div>
-                <span class="text-sm text-purple-600">Download automático</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Requisitos Card -->
-          <div class="bg-white/90 rounded-2xl shadow-lg p-6 border border-purple-100">
-            <div class="flex items-center gap-3 mb-4">
-              <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-                </svg>
-              </div>
-              <h3 class="font-bold text-purple-700">Requisitos</h3>
-            </div>
-            <div class="space-y-2 text-sm text-purple-600">
-              <div class="flex items-center gap-2">
-                <span class="text-purple-400">•</span>
-                <span>Arquivos XML válidos</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <span class="text-purple-400">•</span>
-                <span>Tamanho máx. 5MB cada</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <span class="text-purple-400">•</span>
-                <span>Navegador moderno</span>
-              </div>
-            </div>
-          </div>
-        </aside>
 
       </div>
     </main>
@@ -486,7 +362,7 @@ export default {
     async enviarArquivos() {
       if (!this.selectedFiles.length || !this.nomePlanilha.trim()) return;
 
-      this.isLoading = true;
+      this.loading = true;  // ✅ Corrigido
       this.mensagem = '';
       this.validationMessage = null;
 
@@ -494,13 +370,18 @@ export default {
       this.selectedFiles.forEach(file => formData.append('xmls', file));
       formData.append('planilha', this.nomePlanilha.trim());
 
+      // ✅ URL dinâmica para funcionar em dev e produção
+      const baseURL = process.env.NODE_ENV === 'production' 
+        ? '/api'  // No Vercel: https://seu-dominio.vercel.app/api
+        : 'http://localhost:8000';  // Dev local
+
       try {
         // 📊 Primeiro: obter informações sobre o processamento
         const formDataInfo = new FormData();
         this.selectedFiles.forEach(file => formDataInfo.append('xmls', file));
         formDataInfo.append('planilha', this.nomePlanilha.trim());
 
-        const infoResponse = await fetch('http://localhost:8000/processar-info', {
+        const infoResponse = await fetch(`${baseURL}/processar-info`, {
           method: 'POST',
           body: formDataInfo
         });
@@ -511,8 +392,8 @@ export default {
         }
         const resultado = await infoResponse.json();
 
-        // � Segundo: fazer download do arquivo
-        const downloadResponse = await fetch('http://localhost:8000/processar', {
+        // 📥 Segundo: fazer download do arquivo
+        const downloadResponse = await fetch(`${baseURL}/processar`, {
           method: 'POST',
           body: formData
         });
@@ -579,7 +460,7 @@ export default {
         this.mensagem = `❌ Erro: ${err.message}`;
         this.showValidation('error', 'Erro no processamento. Verifique os arquivos e tente novamente.');
       } finally {
-        this.isLoading = false;
+        this.loading = false;  // ✅ Corrigido
       }
     }
   }
