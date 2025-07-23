@@ -367,9 +367,14 @@ export default {
       this.validationMessage = null;
 
       const formData = new FormData();
-      this.selectedFiles.forEach(file => formData.append('files', file));
+      
+      // ✅ Adicionar arquivos
+      this.selectedFiles.forEach(file => formData.append('xmls', file));
+      
+      // ✅ Adicionar nome da planilha (OBRIGATÓRIO!)
+      formData.append('planilha', this.nomePlanilha);
 
-      // ✅ URL correta do backend
+      // URL correta do backend
       const API_URL = 'https://datarum-api.fly.dev';
 
       try {
@@ -380,20 +385,22 @@ export default {
         });
         
         if (!responseInfo.ok) {
-          throw new Error(`Erro ${responseInfo.status}: ${responseInfo.statusText}`);
+          const errorText = await responseInfo.text();
+          throw new Error(`Erro ${responseInfo.status}: ${errorText}`);
         }
         
         const info = await responseInfo.json();
         this.showResults(info);
         
-        // Depois: baixar Excel
+        // Depois: baixar Excel usando o MESMO formData
         const responseExcel = await fetch(`${API_URL}/processar`, {
           method: 'POST', 
           body: formData
         });
         
         if (!responseExcel.ok) {
-          throw new Error(`Erro ${responseExcel.status}: ${responseExcel.statusText}`);
+          const errorText = await responseExcel.text();
+          throw new Error(`Erro ${responseExcel.status}: ${errorText}`);
         }
         
         const blob = await responseExcel.blob();
@@ -406,6 +413,7 @@ export default {
         
       } catch (error) {
         this.mensagem = `Erro: ${error.message}`;
+        console.error('Erro no processamento:', error);
       } finally {
         this.loading = false;
       }
