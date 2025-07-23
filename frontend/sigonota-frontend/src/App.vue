@@ -375,13 +375,16 @@ export default {
         ? '/api'  // No Vercel: https://seu-dominio.vercel.app/api
         : 'http://localhost:8000';  // Dev local
 
+      // No frontend, chamar API externa
+      const API_URL = 'https://sigonota-api.fly.dev';
+
       try {
         // 📊 Primeiro: obter informações sobre o processamento
         const formDataInfo = new FormData();
         this.selectedFiles.forEach(file => formDataInfo.append('xmls', file));
         formDataInfo.append('planilha', this.nomePlanilha.trim());
 
-        const infoResponse = await fetch(`${baseURL}/processar-info`, {
+        const infoResponse = await fetch(`${API_URL}/processar-info`, {
           method: 'POST',
           body: formDataInfo
         });
@@ -393,7 +396,7 @@ export default {
         const resultado = await infoResponse.json();
 
         // 📥 Segundo: fazer download do arquivo
-        const downloadResponse = await fetch(`${baseURL}/processar`, {
+        const downloadResponse = await fetch(`${API_URL}/processar`, {
           method: 'POST',
           body: formData
         });

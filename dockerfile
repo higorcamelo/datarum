@@ -1,5 +1,5 @@
 # Estágio 1: Build do frontend
-FROM node:20-alpine AS frontend-build
+FROM node:22-alpine AS frontend-build
 
 WORKDIR /frontend
 
@@ -16,17 +16,13 @@ FROM python:3.12-alpine
 
 WORKDIR /app
 
-# Instalar dependências do sistema
-RUN apk add --no-cache \
-    gcc \
-    musl-dev \
-    libffi-dev \
-    openssl-dev \
-    && rm -rf /var/cache/apk/*
+# Dependências do sistema
+RUN apk add --no-cache gcc musl-dev libffi-dev openssl-dev libxml2-dev libxslt-dev
 
-# Copiar requirements do backend
+# Instalar dependências Python
 COPY backend/requirements.txt .
-RUN pip install --no-cache-dir --upgrade pip && pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
 # Copiar código do backend
 COPY backend/ .
@@ -34,12 +30,12 @@ COPY backend/ .
 # Copiar frontend buildado
 COPY --from=frontend-build /frontend/dist ./static/
 
-# Criar usuário não-root
+# Usuário não-root
 RUN adduser -D -s /bin/sh app && chown -R app:app /app
 USER app
 
 # Expor porta
-EXPOSE 8000
+EXPOSE 8080
 
-# Comando para rodar (FastAPI vai servir tanto API quanto static)
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Comando correto para FastAPI
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
