@@ -43,57 +43,125 @@ class handler(BaseHTTPRequestHandler):
         return files
     
     def processar_xml(self, content):
-        """Processa um arquivo XML de NFe"""
+        """Processa um arquivo XML de NFe usando o parser do utils"""
         try:
+            import sys
+            import os
+            # Adicionar o diretório backend ao path para importar utils
+            backend_path = os.path.join(os.path.dirname(os.path.dirname(__file__)))
+            if backend_path not in sys.path:
+                sys.path.append(backend_path)
+            
+            from utils.xml_parser import validate_nfe_version
             import xmltodict
+            
             xml_dict = xmltodict.parse(content.decode('utf-8'))
             
-            # Encontrar NFe
-            if 'nfeProc' in xml_dict:
-                nfe = xml_dict['nfeProc']['NFe']['infNFe']
-            elif 'NFe' in xml_dict:
-                nfe = xml_dict['NFe']['infNFe']
-            else:
-                return []
+            # Validar NFe usando a função do utils
+            validacao = validate_nfe_version(xml_dict)
+            if not validacao["valid"]:
+                return [{
+                    'numero_nf': 'ERRO',
+                    'data_emissao': '2025-01-01',
+                    'emitente': f'NFe inválida: {validacao["error"]}',
+                    'erro': validacao["error"]
+                }]
             
-            ide = nfe.get('ide', {})
-            emit = nfe.get('emit', {})
-            total = nfe.get('total', {})
-            
-            # Dados base da nota
-            base_data = {
-                'numero_nf': ide.get('nNF', 'N/A'),
-                'serie': ide.get('serie', '1'),
-                'data_emissao': ide.get('dhEmi', ide.get('dEmi', datetime.now().strftime('%Y-%m-%d'))),
-                'emitente': emit.get('xNome', 'N/A'),
-                'cnpj_emitente': emit.get('CNPJ', 'N/A'),
-                'valor_total_nf': total.get('ICMSTot', {}).get('vNF', '0')
+            # A nota pode estar aninhada de formas diferentes
+            nfe_root = xml_dict.get("NFe") \
+                or xml_dict.get("nfeProc", {}).get("NFe") \
+                or xml_dict.get("nfeProc", {}).get("nfe:NFe")
+
+            if not nfe_root:
+                return [{
+                    'numero_nf': 'ERRO',
+                    'data_emissao': '2025-01-01',
+                    'emitente': 'Estrutura NFe não encontrada',
+                    'erro': 'Estrutura NFe não encontrada'
+                }]
+
+            inf_nfe = nfe_root.get("infNFe") or nfe_root.get("nfe:infNFe")
+
+            # Função auxiliar para acessos seguros
+            def g(dic, path, default=""):
+                for p in path.split("."):
+                    dic = dic.get(p, {})
+                return dic or default
+
+            # Dados do cabeçalho
+            ide = inf_nfe.get("ide", {})
+            emit = inf_nfe.get("emit", {})
+            dest = inf_nfe.get("dest", {})
+            total = inf_nfe.get("total", {}).get("ICMSTot", {})
+            transp = inf_nfe.get("transp", {})
+
+            dados_comuns = {
+                "numero_nf": g(ide, "nNF"),
+                "serie": g(ide, "serie"),
+                "data_emissao": g(ide, "dEmi") or g(ide, "dhEmi", "")[:10],
+                "modelo": g(ide, "mod"),
+                "tipo_operacao": g(ide, "tpNF"),
+                "finalidade": g(ide, "finNFe"),
+                "natureza_operacao": g(ide, "natOp"),
+                "versao_nfe": validacao["version"],
+
+                "cnpj_emitente": g(emit, "CNPJ"),
+                "emitente": g(emit, "xNome"),
+                "municipio_emitente": g(emit, "enderEmit.xMun"),
+                "uf_emitente": g(emit, "enderEmit.UF"),
+
+                "cnpj_destinatario": g(dest, "CNPJ"),
+                "destinatario": g(dest, "xNome"),
+                "municipio_dest": g(dest, "enderDest.xMun"),
+                "uf_dest": g(dest, "enderDest.UF"),
+
+                "valor_total_nf": g(total, "vNF"),
+                "valor_produtos": g(total, "vProd"),
+                "valor_icms": g(total, "vICMS"),
+                "valor_pis": g(total, "vPIS"),
+                "valor_cofins": g(total, "vCOFINS"),
+
+                "transportadora": g(transp, "transporta.xNome"),
+                "placa_veiculo": g(transp, "veicTransp.placa"),
             }
-            
-            # Processar itens
-            det = nfe.get('det', [])
-            if not isinstance(det, list):
-                det = [det]
-            
-            result = []
-            for item in det:
-                prod = item.get('prod', {})
-                item_data = base_data.copy()
-                item_data.update({
-                    'descricao_produto': prod.get('xProd', 'Produto'),
-                    'quantidade_comercial': prod.get('qCom', '1'),
-                    'valor_unitario': prod.get('vUnCom', '0'),
-                    'valor_total_item': prod.get('vProd', '0'),
-                    'cfop': prod.get('CFOP', '5102')
-                })
-                result.append(item_data)
-            
-            return result or [base_data]
+
+            # Produtos
+            itens = inf_nfe.get("det", [])
+            if isinstance(itens, dict):  # caso haja apenas 1 item
+                itens = [itens]
+
+            resultado = []
+            for item in itens:
+                prod = item.get("prod", {})
+                imposto = item.get("imposto", {})
+
+                icms = next(iter(imposto.get("ICMS", {}).values()), {})
+                pis = next(iter(imposto.get("PIS", {}).values()), {})
+                cofins = next(iter(imposto.get("COFINS", {}).values()), {})
+
+                item_extraido = {
+                    **dados_comuns,
+                    "codigo_produto": prod.get("cProd", ""),
+                    "descricao_produto": prod.get("xProd", ""),
+                    "cfop": prod.get("CFOP", ""),
+                    "quantidade_comercial": prod.get("qCom", ""),
+                    "unidade_comercial": prod.get("uCom", ""),
+                    "valor_unitario": prod.get("vUnCom", ""),
+                    "valor_total_item": prod.get("vProd", ""),
+
+                    "icms_valor": icms.get("vICMS", ""),
+                    "pis_valor": pis.get("vPIS", ""),
+                    "cofins_valor": cofins.get("vCOFINS", "")
+                }
+
+                resultado.append(item_extraido)
+
+            return resultado or [dados_comuns]
             
         except Exception as e:
             return [{
                 'numero_nf': 'ERRO',
-                'data_emissao': datetime.now().strftime('%Y-%m-%d'),
+                'data_emissao': '2025-01-01',
                 'emitente': f'Erro: {str(e)[:50]}',
                 'erro': str(e)
             }]
@@ -180,82 +248,47 @@ class handler(BaseHTTPRequestHandler):
             self.end_headers()
             
             try:
+                import sys
+                import os
                 import tempfile
-                from openpyxl import Workbook
-                from openpyxl.styles import Font, PatternFill
+                
+                # Adicionar o diretório backend ao path para importar utils
+                backend_path = os.path.join(os.path.dirname(os.path.dirname(__file__)))
+                if backend_path not in sys.path:
+                    sys.path.append(backend_path)
+                
+                from utils.excel_handler import salvar_em_excel
                 
                 # Buscar dados do cache
                 dados = globals().get('cache_dados', [])
                 
                 if not dados:
-                    # Dados de exemplo se não houver cache
-                    dados = [{
-                        'numero_nf': '123456',
-                        'serie': '1',
-                        'data_emissao': datetime.now().strftime('%Y-%m-%d'),
-                        'emitente': 'Empresa Exemplo Ltda',
-                        'descricao_produto': 'Produto de Exemplo',
-                        'quantidade_comercial': '10',
-                        'valor_unitario': '100.00',
-                        'valor_total_item': '1000.00',
-                        'cfop': '5102'
-                    }]
+                    # Se não houver dados, retornar erro
+                    self.send_response(400)
+                    self.send_header('Content-Type', 'application/json')
+                    self.send_header('Access-Control-Allow-Origin', '*')
+                    self.end_headers()
+                    
+                    error_response = {
+                        'message': 'Nenhum dado para processar. Faça upload dos XMLs primeiro.',
+                        'erro': True
+                    }
+                    self.wfile.write(json.dumps(error_response).encode())
+                    return
                 
-                # Criar workbook Excel
-                wb = Workbook()
-                ws = wb.active
-                ws.title = "NFe Processadas"
-                
-                # Headers com formatação
-                headers = ['Numero NF', 'Serie', 'Data Emissao', 'Emitente', 'CNPJ Emitente', 
-                          'Produto', 'Quantidade', 'Valor Unitario', 'Total Item', 'CFOP']
-                
-                # Estilo do cabeçalho
-                header_font = Font(bold=True, color="FFFFFF")
-                header_fill = PatternFill(start_color="366092", end_color="366092", fill_type="solid")
-                
-                # Adicionar cabeçalhos
-                for col, header in enumerate(headers, 1):
-                    cell = ws.cell(row=1, column=col, value=header)
-                    cell.font = header_font
-                    cell.fill = header_fill
-                
-                # Adicionar dados
-                for row_idx, item in enumerate(dados, 2):
-                    ws.cell(row=row_idx, column=1, value=item.get('numero_nf', ''))
-                    ws.cell(row=row_idx, column=2, value=item.get('serie', ''))
-                    ws.cell(row=row_idx, column=3, value=item.get('data_emissao', ''))
-                    ws.cell(row=row_idx, column=4, value=item.get('emitente', ''))
-                    ws.cell(row=row_idx, column=5, value=item.get('cnpj_emitente', ''))
-                    ws.cell(row=row_idx, column=6, value=item.get('descricao_produto', ''))
-                    ws.cell(row=row_idx, column=7, value=item.get('quantidade_comercial', ''))
-                    ws.cell(row=row_idx, column=8, value=item.get('valor_unitario', ''))
-                    ws.cell(row=row_idx, column=9, value=item.get('valor_total_item', ''))
-                    ws.cell(row=row_idx, column=10, value=item.get('cfop', ''))
-                
-                # Ajustar largura das colunas
-                for column in ws.columns:
-                    max_length = 0
-                    column_letter = column[0].column_letter
-                    for cell in column:
-                        try:
-                            if len(str(cell.value)) > max_length:
-                                max_length = len(str(cell.value))
-                        except:
-                            pass
-                    adjusted_width = min(max_length + 2, 50)
-                    ws.column_dimensions[column_letter].width = adjusted_width
-                
-                # Salvar em arquivo temporário
+                # Criar arquivo temporário
                 with tempfile.NamedTemporaryFile(delete=False, suffix='.xlsx') as tmp_file:
-                    wb.save(tmp_file.name)
-                    
-                    # Ler arquivo e enviar
-                    with open(tmp_file.name, 'rb') as f:
-                        excel_content = f.read()
-                    
-                    # Limpar arquivo temporário
-                    os.unlink(tmp_file.name)
+                    tmp_path = tmp_file.name
+                
+                # Usar a função do utils para salvar em Excel
+                num_linhas = salvar_em_excel(dados, tmp_path)
+                
+                # Ler arquivo e enviar
+                with open(tmp_path, 'rb') as f:
+                    excel_content = f.read()
+                
+                # Limpar arquivo temporário
+                os.unlink(tmp_path)
                 
                 self.wfile.write(excel_content)
                 
