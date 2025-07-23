@@ -289,9 +289,5 @@ async def processar_download():
         logger.error(f"Erro no download: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-# Para Vercel - exportar o app diretamente
-def handler(request):
-    return app
-
-# Também exportar como app para compatibilidade
-app_handler = app
+# Para Vercel - exportar app ASGI diretamente
+handler = app
