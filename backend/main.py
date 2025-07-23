@@ -3,14 +3,27 @@ import uuid
 import os
 import logging
 import time
+import sys
 from datetime import datetime
 from fastapi import FastAPI, File, UploadFile, Form, HTTPException
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List
 from pathlib import Path
-from utils.xml_parser import parse_nfe
-from utils.excel_handler import salvar_em_excel
+
+# Adicionar o diretório atual ao path para imports funcionarem no Vercel
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+try:
+    from utils.xml_parser import parse_nfe
+    from utils.excel_handler import salvar_em_excel
+except ImportError:
+    # Fallback para imports relativos se estiver em ambiente local
+    import sys
+    sys.path.insert(0, os.path.join(os.path.dirname(__file__), '.'))
+    from utils.xml_parser import parse_nfe
+    from utils.excel_handler import salvar_em_excel
+
 import config
 from validador import validar_xml_nfe, validar_tamanho_arquivo, contar_itens_xml
 
