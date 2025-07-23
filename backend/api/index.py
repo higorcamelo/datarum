@@ -165,7 +165,7 @@ class handler(BaseHTTPRequestHandler):
                     'emitentes': list(stats['emitentes'])[:10],
                     'valor_total': round(stats['valor_total'], 2),
                     'session_id': f"session_{stats['processados']}",
-                    'planilha_destino': 'datarum_processamento.csv'
+                    'planilha_destino': 'datarum_processamento.xlsx'
                 }
                 
             except Exception as e:
@@ -175,12 +175,16 @@ class handler(BaseHTTPRequestHandler):
         
         elif 'processar' in self.path:
             self.send_response(200)
-            self.send_header('Content-Type', 'text/csv; charset=utf-8')
+            self.send_header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
             self.send_header('Access-Control-Allow-Origin', '*')
-            self.send_header('Content-Disposition', 'attachment; filename=datarum_processamento.csv')
+            self.send_header('Content-Disposition', 'attachment; filename=datarum_processamento.xlsx')
             self.end_headers()
             
             try:
+                import tempfile
+                from openpyxl import Workbook
+                from openpyxl.styles import Font, PatternFill
+                
                 # Buscar dados do cache
                 global cache_dados
                 dados = cache_dados if 'cache_dados' in globals() else []
@@ -199,30 +203,70 @@ class handler(BaseHTTPRequestHandler):
                         'cfop': '5102'
                     }]
                 
-                # Gerar CSV
-                csv_lines = ['Numero NF,Serie,Data Emissao,Emitente,Produto,Quantidade,Valor Unitario,Total Item,CFOP']
+                # Criar workbook Excel
+                wb = Workbook()
+                ws = wb.active
+                ws.title = "NFe Processadas"
                 
-                for item in dados:
-                    row = [
-                        str(item.get('numero_nf', '')),
-                        str(item.get('serie', '')),
-                        str(item.get('data_emissao', '')),
-                        str(item.get('emitente', '')).replace(',', ';'),
-                        str(item.get('descricao_produto', '')).replace(',', ';'),
-                        str(item.get('quantidade_comercial', '')),
-                        str(item.get('valor_unitario', '')),
-                        str(item.get('valor_total_item', '')),
-                        str(item.get('cfop', ''))
-                    ]
-                    csv_lines.append(','.join(f'"{cell}"' for cell in row))
+                # Headers com formatação
+                headers = ['Numero NF', 'Serie', 'Data Emissao', 'Emitente', 'CNPJ Emitente', 
+                          'Produto', 'Quantidade', 'Valor Unitario', 'Total Item', 'CFOP']
                 
-                csv_content = '\n'.join(csv_lines)
+                # Estilo do cabeçalho
+                header_font = Font(bold=True, color="FFFFFF")
+                header_fill = PatternFill(start_color="366092", end_color="366092", fill_type="solid")
                 
-                # Adicionar BOM para UTF-8
-                bom = '\ufeff'
-                self.wfile.write((bom + csv_content).encode('utf-8'))
+                # Adicionar cabeçalhos
+                for col, header in enumerate(headers, 1):
+                    cell = ws.cell(row=1, column=col, value=header)
+                    cell.font = header_font
+                    cell.fill = header_fill
+                
+                # Adicionar dados
+                for row_idx, item in enumerate(dados, 2):
+                    ws.cell(row=row_idx, column=1, value=item.get('numero_nf', ''))
+                    ws.cell(row=row_idx, column=2, value=item.get('serie', ''))
+                    ws.cell(row=row_idx, column=3, value=item.get('data_emissao', ''))
+                    ws.cell(row=row_idx, column=4, value=item.get('emitente', ''))
+                    ws.cell(row=row_idx, column=5, value=item.get('cnpj_emitente', ''))
+                    ws.cell(row=row_idx, column=6, value=item.get('descricao_produto', ''))
+                    ws.cell(row=row_idx, column=7, value=item.get('quantidade_comercial', ''))
+                    ws.cell(row=row_idx, column=8, value=item.get('valor_unitario', ''))
+                    ws.cell(row=row_idx, column=9, value=item.get('valor_total_item', ''))
+                    ws.cell(row=row_idx, column=10, value=item.get('cfop', ''))
+                
+                # Ajustar largura das colunas
+                for column in ws.columns:
+                    max_length = 0
+                    column_letter = column[0].column_letter
+                    for cell in column:
+                        try:
+                            if len(str(cell.value)) > max_length:
+                                max_length = len(str(cell.value))
+                        except:
+                            pass
+                    adjusted_width = min(max_length + 2, 50)
+                    ws.column_dimensions[column_letter].width = adjusted_width
+                
+                # Salvar em arquivo temporário
+                with tempfile.NamedTemporaryFile(delete=False, suffix='.xlsx') as tmp_file:
+                    wb.save(tmp_file.name)
+                    
+                    # Ler arquivo e enviar
+                    with open(tmp_file.name, 'rb') as f:
+                        excel_content = f.read()
+                    
+                    # Limpar arquivo temporário
+                    os.unlink(tmp_file.name)
+                
+                self.wfile.write(excel_content)
                 
             except Exception as e:
+                # Em caso de erro, fallback para CSV
+                self.send_response(200)
+                self.send_header('Content-Type', 'text/csv; charset=utf-8')
+                self.send_header('Content-Disposition', 'attachment; filename=datarum_erro.csv')
+                
                 error_csv = f'Erro,{str(e)}\nContate o suporte,suporte@datarum.com.br'
                 self.wfile.write(error_csv.encode('utf-8'))
     
