@@ -390,7 +390,14 @@ export default {
         }
         
         const info = await responseInfo.json();
-        this.showResults(info);
+        
+        // ✅ Mostrar resultados diretamente aqui (em vez de chamar showResults)
+        this.mensagem = `✅ Processamento concluído!\n` +
+          `📁 Arquivos: ${info.arquivos_processados}\n` +
+          `📄 Itens: ${info.itens_processados}\n` +
+          `💰 Valor total: R$ ${info.valor_total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}\n` +
+          `📋 NFes: ${info.notas_encontradas.slice(0, 3).join(', ')}${info.notas_encontradas.length > 3 ? '...' : ''}\n` +
+          `🏢 Emitentes: ${info.emitentes.slice(0, 2).join(', ')}${info.emitentes.length > 2 ? '...' : ''}`;
         
         // Depois: baixar Excel usando o MESMO formData
         const responseExcel = await fetch(`${API_URL}/processar`, {
@@ -403,16 +410,22 @@ export default {
           throw new Error(`Erro ${responseExcel.status}: ${errorText}`);
         }
         
+        // ✅ Download do arquivo Excel
         const blob = await responseExcel.blob();
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
         a.download = `${this.nomePlanilha}.xlsx`;
+        document.body.appendChild(a);
         a.click();
+        document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
         
+        // ✅ Mostrar sucesso no download
+        this.mensagem += '\n📥 Download iniciado automaticamente!';
+        
       } catch (error) {
-        this.mensagem = `Erro: ${error.message}`;
+        this.mensagem = `❌ Erro: ${error.message}`;
         console.error('Erro no processamento:', error);
       } finally {
         this.loading = false;
