@@ -7,6 +7,7 @@ import sys
 from datetime import datetime
 from fastapi import FastAPI, File, UploadFile, Form, HTTPException
 from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List
 from pathlib import Path
@@ -55,6 +56,25 @@ app = FastAPI(
     version="1.0.1"
 )
 
+# Configurar arquivos estáticos do frontend (se existirem)
+static_dir = Path(__file__).parent / "static"
+if static_dir.exists():
+    app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
+    
+    @app.get("/")
+    async def serve_frontend():
+        """Servir frontend (index.html)"""
+        index_file = static_dir / "index.html"
+        if index_file.exists():
+            return FileResponse(str(index_file))
+        else:
+            return {"status": "ok", "message": "Datarum API Online - Fly.io", "timestamp": datetime.now().isoformat()}
+else:
+    @app.get("/")
+    async def root():
+        """Endpoint raiz com informações da API"""
+        return {"status": "ok", "message": "Datarum API Online - Fly.io", "timestamp": datetime.now().isoformat()}
+
 # CORS configurável
 app.add_middleware(
     CORSMiddleware,
@@ -64,23 +84,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/")
-async def root():
-    """Endpoint raiz com informações da API"""
-    logger.info("Root endpoint accessed")
-    return {
-        "name": "Datarum API",
-        "version": "1.0.1",
-        "description": "Conversor de XMLs de NFe para Excel",
-        "status": "online",
-        "environment": config.ENVIRONMENT,
-        "cors_origins": config.CORS_ORIGINS,
-        "endpoints": {
-            "processar": "POST /processar - Processa XMLs e retorna Excel",
-            "processar-info": "POST /processar-info - Retorna estatísticas sem arquivo",
-            "health": "GET /health - Status da API"
-        }
-    }
+# As rotas da API estão definidas abaixo
 
 @app.get("/health")
 async def health_check():
@@ -311,3 +315,31 @@ async def processar_info(
         "valor_total": round(valor_total, 2) if valor_total > 0 else 0,
         "planilha_destino": f"{planilha}.xlsx"
     }
+
+# Rota catch-all para servir frontend em qualquer path que não seja API
+@app.get("/{full_path:path}")
+async def serve_spa(full_path: str):
+    """Servir Single Page Application (SPA) para qualquer rota que não seja API"""
+    static_dir = Path(__file__).parent / "static"
+    index_file = static_dir / "index.html"
+    
+    # Se é uma rota de API, deixar o FastAPI lidar com o 404
+    if full_path.startswith("api/"):
+        raise HTTPException(status_code=404, detail="API endpoint not found")
+    
+    # Se o arquivo estático existe, servir ele
+    if static_dir.exists() and index_file.exists():
+        return FileResponse(str(index_file))
+    else:
+        # Fallback para API info se não há frontend
+        return {
+            "name": "Datarum API", 
+            "status": "online",
+            "message": "Frontend não encontrado, apenas API disponível",
+            "endpoints": {
+                "processar": "POST /processar",
+                "processar-info": "POST /processar-info", 
+                "health": "GET /health",
+                "docs": "GET /docs"
+            }
+        }
