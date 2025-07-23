@@ -1,4 +1,5 @@
 import pandas as pd
+import os
 from pathlib import Path
 
 def salvar_em_excel(dados: list[dict], caminho_planilha: str):
@@ -82,8 +83,14 @@ def salvar_em_excel(dados: list[dict], caminho_planilha: str):
     colunas_finais = [col for col in ordem if col in df_novos.columns]
     df_final = df_novos[colunas_finais]
 
-    # Criar diretório se não existir
-    caminho.parent.mkdir(parents=True, exist_ok=True)
+    # Criar diretório se não existir - ajustado para Vercel
+    if os.getenv('VERCEL_ENV') or os.getenv('VERCEL') or os.getenv('ENVIRONMENT') == 'production':
+        # No Vercel, usar /tmp que é o único diretório gravável
+        if not str(caminho).startswith('/tmp'):
+            caminho = Path('/tmp') / caminho.name
+    else:
+        # Ambiente local - criar diretório normalmente
+        caminho.parent.mkdir(parents=True, exist_ok=True)
     
     df_final.to_excel(caminho, index=False, engine='openpyxl')
     return len(df_novos)

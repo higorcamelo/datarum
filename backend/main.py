@@ -27,16 +27,26 @@ except ImportError:
 import config
 from validador import validar_xml_nfe, validar_tamanho_arquivo, contar_itens_xml
 
-# Configurar logging básico
-os.makedirs('logs', exist_ok=True)
-logging.basicConfig(
-    level=getattr(logging, config.LOG_LEVEL),
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler('logs/datarum.log', encoding='utf-8'),
-        logging.StreamHandler()
-    ]
-)
+# Configurar logging para ambiente serverless (Vercel)
+# No Vercel, só podemos usar stdout/stderr, não arquivos
+if os.getenv('VERCEL_ENV') or os.getenv('VERCEL') or os.getenv('ENVIRONMENT') == 'production':
+    # Configuração para Vercel - apenas console
+    logging.basicConfig(
+        level=getattr(logging, config.LOG_LEVEL),
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        handlers=[logging.StreamHandler()]
+    )
+else:
+    # Configuração para desenvolvimento local
+    os.makedirs('logs', exist_ok=True)
+    logging.basicConfig(
+        level=getattr(logging, config.LOG_LEVEL),
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        handlers=[
+            logging.FileHandler('logs/datarum.log', encoding='utf-8'),
+            logging.StreamHandler()
+        ]
+    )
 logger = logging.getLogger("datarum")
 
 app = FastAPI(
