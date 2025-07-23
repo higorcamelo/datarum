@@ -13,19 +13,18 @@ RUN npm run build
 
 # Estágio 2: Backend Python + frontend servido via FastAPI
 FROM python:3.12-alpine
-
 WORKDIR /app
 
 # Dependências do sistema
 RUN apk add --no-cache gcc musl-dev libffi-dev openssl-dev libxml2-dev libxslt-dev
 
 # Instalar dependências Python
-COPY backend/requirements.txt .
+COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
 # Copiar código do backend
-COPY backend/ .
+COPY . .
 
 # Copiar frontend buildado
 COPY --from=frontend-build /frontend/dist ./static/
@@ -37,5 +36,5 @@ USER app
 # Expor porta
 EXPOSE 8080
 
-# Comando correto para FastAPI
+# Comando para FastAPI
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
