@@ -2,13 +2,6 @@
   "version": 2,
   "builds": [
     {
-      "src": "frontend/sigonota-frontend/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
-    },
-    {
       "src": "backend/api/index.py",
       "use": "@vercel/python"
     }
@@ -16,17 +9,7 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "backend/api/index.py"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "frontend/sigonota-frontend/$1"
+      "dest": "/backend/api/index.py"
     }
-  ],
-  "outputDirectory": "frontend/sigonota-frontend/dist",
-  "framework": "vite",
-  "env": {
-    "ENVIRONMENT": "production",
-    "CORS_ORIGINS": "[\"https://www.datarum.com.br\", \"https://datarum.com.br\", \"http://localhost:5173\", \"http://localhost:3000\"]"
-  }
+  ]
 }

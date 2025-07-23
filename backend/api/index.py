@@ -154,8 +154,7 @@ class handler(BaseHTTPRequestHandler):
                                         pass
                 
                 # Salvar no cache global (simplificado)
-                global cache_dados
-                cache_dados = todos_dados
+                globals()['cache_dados'] = todos_dados
                 
                 response = {
                     'message': 'Processamento concluído!',
@@ -186,8 +185,7 @@ class handler(BaseHTTPRequestHandler):
                 from openpyxl.styles import Font, PatternFill
                 
                 # Buscar dados do cache
-                global cache_dados
-                dados = cache_dados if 'cache_dados' in globals() else []
+                dados = globals().get('cache_dados', [])
                 
                 if not dados:
                     # Dados de exemplo se não houver cache
