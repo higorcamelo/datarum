@@ -356,7 +356,7 @@ export default {
     usarSugestao() {
       const agora = new Date();
       const pad = (n) => n.toString().padStart(2, '0');
-      const sugestao = `sigonota_${agora.getFullYear()}-${pad(agora.getMonth()+1)}-${pad(agora.getDate())}_${pad(agora.getHours())}${pad(agora.getMinutes())}`;
+      const sugestao = `datarum_${agora.getFullYear()}-${pad(agora.getMonth()+1)}-${pad(agora.getDate())}_${pad(agora.getHours())}${pad(agora.getMinutes())}`;
       this.nomePlanilha = sugestao;
     },
     async enviarArquivos() {
