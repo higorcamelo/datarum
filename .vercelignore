@@ -1,0 +1,33 @@
+# Ignorar arquivos desnecessários no deploy
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+.coverage
+.pytest_cache/
+.venv/
+venv/
+logs/
+*.log
+.DS_Store
+.env
+.env.local
+*.db
+*.sqlite
+
+# Ignorar o vercel_app.py antigo
+backend/vercel_app.py
+backend/main.py
+backend/run.py
+backend/start.py
+backend/test*.py
+backend/tests/
+
+# Manter apenas o necessário para a API
+!backend/api/
+!backend/utils/
+!backend/validador.py
+!backend/config.py
+!backend/config_simple.py
