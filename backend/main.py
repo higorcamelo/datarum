@@ -311,6 +311,3 @@ async def processar_info(
         "valor_total": round(valor_total, 2) if valor_total > 0 else 0,
         "planilha_destino": f"{planilha}.xlsx"
     }
-
-# Handler para Vercel
-handler = app
