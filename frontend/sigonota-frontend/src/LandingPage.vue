@@ -27,31 +27,29 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid lg:grid-cols-2 gap-12 items-center">
           <div class="text-center lg:text-left">
-            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
-              Converta XMLs de NFe em 
-              <span class="text-purple-600 bg-gradient-to-r from-purple-600 to-purple-700 bg-clip-text text-transparent">
-                planilhas Excel
-              </span>
-              automaticamente
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-purple-800 leading-tight mb-6">
+              Datarum transforma seus XMLs fiscais em planilhas inteligentes
             </h1>
-            <p class="text-xl text-gray-600 mb-8 leading-relaxed">
-              Transforme centenas de XMLs de Nota Fiscal Eletrônica em planilhas organizadas e profissionais em segundos. 
-              Suporte completo para todas as versões NFe (1.10 a 4.00).
+            <p class="text-xl text-gray-600 mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+              Automatize relatórios contábeis, reduza erros e ganhe tempo. Tudo direto no navegador — sem instalações, sem enrolação.
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <button @click="goToApp" class="bg-purple-600 text-white px-8 py-4 rounded-lg hover:bg-purple-700 transition font-semibold text-lg shadow-lg">
-                Começar Agora - Grátis
+              <button @click="goToApp" class="bg-purple-700 hover:bg-purple-800 text-white font-semibold py-4 px-8 rounded-lg shadow-lg transition text-lg">
+                Usar gratuitamente
               </button>
               <button @click="scrollTo('demo')" class="border-2 border-purple-600 text-purple-600 px-8 py-4 rounded-lg hover:bg-purple-50 transition font-semibold text-lg">
                 Ver Demonstração
               </button>
             </div>
-            <div class="flex items-center gap-6 mt-8 justify-center lg:justify-start text-sm text-gray-500">
+            <p class="text-sm text-gray-600 mt-4 text-center lg:text-left">
+              Lançamento Beta — use gratuitamente enquanto aprimoramos a plataforma.
+            </p>
+            <div class="flex items-center gap-6 mt-6 justify-center lg:justify-start text-sm text-gray-500">
               <div class="flex items-center gap-2">
                 <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                 </svg>
-                <span>100% Gratuito</span>
+                <span>Beta disponível sem custo</span>
               </div>
               <div class="flex items-center gap-2">
                 <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
@@ -65,18 +63,7 @@
                 </svg>
                 <span>Processamento Local</span>
               </div>
-            </div>
-            <div class="mt-6 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border border-blue-200">
-              <div class="flex items-center gap-2 text-blue-700 mb-2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-                <span class="font-semibold text-sm">Versão 1.0 - Lançamento Beta</span>
-              </div>
-              <p class="text-blue-600 text-sm">
-                Esta versão está disponível gratuitamente por tempo limitado durante nosso período de testes. 
-                <span class="font-medium">Ajude-nos com seu feedback para melhorar!</span>
-              </p>
+              <span class="font-medium text-sm text-purple-600">Ajude com seu feedback</span>
             </div>
           </div>
           <div class="relative">
@@ -111,6 +98,33 @@
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+        
+        <!-- Quick Benefits Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 max-w-5xl mx-auto">
+          <div class="bg-white p-6 rounded-lg shadow-lg text-center border border-gray-100">
+            <svg class="w-10 h-10 text-purple-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"/>
+            </svg>
+            <h3 class="text-xl font-semibold mb-2 text-gray-900">Upload em massa</h3>
+            <p class="text-gray-600">Arraste vários XMLs de uma vez só, sem limites artificiais.</p>
+          </div>
+          
+          <div class="bg-white p-6 rounded-lg shadow-lg text-center border border-gray-100">
+            <svg class="w-10 h-10 text-purple-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+            </svg>
+            <h3 class="text-xl font-semibold mb-2 text-gray-900">Processamento instantâneo</h3>
+            <p class="text-gray-600">Conversão automática em segundos, direto no seu navegador.</p>
+          </div>
+          
+          <div class="bg-white p-6 rounded-lg shadow-lg text-center border border-gray-100">
+            <svg class="w-10 h-10 text-purple-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <h3 class="text-xl font-semibold mb-2 text-gray-900">100% seguro e privado</h3>
+            <p class="text-gray-600">Seus dados ficam apenas no seu computador, zero uploads.</p>
           </div>
         </div>
       </div>
@@ -386,8 +400,8 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"/>
               </svg>
             </div>
-            <h3 class="text-lg font-semibold text-gray-900 mb-2">Primeira versão SaaS</h3>
-            <p class="text-gray-600 text-sm">Escolher colunas específicas, linha de soma, melhor resumo. Freemium: 5 arquivos/mês grátis.</p>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">O que vem por aí</h3>
+            <p class="text-gray-600 text-sm">Recursos avançados de análise, colunas personalizadas, totalizações automáticas — tudo no seu navegador. Uma versão gratuita continuará disponível para uso leve.</p>
           </div>
 
           <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 relative">
