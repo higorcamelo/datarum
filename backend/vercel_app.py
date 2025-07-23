@@ -1,40 +1,42 @@
-def handler(event, context):
-    """Handler simples que funciona no Vercel"""
-    
-    # Importar aqui dentro para evitar problemas de inicialização
-    import json
-    from urllib.parse import parse_qs
-    
-    # Verificar se é POST para processar-info
-    method = event.get('httpMethod', event.get('requestContext', {}).get('http', {}).get('method', 'GET'))
-    path = event.get('path', event.get('rawPath', ''))
-    
-    if method == 'POST' and 'processar-info' in path:
-        return {
-            'statusCode': 200,
-            'headers': {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
-                'Access-Control-Allow-Headers': '*'
-            },
-            'body': json.dumps({
-                'message': 'API funcionando!',
-                'endpoint': 'processar-info',
-                'method': method,
-                'path': path
-            })
-        }
-    
-    # Endpoint raiz
-    return {
-        'statusCode': 200,
-        'headers': {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
-        },
-        'body': json.dumps({
+from http.server import BaseHTTPRequestHandler
+import json
+import urllib.parse
+
+class handler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.send_header('Content-Type', 'application/json')
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.end_headers()
+        
+        response = {
             'message': 'Datarum API está funcionando!',
-            'status': 'online'
-        })
-    }
+            'status': 'online',
+            'path': self.path
+        }
+        
+        self.wfile.write(json.dumps(response).encode('utf-8'))
+        
+    def do_POST(self):
+        self.send_response(200)
+        self.send_header('Content-Type', 'application/json')
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
+        self.send_header('Access-Control-Allow-Headers', '*')
+        self.end_headers()
+        
+        response = {
+            'message': 'API funcionando!',
+            'endpoint': 'processar-info',
+            'method': 'POST',
+            'path': self.path
+        }
+        
+        self.wfile.write(json.dumps(response).encode('utf-8'))
+        
+    def do_OPTIONS(self):
+        self.send_response(200)
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
+        self.send_header('Access-Control-Allow-Headers', '*')
+        self.end_headers()
