@@ -1,20 +1,21 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.responses import JSONResponse, Response
 from fastapi.middleware.cors import CORSMiddleware
+from mangum import Mangum
 from typing import List
 import tempfile
 import os
 import sys
+import pathlib
 from datetime import datetime
+import xmltodict
 
-# Adicionar o diretório backend ao path para importar utils
-backend_path = os.path.join(os.path.dirname(os.path.dirname(__file__)))
-if backend_path not in sys.path:
-    sys.path.append(backend_path)
+# Adicionar o diretório backend ao path para importar utils (robusto para serverless)
+BASE_DIR = pathlib.Path(__file__).resolve().parent.parent
+sys.path.append(str(BASE_DIR))
 
 from utils.xml_parser import validate_nfe_version
 from utils.excel_handler import salvar_em_excel
-import xmltodict
 
 app = FastAPI()
 
@@ -235,6 +236,5 @@ async def processar_excel(files: List[UploadFile] = File(...)):
             headers={'Content-Disposition': 'attachment; filename=datarum_erro.csv'}
         )
 
-# Handler para Vercel
-from mangum import Mangum
+# Handler para Vercel - deve ser a última linha
 handler = Mangum(app)
