@@ -362,108 +362,52 @@ export default {
     async enviarArquivos() {
       if (!this.selectedFiles.length || !this.nomePlanilha.trim()) return;
 
-      this.loading = true;  // ✅ Corrigido
+      this.loading = true;
       this.mensagem = '';
       this.validationMessage = null;
 
       const formData = new FormData();
-      this.selectedFiles.forEach(file => formData.append('xmls', file));
-      formData.append('planilha', this.nomePlanilha.trim());
+      this.selectedFiles.forEach(file => formData.append('files', file));
 
-      // ✅ URL dinâmica para funcionar em dev e produção
-      const baseURL = process.env.NODE_ENV === 'production' 
-        ? '/api'  // No Vercel: https://seu-dominio.vercel.app/api
-        : 'http://localhost:8000';  // Dev local
-
-      // No frontend, chamar API externa
-      const API_URL = 'https://sigonota-api.fly.dev';
+      // ✅ URL correta do backend
+      const API_URL = 'https://datarum-api.fly.dev';
 
       try {
-        // 📊 Primeiro: obter informações sobre o processamento
-        const formDataInfo = new FormData();
-        this.selectedFiles.forEach(file => formDataInfo.append('xmls', file));
-        formDataInfo.append('planilha', this.nomePlanilha.trim());
-
-        const infoResponse = await fetch(`${API_URL}/processar-info`, {
-          method: 'POST',
-          body: formDataInfo
-        });
-
-        if (!infoResponse.ok) {
-          const errorData = await infoResponse.json().catch(() => ({}));
-          throw new Error(errorData.detail || 'Falha ao processar os arquivos');
-        }
-        const resultado = await infoResponse.json();
-
-        // 📥 Segundo: fazer download do arquivo
-        const downloadResponse = await fetch(`${API_URL}/processar`, {
+        // Primeiro: obter informações
+        const responseInfo = await fetch(`${API_URL}/processar-info`, {
           method: 'POST',
           body: formData
         });
-
-        if (!downloadResponse.ok) {
-          const errorData = await downloadResponse.json().catch(() => ({}));
-          throw new Error(errorData.detail || 'Falha ao gerar arquivo');
+        
+        if (!responseInfo.ok) {
+          throw new Error(`Erro ${responseInfo.status}: ${responseInfo.statusText}`);
         }
-
-        // �🔽 Força o download
-        const blob = await downloadResponse.blob();
+        
+        const info = await responseInfo.json();
+        this.showResults(info);
+        
+        // Depois: baixar Excel
+        const responseExcel = await fetch(`${API_URL}/processar`, {
+          method: 'POST', 
+          body: formData
+        });
+        
+        if (!responseExcel.ok) {
+          throw new Error(`Erro ${responseExcel.status}: ${responseExcel.statusText}`);
+        }
+        
+        const blob = await responseExcel.blob();
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `${this.nomePlanilha.trim()}.xlsx`;
-        document.body.appendChild(a);
+        a.download = `${this.nomePlanilha}.xlsx`;
         a.click();
-        a.remove();
         window.URL.revokeObjectURL(url);
-
-        // ✅ Feedback rico com estatísticas avançadas
-        const feedback = [
-          `✅ ${resultado.itens_processados} itens processados com sucesso!`,
-          `📄 Planilha: ${resultado.planilha_destino}`,
-          `📦 ${resultado.arquivos_processados} arquivos XML processados`
-        ];
-
-        if (resultado.notas_encontradas && resultado.notas_encontradas.length > 0) {
-          const notasTexto = resultado.notas_encontradas.length > 5 
-            ? `${resultado.notas_encontradas.slice(0, 5).join(', ')}... (+${resultado.notas_encontradas.length - 5} mais)`
-            : resultado.notas_encontradas.join(', ');
-          feedback.push(`🧾 Notas: ${notasTexto}`);
-        }
-
-        if (resultado.emitentes && resultado.emitentes.length > 0) {
-          const emitentesTexto = resultado.emitentes.length > 3
-            ? `${resultado.emitentes.slice(0, 3).join(', ')}... (+${resultado.emitentes.length - 3} mais)`
-            : resultado.emitentes.join(', ');
-          feedback.push(`🏢 Emitentes: ${emitentesTexto}`);
-        }
-
-        if (resultado.versoes_nfe && resultado.versoes_nfe.length > 0) {
-          feedback.push(`📋 Versões NFe: ${resultado.versoes_nfe.join(', ')}`);
-        }
-
-        if (resultado.periodo && resultado.periodo.inicio) {
-          feedback.push(`📅 Período: ${resultado.periodo.inicio} a ${resultado.periodo.fim}`);
-        }
-
-        if (resultado.valor_total && resultado.valor_total > 0) {
-          feedback.push(`💰 Valor Total: R$ ${resultado.valor_total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`);
-        }
-
-        this.mensagem = feedback.join('\n');
-
-        // 🧹 Auto-limpeza após sucesso
-        setTimeout(() => {
-          this.clearFiles();
-          this.nomePlanilha = '';
-          this.mensagem = '';
-        }, 8000);
-
-      } catch (err) {
-        this.mensagem = `❌ Erro: ${err.message}`;
-        this.showValidation('error', 'Erro no processamento. Verifique os arquivos e tente novamente.');
+        
+      } catch (error) {
+        this.mensagem = `Erro: ${error.message}`;
       } finally {
-        this.loading = false;  // ✅ Corrigido
+        this.loading = false;
       }
     }
   }

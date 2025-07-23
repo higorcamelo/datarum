@@ -16,8 +16,8 @@
     }
   ],
   "outputDirectory": "frontend/sigonota-frontend/dist",
-  "framework": "vite",
+  "framework": "vite", 
   "env": {
-    "VITE_API_URL": "https://sigonota-api.fly.dev"
+    "VITE_API_URL": "https://datarum-api.fly.dev"
   }
 }
