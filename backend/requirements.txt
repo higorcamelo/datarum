@@ -1,8 +1,6 @@
-# Dependências essenciais do Datarum
+# Mínimo necessário para funcionar
 fastapi==0.104.1
-uvicorn==0.24.0
 python-multipart==0.0.6
-mangum==0.17.0
 
 # Processamento de XMLs e Excel  
 pandas==2.1.3
