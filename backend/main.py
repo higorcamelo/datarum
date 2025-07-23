@@ -56,6 +56,15 @@ app = FastAPI(
     version="1.0.1"
 )
 
+# CORS configuração - DEVE ser a primeira coisa após criar o app
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Ou especificar domínios: ["https://sigonota.vercel.app"]
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["*"],
+)
+
 # Configurar arquivos estáticos do frontend (se existirem)
 static_dir = Path(__file__).parent / "static"
 if static_dir.exists():
@@ -78,9 +87,9 @@ else:
 # CORS configurável
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=config.CORS_ORIGINS,
+    allow_origins=["*"],  # Em produção, especificar domínios
     allow_credentials=True,
-    allow_methods=["GET", "POST"],
+    allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],
 )
 
