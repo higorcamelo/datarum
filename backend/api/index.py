@@ -289,5 +289,11 @@ async def processar_download():
         logger.error(f"Erro no download: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-# Para Vercel - exportar app ASGI diretamente
-handler = app
+# Para Vercel - usar Mangum para adaptar ASGI → Lambda
+try:
+    from mangum import Mangum
+    handler = Mangum(app)
+    logger.info("✅ Handler Mangum configurado")
+except ImportError:
+    logger.warning("⚠️ Mangum não encontrado, usando app direto")
+    handler = app

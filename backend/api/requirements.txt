@@ -11,6 +11,7 @@ lxml==4.9.3
 
 # Para compatibilidade com Vercel
 python-dotenv==1.0.0
+mangum==0.17.0
 
 # Para testes
 httpx==0.25.2
