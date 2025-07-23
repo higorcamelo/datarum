@@ -1,24 +1,18 @@
-# Estágio 1: Build do frontend
-FROM node:22-alpine AS frontend-build
-
-WORKDIR /frontend
-
-# Copiar package.json do frontend
-COPY frontend/sigonota-frontend/package*.json ./
-RUN npm ci --only=production
-
-# Copiar código do frontend e buildar
-COPY frontend/sigonota-frontend/ ./
-RUN npm run build
-
-# Estágio 2: Backend Python + frontend servido via FastAPI
+# Backend isolado para Fly.io - apenas API
 FROM python:3.12-alpine
 WORKDIR /app
 
-# Dependências do sistema
-RUN apk add --no-cache gcc musl-dev libffi-dev openssl-dev libxml2-dev libxslt-dev
+# Dependências do sistema necessárias para pandas/openpyxl
+RUN apk add --no-cache \
+    gcc \
+    musl-dev \
+    libffi-dev \
+    openssl-dev \
+    libxml2-dev \
+    libxslt-dev \
+    && rm -rf /var/cache/apk/*
 
-# Instalar dependências Python
+# Copiar e instalar dependências Python
 COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
@@ -26,15 +20,17 @@ RUN pip install --no-cache-dir --upgrade pip && \
 # Copiar código do backend
 COPY . .
 
-# Copiar frontend buildado
-COPY --from=frontend-build /frontend/dist ./static/
-
-# Usuário não-root
-RUN adduser -D -s /bin/sh app && chown -R app:app /app
+# Criar usuário não-root para segurança
+RUN adduser -D -s /bin/sh app && \
+    chown -R app:app /app
 USER app
 
 # Expor porta
 EXPOSE 8080
 
-# Comando para FastAPI
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD python -c "import requests; requests.get('http://localhost:8080/health')" || exit 1
+
+# Comando para rodar a aplicação
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
