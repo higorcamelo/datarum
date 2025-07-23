@@ -259,18 +259,36 @@ class handler(BaseHTTPRequestHandler):
                 
                 from utils.excel_handler import salvar_em_excel
                 
-                # Buscar dados do cache
+                # Buscar dados do cache primeiro
                 dados = globals().get('cache_dados', [])
                 
+                # Se não houver cache, tentar processar os XMLs diretamente desta requisição
                 if not dados:
-                    # Se não houver dados, retornar erro
+                    # Extrair boundary do Content-Type
+                    content_type = self.headers.get('Content-Type', '')
+                    boundary = None
+                    if 'multipart/form-data' in content_type:
+                        boundary_start = content_type.find('boundary=')
+                        if boundary_start != -1:
+                            boundary = content_type[boundary_start + 9:].strip()
+                    
+                    if boundary and post_data:
+                        arquivos_xml = self.parse_multipart(post_data, boundary)
+                        
+                        for arquivo in arquivos_xml:
+                            dados_nfe = self.processar_xml(arquivo['content'])
+                            if dados_nfe:
+                                dados.extend(dados_nfe)
+                
+                if not dados:
+                    # Se ainda não há dados, retornar erro
                     self.send_response(400)
                     self.send_header('Content-Type', 'application/json')
                     self.send_header('Access-Control-Allow-Origin', '*')
                     self.end_headers()
                     
                     error_response = {
-                        'message': 'Nenhum dado para processar. Faça upload dos XMLs primeiro.',
+                        'message': 'Nenhum arquivo XML válido encontrado. Faça upload dos XMLs.',
                         'erro': True
                     }
                     self.wfile.write(json.dumps(error_response).encode())
