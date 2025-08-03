@@ -1,570 +1,505 @@
 <template>
-  <div class="min-h-screen bg-white">
-    <!-- Header/Navigation -->
+  <div class="min-h-screen bg-white pb-20 lg:pb-0">
+    <!-- Header Essencial -->
     <header class="bg-white/95 backdrop-blur fixed w-full top-0 z-50 border-b border-gray-100">
       <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center py-4">
-          <div class="flex items-center gap-3">
-            <span class="inline-flex items-center justify-center w-10 h-10 bg-purple-600 rounded-full text-white text-xl font-bold">D</span>
-            <div class="flex flex-col">
-              <span class="text-xl font-bold text-purple-700">Datarum</span>
-              <span class="text-xs text-purple-600 hidden sm:block">Automação fiscal inteligente</span>
-            </div>
+        <div class="flex justify-between items-center py-3">
+          <div class="flex items-center gap-2">
+            <span class="inline-flex items-center justify-center w-8 h-8 bg-purple-600 rounded-full text-white text-lg font-bold">D</span>
+            <span class="text-lg font-bold text-purple-700">Datarum</span>
           </div>
-          <div class="flex items-center gap-4">
-            <button @click="scrollTo('features')" class="hidden md:block text-gray-600 hover:text-purple-600 transition">Recursos</button>
-            <button @click="scrollTo('how-it-works')" class="hidden md:block text-gray-600 hover:text-purple-600 transition">Como Funciona</button>
-            <button @click="goToApp" class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition font-medium">
-              Começar Agora
-            </button>
-          </div>
+          <button @click="goToApp" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition text-sm font-semibold disabled:opacity-75 disabled:cursor-not-allowed flex items-center gap-2" :disabled="isLoadingApp">
+            <svg v-if="isLoadingApp" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            {{ isLoadingApp ? 'Carregando...' : 'Usar Agora' }}
+          </button>
         </div>
       </nav>
     </header>
 
-    <!-- Hero Section -->
-    <section class="pt-20 pb-16 bg-gradient-to-br from-purple-50 via-white to-purple-100">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid lg:grid-cols-2 gap-12 items-center">
-          <div class="text-center lg:text-left">
-            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-purple-800 leading-tight mb-6">
-              Datarum transforma seus XMLs fiscais em planilhas inteligentes
+    <!-- Hero Section - Responsivo -->
+    <section class="pt-16 pb-8 bg-gradient-to-br from-purple-50 via-white to-purple-100 min-h-screen flex items-center">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div class="grid lg:grid-cols-5 gap-6 lg:gap-8 items-start">
+          
+          <!-- ESQUERDA: Título + Features + CTA -->
+          <div class="col-span-full lg:col-span-2 text-center lg:text-left">
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-purple-800 leading-tight mb-4 lg:mb-6">
+              Transforme XMLs de NFe em Excel
             </h1>
-            <p class="text-xl text-gray-600 mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-              Automatize relatórios contábeis, reduza erros e ganhe tempo. Tudo direto no navegador — sem instalações, sem enrolação.
+            <p class="text-lg lg:text-xl text-gray-600 mb-6 lg:mb-8">
+              Converta seus arquivos XML fiscais em planilhas organizadas automaticamente
             </p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <button @click="goToApp" class="bg-purple-700 hover:bg-purple-800 text-white font-semibold py-4 px-8 rounded-lg shadow-lg transition text-lg">
-                Usar gratuitamente
-              </button>
-              <button @click="scrollTo('demo')" class="border-2 border-purple-600 text-purple-600 px-8 py-4 rounded-lg hover:bg-purple-50 transition font-semibold text-lg">
-                Ver Demonstração
-              </button>
-            </div>
-            <p class="text-sm text-gray-600 mt-4 text-center lg:text-left">
-              Lançamento Beta — use gratuitamente enquanto aprimoramos a plataforma.
-            </p>
-            <div class="flex items-center gap-6 mt-6 justify-center lg:justify-start text-sm text-gray-500">
-              <div class="flex items-center gap-2">
-                <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                </svg>
-                <span>Beta disponível sem custo</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                </svg>
-                <span>Sem Cadastro</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                </svg>
-                <span>Processamento Local</span>
-              </div>
-              <span class="font-medium text-sm text-purple-600">Ajude com seu feedback</span>
-            </div>
-          </div>
-          <div class="relative">
-            <div class="bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
-              <div class="bg-gray-50 rounded-lg p-4 mb-4">
-                <div class="flex items-center gap-2 mb-2">
-                  <div class="w-3 h-3 bg-red-400 rounded-full"></div>
-                  <div class="w-3 h-3 bg-yellow-400 rounded-full"></div>
-                  <div class="w-3 h-3 bg-green-400 rounded-full"></div>
-                  <span class="text-sm text-gray-500 ml-auto">XMLs NFe → Excel</span>
-                </div>
-                <div class="space-y-2">
-                  <div class="bg-purple-100 p-2 rounded text-sm text-purple-700">📄 nota_fiscal_001.xml</div>
-                  <div class="bg-purple-100 p-2 rounded text-sm text-purple-700">📄 nota_fiscal_002.xml</div>
-                  <div class="bg-purple-100 p-2 rounded text-sm text-purple-700">📄 nota_fiscal_003.xml</div>
-                </div>
-              </div>
-              <div class="text-center py-4">
-                <div class="inline-flex items-center gap-2 text-purple-600">
-                  <svg class="w-6 h-6 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-                  </svg>
-                  <span class="font-medium">Processando...</span>
-                </div>
-              </div>
-              <div class="bg-green-50 p-4 rounded-lg border border-green-200">
-                <div class="flex items-center gap-2 text-green-700">
-                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+
+            <!-- Features Compactas -->
+            <div class="grid sm:grid-cols-2 lg:grid-cols-1 gap-3 lg:gap-4 mb-6 lg:mb-8 text-sm lg:text-lg">
+              <div class="flex items-center gap-2 lg:gap-3 justify-center lg:justify-start">
+                <div class="w-5 h-5 lg:w-6 lg:h-6 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                  <svg class="w-3 h-3 lg:w-4 lg:h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                   </svg>
-                  <span class="font-medium">📊 planilha_notas_fiscais.xlsx</span>
+                </div>
+                <span class="text-gray-700"><strong>Versão gratuita</strong> • 200 XMLs/mês</span>
+              </div>
+              
+              <div class="flex items-center gap-2 lg:gap-3 justify-center lg:justify-start">
+                <div class="w-5 h-5 lg:w-6 lg:h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+                  <svg class="w-3 h-3 lg:w-4 lg:h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                  </svg>
+                </div>
+                <span class="text-gray-700"><strong>Rápido</strong> • Centenas em segundos</span>
+              </div>
+              
+              <div class="flex items-center gap-2 lg:gap-3 justify-center lg:justify-start">
+                <div class="w-5 h-5 lg:w-6 lg:h-6 bg-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+                  <svg class="w-3 h-3 lg:w-4 lg:h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm6.293-6.707a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L12 12.586V3a1 1 0 10-2 0v9.586l-1.707-1.707z" clip-rule="evenodd"/>
+                  </svg>
+                </div>
+                <span class="text-gray-700"><strong>Completo</strong> • Todos os dados</span>
+              </div>
+              
+              <div class="flex items-center gap-2 lg:gap-3 justify-center lg:justify-start">
+                <div class="w-5 h-5 lg:w-6 lg:h-6 bg-orange-500 rounded-full flex items-center justify-center flex-shrink-0">
+                  <svg class="w-3 h-3 lg:w-4 lg:h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                  </svg>
+                </div>
+                <span class="text-gray-700"><strong>Prático</strong> • Direto no navegador</span>
+              </div>
+            </div>
+
+            <!-- CTA Principal -->
+            <div>
+              <button @click="goToApp" class="bg-purple-600 text-white px-6 lg:px-8 py-3 lg:py-4 rounded-xl hover:bg-purple-700 transition font-bold text-base lg:text-lg shadow-lg w-full sm:w-auto disabled:opacity-75 disabled:cursor-not-allowed flex items-center justify-center gap-2" :disabled="isLoadingApp">
+                <svg v-if="isLoadingApp" class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                {{ isLoadingApp ? 'Carregando...' : 'Começar Agora' }}
+              </button>
+              <p class="text-xs lg:text-sm text-gray-500 mt-2 lg:mt-3">200 XMLs grátis/mês • Processamento instantâneo</p>
+            </div>
+          </div>
+
+          <!-- DIREITA: Demonstração XML → Excel -->
+          <div class="col-span-full lg:col-span-3 mt-8 lg:mt-0">
+            <div class="bg-white rounded-xl lg:rounded-2xl shadow-xl p-4 lg:p-8 border border-gray-200">
+              <div class="text-center mb-4 lg:mb-6">
+                <h3 class="text-lg lg:text-2xl font-bold text-gray-900 mb-2 lg:mb-3">Veja como funciona</h3>
+                <p class="text-sm lg:text-base text-gray-600">Arquivo XML se torna planilha Excel organizada</p>
+              </div>
+
+              <!-- Demonstração Mobile/Desktop -->
+              <div class="block lg:hidden">
+                <!-- Layout Mobile: Vertical -->
+                <div class="space-y-4">
+                  <!-- XML Mobile -->
+                  <div>
+                    <div class="text-center mb-3">
+                      <span class="text-xs font-bold text-orange-600 bg-orange-100 px-3 py-1 rounded">ARQUIVO XML</span>
+                    </div>
+                    <div class="bg-gray-50 rounded-lg border border-gray-300 p-3">
+                      <div class="font-mono text-xs leading-relaxed">
+                        <div class="text-blue-600">&lt;?xml version="1.0"?&gt;</div>
+                        <div class="text-purple-600">&lt;nfeProc&gt;</div>
+                        <div class="ml-2 text-green-600">&lt;emit&gt;</div>
+                        <div class="ml-4 text-gray-700">&lt;CNPJ&gt;<span class="bg-yellow-200">12345678000199</span>&lt;/CNPJ&gt;</div>
+                        <div class="ml-4 text-gray-700">&lt;xNome&gt;<span class="bg-yellow-200">ABC LTDA</span>&lt;/xNome&gt;</div>
+                        <div class="ml-2 text-green-600">&lt;/emit&gt;</div>
+                        <div class="text-center text-gray-400 py-1 text-xs">...mais 2.000 linhas...</div>
+                      </div>
+                    </div>
+                    <div class="text-center mt-2 bg-red-50 border border-red-200 rounded p-2">
+                      <p class="text-red-700 text-xs"><strong>😓 Difícil de ler</strong></p>
+                    </div>
+                  </div>
+
+                  <!-- Seta Mobile -->
+                  <div class="text-center py-2">
+                    <svg class="w-8 h-8 text-purple-600 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+                    </svg>
+                  </div>
+
+                  <!-- Excel Mobile -->
+                  <div>
+                    <div class="text-center mb-3">
+                      <span class="text-xs font-bold text-green-600 bg-green-100 px-3 py-1 rounded">PLANILHA EXCEL</span>
+                    </div>
+                    <div class="bg-white rounded-lg border-2 border-green-300 overflow-hidden">
+                      <div class="bg-green-100 px-3 py-2">
+                        <div class="flex items-center gap-2 justify-center">
+                          <svg class="w-3 h-3 text-green-700" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm6.293-6.707a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L12 12.586V3a1 1 0 10-2 0v9.586l-1.707-1.707z" clip-rule="evenodd"/>
+                          </svg>
+                          <span class="font-mono text-xs text-green-800">notas_fiscais.xlsx</span>
+                        </div>
+                      </div>
+                      <div class="bg-green-200 px-3 py-2 text-xs font-bold text-green-900">
+                        <div class="grid grid-cols-3 gap-2">
+                          <div>Fornecedor</div>
+                          <div>CNPJ</div>
+                          <div>Valor</div>
+                        </div>
+                      </div>
+                      <div class="text-xs">
+                        <div class="grid grid-cols-3 gap-2 px-3 py-2 border-b border-green-100 bg-yellow-50">
+                          <div class="font-medium">ABC LTDA</div>
+                          <div>12.345.678/0001-99</div>
+                          <div class="font-bold text-green-700">R$ 1.250,00</div>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2 px-3 py-2">
+                          <div class="font-medium">XYZ Corp</div>
+                          <div>98.765.432/0001-11</div>
+                          <div class="font-bold text-green-700">R$ 2.890,50</div>
+                        </div>
+                      </div>
+                      <div class="bg-green-50 px-3 py-2 border-t border-green-200">
+                        <div class="text-center text-green-800 text-xs">
+                          <div class="font-bold">+ Produtos, CFOP, ICMS</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="text-center mt-2 bg-green-50 border border-green-200 rounded p-2">
+                      <p class="text-green-700 text-xs"><strong>😎 Organizado e pronto</strong></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Layout Desktop: Horizontal -->
+              <div class="hidden lg:block">
+                <div class="grid grid-cols-11 gap-3 items-center">
+                  
+                  <!-- XML (4 colunas) -->
+                  <div class="col-span-4">
+                    <div class="text-center mb-4">
+                      <span class="text-sm font-bold text-orange-600 bg-orange-100 px-3 py-2 rounded">ARQUIVO XML</span>
+                    </div>
+                    
+                    <div class="bg-gray-50 rounded-lg border border-gray-300 p-4">
+                      <div class="font-mono text-sm leading-relaxed">
+                        <div class="text-blue-600">&lt;?xml version="1.0"?&gt;</div>
+                        <div class="text-purple-600">&lt;nfeProc&gt;</div>
+                        <div class="ml-3 text-green-600">&lt;emit&gt;</div>
+                        <div class="ml-6 text-gray-700">&lt;CNPJ&gt;<span class="bg-yellow-200 px-1">12345678000199</span>&lt;/CNPJ&gt;</div>
+                        <div class="ml-6 text-gray-700">&lt;xNome&gt;<span class="bg-yellow-200 px-1">ABC LTDA</span>&lt;/xNome&gt;</div>
+                        <div class="ml-3 text-green-600">&lt;/emit&gt;</div>
+                        <div class="ml-3 text-green-600">&lt;ide&gt;</div>
+                        <div class="ml-6 text-gray-700">&lt;nNF&gt;<span class="bg-yellow-200 px-1">123456</span>&lt;/nNF&gt;</div>
+                        <div class="ml-6 text-gray-700">&lt;dEmi&gt;<span class="bg-yellow-200 px-1">2024-07-23</span>&lt;/dEmi&gt;</div>
+                        <div class="ml-6 text-gray-700">&lt;vNF&gt;<span class="bg-yellow-200 px-1">1250.00</span>&lt;/vNF&gt;</div>
+                        <div class="ml-3 text-green-600">&lt;/ide&gt;</div>
+                        <div class="text-center text-gray-400 py-2 text-sm">...mais 2.000 linhas...</div>
+                        <div class="text-purple-600">&lt;/nfeProc&gt;</div>
+                      </div>
+                    </div>
+                    
+                    <div class="text-center mt-3 bg-red-50 border border-red-200 rounded p-3">
+                      <p class="text-red-700 text-sm"><strong>😓 Difícil de ler</strong></p>
+                    </div>
+                  </div>
+
+                  <!-- SETA (1 coluna) -->
+                  <div class="col-span-1 text-center">
+                    <svg class="w-6 h-6 text-purple-600 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                    </svg>
+                  </div>
+
+                  <!-- EXCEL (6 colunas) -->
+                  <div class="col-span-6">
+                    <div class="text-center mb-4">
+                      <span class="text-sm font-bold text-green-600 bg-green-100 px-3 py-2 rounded">PLANILHA EXCEL</span>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg border-2 border-green-300 overflow-hidden">
+                      <div class="bg-green-100 px-4 py-3">
+                        <div class="flex items-center gap-2 justify-center">
+                          <svg class="w-4 h-4 text-green-700" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm6.293-6.707a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L12 12.586V3a1 1 0 10-2 0v9.586l-1.707-1.707z" clip-rule="evenodd"/>
+                          </svg>
+                          <span class="font-mono text-sm text-green-800">notas_fiscais.xlsx</span>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <div class="bg-green-200 px-4 py-3 text-sm font-bold text-green-900">
+                          <div class="grid grid-cols-3 gap-4">
+                            <div>Fornecedor</div>
+                            <div>CNPJ</div>
+                            <div>Valor</div>
+                          </div>
+                        </div>
+                        
+                        <div class="text-sm">
+                          <div class="grid grid-cols-3 gap-4 px-4 py-3 border-b border-green-100 bg-yellow-50">
+                            <div class="font-medium">ABC LTDA</div>
+                            <div>12.345.678/0001-99</div>
+                            <div class="font-bold text-green-700">R$ 1.250,00</div>
+                          </div>
+                          <div class="grid grid-cols-3 gap-4 px-4 py-3 border-b border-green-100">
+                            <div class="font-medium">XYZ Corp</div>
+                            <div>98.765.432/0001-11</div>
+                            <div class="font-bold text-green-700">R$ 2.890,50</div>
+                          </div>
+                        </div>
+                        
+                        <div class="bg-green-50 px-4 py-3 border-t border-green-200">
+                          <div class="text-center text-green-800 text-sm">
+                            <div class="font-bold">+ Produtos, CFOP, ICMS</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="text-center mt-3 bg-green-50 border border-green-200 rounded p-3">
+                      <p class="text-green-700 text-sm"><strong>😎 Organizado e pronto</strong></p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-        
-        <!-- Quick Benefits Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 max-w-5xl mx-auto">
-          <div class="bg-white p-6 rounded-lg shadow-lg text-center border border-gray-100">
-            <svg class="w-10 h-10 text-purple-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"/>
-            </svg>
-            <h3 class="text-xl font-semibold mb-2 text-gray-900">Upload em massa</h3>
-            <p class="text-gray-600">Arraste vários XMLs de uma vez só, sem limites artificiais.</p>
-          </div>
-          
-          <div class="bg-white p-6 rounded-lg shadow-lg text-center border border-gray-100">
-            <svg class="w-10 h-10 text-purple-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-            </svg>
-            <h3 class="text-xl font-semibold mb-2 text-gray-900">Processamento instantâneo</h3>
-            <p class="text-gray-600">Conversão automática em segundos, direto no seu navegador.</p>
-          </div>
-          
-          <div class="bg-white p-6 rounded-lg shadow-lg text-center border border-gray-100">
-            <svg class="w-10 h-10 text-purple-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-            <h3 class="text-xl font-semibold mb-2 text-gray-900">100% seguro e privado</h3>
-            <p class="text-gray-600">Seus dados ficam apenas no seu computador, zero uploads.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Features Section -->
-    <section id="features" class="py-20 bg-white">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-          <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-            Por que escolher o Datarum?
+    <!-- Benefícios Principais -->
+    <section class="py-12 lg:py-16 bg-white">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-8 lg:mb-12">
+          <h2 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-3 lg:mb-4">
+            Por que usar o Datarum?
           </h2>
-          <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-            A solução mais simples e eficiente para converter XMLs de NFe em planilhas organizadas
+          <p class="text-lg lg:text-xl text-gray-600">
+            Economize tempo e tenha dados organizados
           </p>
         </div>
-
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <div class="text-center p-6">
-            <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+          <div class="text-center p-4 lg:p-6 bg-purple-50 rounded-xl border border-purple-100">
+            <div class="w-10 h-10 lg:w-12 lg:h-12 bg-purple-600 rounded-xl flex items-center justify-center mx-auto mb-3 lg:mb-4">
+              <svg class="w-5 h-5 lg:w-6 lg:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
               </svg>
             </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-2">Super Rápido</h3>
-            <p class="text-gray-600">Processe até 50 XMLs simultaneamente em segundos. Não perca mais tempo com conversões manuais.</p>
+            <h3 class="text-base lg:text-lg font-bold mb-2 text-purple-800">Super Rápido</h3>
+            <p class="text-gray-600 text-sm">Processa <strong>200+ XMLs</strong> em menos de <strong>10 segundos</strong></p>
           </div>
 
-          <div class="text-center p-6">
-            <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          <div class="text-center p-4 lg:p-6 bg-green-50 rounded-xl border border-green-100">
+            <div class="w-10 h-10 lg:w-12 lg:h-12 bg-green-600 rounded-xl flex items-center justify-center mx-auto mb-3 lg:mb-4">
+              <svg class="w-5 h-5 lg:w-6 lg:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
               </svg>
             </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-2">Todas as Versões NFe</h3>
-            <p class="text-gray-600">Suporte completo para NFe versões 1.10, 2.00, 3.10 e 4.00. Funciona com qualquer XML válido.</p>
+            <h3 class="text-base lg:text-lg font-bold mb-2 text-green-800">Simples e Prático</h3>
+            <p class="text-gray-600 text-sm"><strong>Fácil de usar</strong> • <strong>Sem instalação</strong></p>
           </div>
 
-          <div class="text-center p-6">
-            <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-              </svg>
-            </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-2">100% Seguro</h3>
-            <p class="text-gray-600">Processamento local no seu navegador. Seus dados nunca saem do seu computador.</p>
-          </div>
-
-          <div class="text-center p-6">
-            <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="text-center p-4 lg:p-6 bg-blue-50 rounded-xl border border-blue-100">
+            <div class="w-10 h-10 lg:w-12 lg:h-12 bg-blue-600 rounded-xl flex items-center justify-center mx-auto mb-3 lg:mb-4">
+              <svg class="w-5 h-5 lg:w-6 lg:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
               </svg>
             </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-2">Excel Profissional</h3>
-            <p class="text-gray-600">Planilhas bem formatadas com todas as informações importantes organizadas e prontas para uso.</p>
+            <h3 class="text-base lg:text-lg font-bold mb-2 text-blue-800">Excel Customizável</h3>
+            <p class="text-gray-600 text-sm"><strong>Escolha os campos</strong> • <strong>25+ opções</strong> disponíveis</p>
           </div>
 
-          <div class="text-center p-6">
-            <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="text-center p-4 lg:p-6 bg-orange-50 rounded-xl border border-orange-100">
+            <div class="w-10 h-10 lg:w-12 lg:h-12 bg-orange-600 rounded-xl flex items-center justify-center mx-auto mb-3 lg:mb-4">
+              <svg class="w-5 h-5 lg:w-6 lg:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
               </svg>
             </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-2">Totalmente Gratuito*</h3>
-            <p class="text-gray-600">Durante o período beta! Sem custos, sem cadastros, sem limitações. Ajude-nos com feedback.</p>
-          </div>
-
-          <div class="text-center p-6">
-            <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"/>
-              </svg>
-            </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-2">Arrastar e Soltar</h3>
-            <p class="text-gray-600">Interface super simples. Basta arrastar seus XMLs e pronto! Download automático da planilha.</p>
+            <h3 class="text-base lg:text-lg font-bold mb-2 text-orange-800">Versão Gratuita</h3>
+            <p class="text-gray-600 text-sm"><strong>200 XMLs/mês</strong> • <strong>Relatórios básicos</strong></p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- How it Works Section -->
-    <section id="how-it-works" class="py-20 bg-gray-50">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-          <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-            Como funciona?
+    <!-- Roadmap Mais Sutil -->
+    <section class="py-16 bg-gray-50">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-gray-900 mb-4">
+            Evolução do Datarum
           </h2>
-          <p class="text-xl text-gray-600">
-            Em apenas 3 passos simples você terá sua planilha pronta
+          <p class="text-gray-600">
+            Estamos apenas começando! Muito mais está por vir
           </p>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-8">
-          <div class="text-center">
-            <div class="w-20 h-20 bg-purple-600 text-white rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold">
-              1
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <!-- v1.0 -->
+          <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200 relative">
+            <div class="absolute -top-2 -right-2 bg-gray-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+              v1.0 ANTERIOR
             </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-4">Selecione os XMLs</h3>
-            <p class="text-gray-600 mb-6">
-              Arraste e solte seus arquivos XML de NFe ou clique para selecioná-los. 
-              Suporte para até 50 arquivos de uma vez.
-            </p>
-            <div class="bg-white p-4 rounded-lg border border-gray-200">
-              <div class="border-2 border-dashed border-purple-300 rounded-lg p-6">
-                <svg class="w-12 h-12 text-purple-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
-                </svg>
-                <p class="text-sm text-gray-500">Arraste XMLs aqui</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="text-center">
-            <div class="w-20 h-20 bg-purple-600 text-white rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold">
-              2
-            </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-4">Processamento Automático</h3>
-            <p class="text-gray-600 mb-6">
-              O sistema analisa automaticamente todos os XMLs, extrai as informações importantes 
-              e organiza tudo em uma planilha profissional.
-            </p>
-            <div class="bg-white p-4 rounded-lg border border-gray-200">
-              <div class="space-y-2">
-                <div class="flex items-center gap-2">
-                  <div class="w-4 h-4 bg-purple-600 rounded animate-pulse"></div>
-                  <div class="text-sm text-gray-600">Analisando XMLs...</div>
-                </div>
-                <div class="flex items-center gap-2">
-                  <div class="w-4 h-4 bg-purple-600 rounded animate-pulse"></div>
-                  <div class="text-sm text-gray-600">Extraindo dados...</div>
-                </div>
-                <div class="flex items-center gap-2">
-                  <div class="w-4 h-4 bg-purple-600 rounded animate-pulse"></div>
-                  <div class="text-sm text-gray-600">Gerando planilha...</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="text-center">
-            <div class="w-20 h-20 bg-purple-600 text-white rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold">
-              3
-            </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-4">Download Automático</h3>
-            <p class="text-gray-600 mb-6">
-              Sua planilha Excel é gerada automaticamente e o download inicia na hora. 
-              Pronta para abrir no Excel, Google Sheets ou qualquer programa de planilhas.
-            </p>
-            <div class="bg-white p-4 rounded-lg border border-gray-200">
-              <div class="bg-green-50 border border-green-200 rounded-lg p-4">
-                <div class="flex items-center gap-2 text-green-700">
-                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                  </svg>
-                  <span class="text-sm font-medium">planilha.xlsx baixado!</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Demo Section -->
-    <section id="demo" class="py-20 bg-white">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-          <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-            Veja o que é extraído dos XMLs
-          </h2>
-          <p class="text-xl text-gray-600">
-            Todas as informações importantes organizadas em colunas
-          </p>
-        </div>
-
-        <div class="bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden">
-          <div class="bg-gray-50 px-6 py-4 border-b border-gray-200">
-            <div class="flex items-center gap-2">
-              <div class="w-3 h-3 bg-red-400 rounded-full"></div>
-              <div class="w-3 h-3 bg-yellow-400 rounded-full"></div>
-              <div class="w-3 h-3 bg-green-400 rounded-full"></div>
-              <span class="text-sm text-gray-600 ml-4">planilha_nfe_exemplo.xlsx</span>
-            </div>
-          </div>
-          <div class="overflow-x-auto">
-            <table class="w-full text-sm">
-              <thead class="bg-purple-50">
-                <tr>
-                  <th class="px-4 py-3 text-left font-semibold text-purple-700">Nº Nota</th>
-                  <th class="px-4 py-3 text-left font-semibold text-purple-700">Data Emissão</th>
-                  <th class="px-4 py-3 text-left font-semibold text-purple-700">CNPJ Emitente</th>
-                  <th class="px-4 py-3 text-left font-semibold text-purple-700">Razão Social</th>
-                  <th class="px-4 py-3 text-left font-semibold text-purple-700">Valor Total</th>
-                  <th class="px-4 py-3 text-left font-semibold text-purple-700">Série</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-gray-200">
-                <tr class="hover:bg-gray-50">
-                  <td class="px-4 py-3">000000123</td>
-                  <td class="px-4 py-3">15/07/2025</td>
-                  <td class="px-4 py-3">12.345.678/0001-90</td>
-                  <td class="px-4 py-3">Empresa Exemplo Ltda</td>
-                  <td class="px-4 py-3">R$ 1.250,00</td>
-                  <td class="px-4 py-3">1</td>
-                </tr>
-                <tr class="hover:bg-gray-50">
-                  <td class="px-4 py-3">000000124</td>
-                  <td class="px-4 py-3">16/07/2025</td>
-                  <td class="px-4 py-3">98.765.432/0001-10</td>
-                  <td class="px-4 py-3">Fornecedor ABC S.A.</td>
-                  <td class="px-4 py-3">R$ 3.780,50</td>
-                  <td class="px-4 py-3">1</td>
-                </tr>
-                <tr class="hover:bg-gray-50">
-                  <td class="px-4 py-3">000000125</td>
-                  <td class="px-4 py-3">17/07/2025</td>
-                  <td class="px-4 py-3">11.222.333/0001-44</td>
-                  <td class="px-4 py-3">Produtos XYZ Eireli</td>
-                  <td class="px-4 py-3">R$ 850,25</td>
-                  <td class="px-4 py-3">1</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="bg-gray-50 px-6 py-4 border-t border-gray-200">
-            <p class="text-sm text-gray-600 text-center">
-              E mais 15+ campos incluindo: Chave NFe, CEP, UF, Valor ICMS, Valor IPI, Produtos, etc.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Roadmap Section -->
-    <section class="py-20 bg-gradient-to-br from-gray-50 to-gray-100">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-          <div class="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-            </svg>
-            Em desenvolvimento
-          </div>
-          <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-            Próximas versões
-          </h2>
-          <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-            Baseado no seu feedback, vamos evoluir o Datarum com funcionalidades que realmente importam
-          </p>
-        </div>
-
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 relative">
-            <div class="absolute -top-2 -right-2 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-bold">
-              DISPONÍVEL
-            </div>
-            <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-4">
-              <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center mb-4">
+              <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
               </svg>
             </div>
-            <h3 class="text-lg font-semibold text-gray-900 mb-2">v1.0 - Beta Público</h3>
-            <p class="text-gray-600 text-sm">Conversor XML → Excel básico. Versão gratuita para testes e validação com usuários reais.</p>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Beta Inicial</h3>
+            <p class="text-gray-600 text-sm mb-3">Conversor XML → Excel básico para validação do conceito.</p>
+            <div class="text-xs text-gray-500">Versão de teste</div>
           </div>
 
-          <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 relative">
-            <div class="absolute -top-2 -right-2 bg-blue-500 text-white px-2 py-1 rounded-full text-xs font-bold">
-              v1.1
+          <!-- v1.1 -->
+          <div class="bg-white p-6 rounded-xl shadow-lg border-2 border-blue-200 relative">
+            <div class="absolute -top-2 -right-2 bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+              v1.1 ATUAL
             </div>
-            <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-4">
-              <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"/>
+            <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+              <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17v4a2 2 0 002 2h4M13 13h3a2 2 0 012 2v1M13 13l-2-2H9a2 2 0 000 4v1a2 2 0 001 1z"/>
               </svg>
             </div>
-            <h3 class="text-lg font-semibold text-gray-900 mb-2">O que vem por aí</h3>
-            <p class="text-gray-600 text-sm">Recursos avançados de análise, colunas personalizadas, totalizações automáticas — tudo no seu navegador. Uma versão gratuita continuará disponível para uso leve.</p>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Design Aprimorado</h3>
+            <p class="text-gray-600 text-sm mb-3">Nova interface, extração melhorada, experiência otimizada.</p>
+            <div class="text-xs text-blue-600 font-semibold">Acesso gratuito</div>
           </div>
 
-          <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 relative">
-            <div class="absolute -top-2 -right-2 bg-purple-500 text-white px-2 py-1 rounded-full text-xs font-bold">
-              v1.2
+          <!-- v1.2 -->
+          <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200 relative">
+            <div class="absolute -top-2 -right-2 bg-purple-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+              v1.2 PRÓXIMA
             </div>
-            <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
-              <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+              <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
               </svg>
             </div>
-            <h3 class="text-lg font-semibold text-gray-900 mb-2">Relatórios Básicos</h3>
-            <p class="text-gray-600 text-sm">Totais por CFOP, por fornecedor, períodos. Aba extra na planilha com resumo fiscal inteligente.</p>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Relatórios Automáticos</h3>
+            <p class="text-gray-600 text-sm mb-3">Formulários fiscais preenchidos automaticamente. Análises por CFOP, fornecedor, período.</p>
+            <div class="text-xs text-purple-600">Gratuito: limitado • Pro: sem limites</div>
           </div>
 
-          <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 relative opacity-75">
-            <div class="absolute -top-2 -right-2 bg-gray-400 text-white px-2 py-1 rounded-full text-xs font-bold">
-              FUTURO
+          <!-- v1.3+ -->
+          <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200 relative">
+            <div class="absolute -top-2 -right-2 bg-gradient-to-r from-orange-500 to-red-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+              v1.3+ FUTURO
             </div>
-            <div class="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center mb-4">
-              <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            <div class="w-10 h-10 bg-gradient-to-br from-orange-100 to-red-100 rounded-lg flex items-center justify-center mb-4">
+              <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
               </svg>
             </div>
-            <h3 class="text-lg font-semibold text-gray-700 mb-2">Insights Automáticos</h3>
-            <p class="text-gray-500 text-sm">Análises de padrões de compra, detecção de ICMS ST, sugestões baseadas nos dados.</p>
-          </div>
-
-          <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 relative opacity-75">
-            <div class="absolute -top-2 -right-2 bg-gray-400 text-white px-2 py-1 rounded-full text-xs font-bold">
-              FUTURO
-            </div>
-            <div class="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center mb-4">
-              <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
-              </svg>
-            </div>
-            <h3 class="text-lg font-semibold text-gray-700 mb-2">Recursos Colaborativos</h3>
-            <p class="text-gray-500 text-sm">Upload por pasta, histórico de exportações, compartilhamento de relatórios.</p>
-          </div>
-
-          <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 relative opacity-75">
-            <div class="absolute -top-2 -right-2 bg-gray-400 text-white px-2 py-1 rounded-full text-xs font-bold">
-              FUTURO
-            </div>
-            <div class="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center mb-4">
-              <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2z"/>
-              </svg>
-            </div>
-            <h3 class="text-lg font-semibold text-gray-700 mb-2">Integrações</h3>
-            <p class="text-gray-500 text-sm">Baseado na demanda: APIs, conectores com ERPs, sistemas contábeis.</p>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">IA & Integrações</h3>
+            <p class="text-gray-600 text-sm mb-3">Insights automáticos com IA, integrações avançadas, recursos colaborativos...</p>
+            <div class="text-xs text-orange-600 font-semibold">Exclusivo versão Pro</div>
           </div>
         </div>
 
-        <div class="mt-12 text-center">
-          <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-6 rounded-2xl max-w-2xl mx-auto">
-            <h3 class="text-xl font-bold mb-2">🧪 Ajude-nos a melhorar!</h3>
-            <p class="mb-4">
-              Use a v1.0 gratuitamente e nos diga o que funciona, o que não funciona e o que falta. 
-              Seu feedback define as próximas versões.
-            </p>
-            <button @click="goToApp" class="bg-white text-purple-600 px-6 py-3 rounded-lg hover:bg-gray-50 transition font-semibold">
-              Testar Agora - v1.0 Beta
-            </button>
+        <!-- Features Futuras -->
+        <div class="mt-12 bg-gradient-to-r from-purple-600 to-purple-700 rounded-2xl p-8 text-white">
+          <div class="text-center mb-8">
+            <h3 class="text-2xl font-bold mb-4">Recursos em desenvolvimento</h3>
+            <p class="text-purple-100">Funcionalidades básicas para todos • Recursos avançados exclusivos Pro</p>
           </div>
+          
+          <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="bg-white/10 rounded-lg p-4 backdrop-blur">
+              <h4 class="font-semibold mb-2">� Formulários Automáticos</h4>
+              <p class="text-sm text-purple-100">Relatórios fiscais preenchidos automaticamente</p>
+            </div>
+            <div class="bg-white/10 rounded-lg p-4 backdrop-blur">
+              <h4 class="font-semibold mb-2">📈 Totais por CFOP</h4>
+              <p class="text-sm text-purple-100">Análise automática por código fiscal</p>
+            </div>
+            <div class="bg-white/10 rounded-lg p-4 backdrop-blur">
+              <h4 class="font-semibold mb-2">🏢 Análise por Fornecedor</h4>
+              <p class="text-sm text-purple-100">Rankings e comparativos automáticos</p>
+            </div>
+            <div class="bg-white/10 rounded-lg p-4 backdrop-blur">
+              <h4 class="font-semibold mb-2">� Insights com IA <span class="text-xs bg-orange-500 px-2 py-1 rounded">PRO</span></h4>
+              <p class="text-sm text-purple-100">IA identifica padrões e anomalias nos dados</p>
+            </div>
+            <div class="bg-white/10 rounded-lg p-4 backdrop-blur">
+              <h4 class="font-semibold mb-2">� Integrações Avançadas <span class="text-xs bg-orange-500 px-2 py-1 rounded">PRO</span></h4>
+              <p class="text-sm text-purple-100">Conecte com sistemas contábeis e ERPs</p>
+            </div>
+            <div class="bg-white/10 rounded-lg p-4 backdrop-blur">
+              <h4 class="font-semibold mb-2">👥 Recursos Colaborativos <span class="text-xs bg-orange-500 px-2 py-1 rounded">PRO</span></h4>
+              <p class="text-sm text-purple-100">Compartilhamento e trabalho em equipe</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8 text-center">
+          <p class="text-sm text-gray-600 mb-4">
+            Conversão sempre com mesma qualidade • Diferença apenas nos limites de uso
+          </p>
+          <button @click="goToApp" class="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition font-semibold disabled:opacity-75 disabled:cursor-not-allowed flex items-center justify-center gap-2" :disabled="isLoadingApp">
+            <svg v-if="isLoadingApp" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            {{ isLoadingApp ? 'Carregando...' : 'Começar Agora' }}
+          </button>
         </div>
       </div>
     </section>
 
-    <!-- Feedback Section -->
-    <section class="py-16 bg-gradient-to-r from-green-50 to-blue-50">
-      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <div class="bg-white rounded-2xl shadow-xl p-8 border border-gray-200">
-          <div class="flex items-center justify-center gap-3 mb-6">
-            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-              <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/>
-              </svg>
-            </div>
-            <h3 class="text-2xl font-bold text-gray-900">Seu feedback é fundamental!</h3>
-          </div>
-          <p class="text-gray-600 mb-6 max-w-2xl mx-auto">
-            Esta versão está disponível <strong>gratuitamente por tempo limitado</strong> durante nosso período de testes. 
-            Clique no botão abaixo para acessar nosso formulário de feedback e nos ajudar a melhorar o Datarum.
-          </p>
-          <div class="mb-6">
-            <button @click="openGoogleForms()" 
-                    class="bg-purple-600 text-white px-8 py-4 rounded-lg hover:bg-purple-700 transition font-semibold text-lg flex items-center justify-center gap-3 mx-auto shadow-lg">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/>
-              </svg>
-              Enviar Feedback
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-              </svg>
-            </button>
-          </div>
-          <p class="text-sm text-gray-500">
-            💡 <strong>Dica:</strong> O formulário possui seções diferentes para sugestões e problemas - você escolhe no primeiro campo
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="py-20 bg-gradient-to-br from-purple-600 to-purple-700">
+    <!-- Feedback Compacto -->
+    <section class="py-12 lg:py-16 bg-gradient-to-r from-purple-600 to-purple-700">
       <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">
-          Pronto para simplificar seu trabalho?
+        <h2 class="text-xl lg:text-2xl font-bold text-white mb-3 lg:mb-4">
+          Sua opinião molda o futuro do Datarum!
         </h2>
-        <p class="text-xl text-purple-100 mb-8">
-          Comece agora e transforme seus XMLs em planilhas organizadas em segundos
+        <p class="text-purple-100 mb-4 lg:mb-6 text-sm lg:text-base">
+          Conte-nos o que você precisa e vamos construir juntos
         </p>
-        <button @click="goToApp" class="bg-white text-purple-600 px-8 py-4 rounded-lg hover:bg-gray-50 transition font-semibold text-lg shadow-lg">
-          Começar Agora - Beta Gratuito!
+        <button @click="openGoogleForms()" class="border-2 border-white text-white px-4 lg:px-6 py-2 lg:py-3 rounded-lg hover:bg-white hover:text-purple-600 transition font-semibold text-sm lg:text-base disabled:opacity-75 disabled:cursor-not-allowed flex items-center justify-center gap-2 mx-auto" :disabled="isLoadingFeedback">
+          <svg v-if="isLoadingFeedback" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          {{ isLoadingFeedback ? 'Abrindo...' : 'Enviar Feedback' }}
         </button>
-        <p class="text-purple-200 text-sm mt-4">
-          Versão beta • Sem cadastro • Sem custos • Acesso antecipado garantido
-        </p>
       </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-12">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center">
-          <div class="flex items-center justify-center gap-3 mb-4">
-            <span class="inline-flex items-center justify-center w-10 h-10 bg-purple-600 rounded-full text-white text-xl font-bold">D</span>
-            <span class="text-2xl font-bold">Datarum</span>
-          </div>
-          <p class="text-gray-400 mb-6">
-            Automação fiscal com inteligência e clareza
-          </p>
-          <div class="flex justify-center gap-8 text-sm text-gray-400 mb-8">
-            <button @click="scrollTo('features')" class="hover:text-white transition">Recursos</button>
-            <button @click="scrollTo('how-it-works')" class="hover:text-white transition">Como Funciona</button>
-            <button @click="goToApp" class="hover:text-white transition">Aplicativo Beta</button>
-          </div>
-          <div class="border-t border-gray-800 pt-8">
-            <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mb-4">
-              <p class="text-gray-500 text-sm">
-                &copy; {{ new Date().getFullYear() }} Datarum. Todos os direitos reservados.
-              </p>
-              <div class="flex items-center gap-2 text-blue-400 text-sm">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                </svg>
-                <span>Versão 1.0 Beta</span>
-              </div>
-            </div>
-          </div>
+    <!-- Footer Simplificado -->
+    <footer class="bg-gray-900 text-white py-6 lg:py-8">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div class="flex items-center justify-center gap-2 lg:gap-3 mb-3 lg:mb-4">
+          <span class="inline-flex items-center justify-center w-8 h-8 lg:w-10 lg:h-10 bg-purple-600 rounded-full text-white text-lg lg:text-xl font-bold">D</span>
+          <span class="text-lg lg:text-xl font-bold">Datarum</span>
         </div>
+        <p class="text-gray-400 text-sm">
+          © {{ new Date().getFullYear() }} Datarum • v1.1 • XML → Excel automatizado
+        </p>
       </div>
     </footer>
 
-    <!-- Toast de Confirmação -->
+    <!-- Sticky CTA Mobile -->
+    <div class="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-40 shadow-lg">
+      <button @click="goToApp" class="w-full bg-purple-600 text-white py-3 rounded-xl hover:bg-purple-700 transition font-bold text-lg shadow-lg disabled:opacity-75 disabled:cursor-not-allowed flex items-center justify-center gap-2" :disabled="isLoadingApp">
+        <svg v-if="isLoadingApp" class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        {{ isLoadingApp ? 'Carregando...' : 'Começar Agora' }}
+      </button>
+      <p class="text-center text-xs text-gray-500 mt-2">200 XMLs grátis/mês</p>
+    </div>
+
+    <!-- Toast Responsivo -->
     <div v-if="showFeedbackToast" 
-         class="fixed bottom-4 right-4 bg-purple-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 flex items-center gap-2">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+         class="fixed bottom-4 right-4 left-4 sm:left-auto sm:right-4 bg-purple-600 text-white px-4 lg:px-6 py-2 lg:py-3 rounded-lg shadow-lg z-50 flex items-center gap-2 max-w-sm sm:max-w-none mx-auto sm:mx-0">
+      <svg class="w-4 h-4 lg:w-5 lg:h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
       </svg>
-      Redirecionando para o formulário...
+      <span class="text-sm lg:text-base">Abrindo formulário de feedback...</span>
     </div>
   </div>
 </template>
@@ -574,53 +509,32 @@ export default {
   name: 'LandingPage',
   data() {
     return {
-      showFeedbackToast: false
+      showFeedbackToast: false,
+      isLoadingApp: false,
+      isLoadingFeedback: false
     };
   },
   methods: {
-    scrollTo(elementId) {
-      const element = document.getElementById(elementId);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-      }
-    },
     goToApp() {
-      this.$emit('goToApp');
+      this.isLoadingApp = true;
+      // Simula um pequeno delay para mostrar o loading
+      setTimeout(() => {
+        this.$emit('goToApp');
+        this.isLoadingApp = false;
+      }, 500);
     },
     openGoogleForms() {
-      // URL do seu Google Forms
       const formsUrl = 'https://forms.gle/w4NigAgBfVFv3saG8';
-      
-      // Mostrar feedback visual
+      this.isLoadingFeedback = true;
       this.showFeedbackToast = true;
       
-      // Auto-ocultar toast
       setTimeout(() => {
         this.showFeedbackToast = false;
+        this.isLoadingFeedback = false;
       }, 2000);
       
-      // Abrir o Google Forms em nova aba
       window.open(formsUrl, '_blank');
-      
-      // Log para desenvolvimento
-      console.log('📝 Redirecionando para formulário de feedback');
     }
   }
 };
 </script>
-
-<style scoped>
-/* Animações e estilos adicionais se necessário */
-.animate-pulse {
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
-</style>
