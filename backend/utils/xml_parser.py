@@ -39,15 +39,24 @@ def validate_nfe_version(xml_dict: dict) -> dict:
         "error": None
     }
 
-def parse_nfe(xml_path: Union[str, Path]) -> List[Dict]:
+def parse_nfe(xml_content: str, campos_selecionados: List[str] = None) -> List[Dict]:
     """
     Extrai informações estruturadas de uma NF-e (versões 1.10, 2.00, 3.10, 4.00).
     Retorna uma lista de dicionários, um por item (det) da nota.
+    
+    Args:
+        xml_content: Conteúdo XML da NFe como string
+        campos_selecionados: Lista de campos específicos para extrair (None = todos)
     """
+    # TESTE URGENTE - VERSÃO COM LOGS FORÇADOS
+    print("=" * 80)
+    print("🚨 PARSE_NFE EXECUTANDO - VERSÃO NOVA COM FILTROS! 🚨")
+    print(f"[DEBUG CRÍTICO] parse_nfe chamado com campos_selecionados: {campos_selecionados}")
+    print(f"[DEBUG CRÍTICO] Tipo de campos_selecionados: {type(campos_selecionados)}")
+    print(f"[DEBUG CRÍTICO] Tamanho de campos_selecionados: {len(campos_selecionados) if campos_selecionados else 'N/A'}")
+    print("=" * 80)
 
-    with open(xml_path, 'rb') as file:
-        raw = file.read()
-        xml_dict = xmltodict.parse(raw)
+    xml_dict = xmltodict.parse(xml_content.encode('utf-8') if isinstance(xml_content, str) else xml_content)
 
     # Valida versão da NFe
     validacao = validate_nfe_version(xml_dict)
@@ -60,7 +69,7 @@ def parse_nfe(xml_path: Union[str, Path]) -> List[Dict]:
         or xml_dict.get("nfeProc", {}).get("nfe:NFe")  # namespaces
 
     if not nfe_root:
-        raise ValueError(f"Não foi possível identificar o conteúdo da NF-e em: {xml_path}")
+        raise ValueError(f"Não foi possível identificar o conteúdo da NF-e")
 
     inf_nfe = nfe_root.get("infNFe") or nfe_root.get("nfe:infNFe")
 
@@ -85,7 +94,7 @@ def parse_nfe(xml_path: Union[str, Path]) -> List[Dict]:
         "tipo_operacao": g(ide, "tpNF"),
         "finalidade": g(ide, "finNFe"),
         "natureza_operacao": g(ide, "natOp"),
-        "versao_nfe": validacao["version"],  # Adicionar versão NFe
+        "versao_nfe": validacao["version"],
 
         "cnpj_emitente": g(emit, "CNPJ"),
         "emitente": g(emit, "xNome"),
@@ -102,9 +111,17 @@ def parse_nfe(xml_path: Union[str, Path]) -> List[Dict]:
         "valor_icms": g(total, "vICMS"),
         "valor_pis": g(total, "vPIS"),
         "valor_cofins": g(total, "vCOFINS"),
+        "valor_ipi": g(total, "vIPI"),
+        "valor_frete": g(total, "vFrete"),
+        "valor_desconto": g(total, "vDesc"),
+        "valor_tributos": g(total, "vTotTrib"),
+        "regime_tributario": g(emit, "CRT"),
+        "info_adicional": g(inf_nfe, "infAdic.infCpl"),
+        "chave_nfe": g(inf_nfe, "@Id", "").replace('NFe', ''),
 
         "transportadora": g(transp, "transporta.xNome"),
         "placa_veiculo": g(transp, "veicTransp.placa"),
+        "data_saida": g(ide, "dSaiEnt") or g(ide, "dhSaiEnt", "")[:10],
     }
 
     # Produtos
@@ -112,16 +129,55 @@ def parse_nfe(xml_path: Union[str, Path]) -> List[Dict]:
     if isinstance(itens, dict):  # caso haja apenas 1 item
         itens = [itens]
 
+    print(f"[DEBUG] Encontrados {len(itens)} itens para processar")
+
     resultado = []
     for item in itens:
+        # Verificações de tipo mais robustas
+        if not isinstance(item, dict):
+            print(f"[DEBUG] Item inválido (não é dict): {type(item)}")
+            continue
+            
         prod = item.get("prod", {})
         imposto = item.get("imposto", {})
+        
+        # Verificar se prod é dict
+        if not isinstance(prod, dict):
+            print(f"[DEBUG] Produto inválido (não é dict): {type(prod)}")
+            prod = {}
+        
+        # Verificar se imposto é dict
+        if not isinstance(imposto, dict):
+            print(f"[DEBUG] Imposto inválido (não é dict): {type(imposto)}")
+            imposto = {}
 
-        icms = next(iter(imposto.get("ICMS", {}).values()), {})
-        pis = next(iter(imposto.get("PIS", {}).values()), {})
-        cofins = next(iter(imposto.get("COFINS", {}).values()), {})
+        # Acessar impostos com verificação de tipo
+        icms_dict = imposto.get("ICMS", {})
+        if isinstance(icms_dict, dict) and icms_dict:
+            icms = next(iter(icms_dict.values()), {})
+        else:
+            icms = {}
+            
+        ipi_dict = imposto.get("IPI", {})  
+        if isinstance(ipi_dict, dict) and ipi_dict:
+            ipi = next(iter(ipi_dict.values()), {})
+        else:
+            ipi = {}
+            
+        pis_dict = imposto.get("PIS", {})
+        if isinstance(pis_dict, dict) and pis_dict:
+            pis = next(iter(pis_dict.values()), {})
+        else:
+            pis = {}
+            
+        cofins_dict = imposto.get("COFINS", {})
+        if isinstance(cofins_dict, dict) and cofins_dict:
+            cofins = next(iter(cofins_dict.values()), {})
+        else:
+            cofins = {}
 
-        item_extraido = {
+        # Dados completos do item (como era originalmente)
+        item_completo = {
             **dados_comuns,
             "codigo_produto": prod.get("cProd", ""),
             "descricao_produto": prod.get("xProd", ""),
@@ -130,14 +186,39 @@ def parse_nfe(xml_path: Union[str, Path]) -> List[Dict]:
             "unidade_comercial": prod.get("uCom", ""),
             "valor_unitario": prod.get("vUnCom", ""),
             "valor_total_item": prod.get("vProd", ""),
+            "ncm": prod.get("NCM", ""),
 
-            "icms_valor": icms.get("vICMS", ""),
-            "pis_valor": pis.get("vPIS", ""),
-            "cofins_valor": cofins.get("vCOFINS", "")
+            "icms_valor": icms.get("vICMS", "") if isinstance(icms, dict) else "",
+            "pis_valor": pis.get("vPIS", "") if isinstance(pis, dict) else "",
+            "cofins_valor": cofins.get("vCOFINS", "") if isinstance(cofins, dict) else "",
+            "cst_icms": icms.get("CST", "") if isinstance(icms, dict) else "",
+            "base_icms": icms.get("vBC", "") if isinstance(icms, dict) else "",
+            "aliquota_icms": icms.get("pICMS", "") if isinstance(icms, dict) else "",
+            "aliquota_ipi": ipi.get("pIPI", "") if isinstance(ipi, dict) else "",
+            "valor_ipi": ipi.get("vIPI", "") if isinstance(ipi, dict) else "",
+            "aliquota_pis": pis.get("pPIS", "") if isinstance(pis, dict) else "",
+            "aliquota_cofins": cofins.get("pCOFINS", "") if isinstance(cofins, dict) else ""
         }
 
-        resultado.append(item_extraido)
+        print(f"[DEBUG] Item completo tem {len(item_completo)} campos")
 
+        # Se campos específicos foram selecionados, filtrar
+        if campos_selecionados and len(campos_selecionados) > 0:
+            print(f"[DEBUG] APLICANDO FILTRO! Campos solicitados: {campos_selecionados}")
+            item_filtrado = {}
+            for campo in campos_selecionados:
+                if campo in item_completo:
+                    item_filtrado[campo] = item_completo[campo]
+                else:
+                    print(f"[DEBUG] Campo '{campo}' não encontrado!")
+            print(f"[DEBUG] Item filtrado tem {len(item_filtrado)} campos")
+            resultado.append(item_filtrado)
+        else:
+            print("[DEBUG] SEM FILTRO - usando todos os campos")
+            # Modo original - todos os campos
+            resultado.append(item_completo)
+
+    print(f"[DEBUG] Retornando {len(resultado)} itens")
     return resultado
 
 

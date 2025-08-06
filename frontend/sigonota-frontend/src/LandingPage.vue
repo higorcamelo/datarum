@@ -41,7 +41,7 @@
                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                   </svg>
                 </div>
-                <span class="text-gray-700"><strong>Versão gratuita</strong> • 200 XMLs/mês</span>
+                <span class="text-gray-700"><strong>Versão gratuita</strong> • 750 XMLs/mês</span>
               </div>
               
               <div class="flex items-center gap-2 lg:gap-3 justify-center lg:justify-start">
@@ -81,7 +81,7 @@
                 </svg>
                 {{ isLoadingApp ? 'Carregando...' : 'Começar Agora' }}
               </button>
-              <p class="text-xs lg:text-sm text-gray-500 mt-2 lg:mt-3">200 XMLs grátis/mês • Processamento instantâneo</p>
+              <p class="text-xs lg:text-sm text-gray-500 mt-2 lg:mt-3">750 XMLs grátis/mês • Processamento instantâneo</p>
             </div>
           </div>
 
@@ -319,7 +319,7 @@
               </svg>
             </div>
             <h3 class="text-base lg:text-lg font-bold mb-2 text-orange-800">Versão Gratuita</h3>
-            <p class="text-gray-600 text-sm"><strong>200 XMLs/mês</strong> • <strong>Relatórios básicos</strong></p>
+            <p class="text-gray-600 text-sm"><strong>750 XMLs/mês</strong> • <strong>Relatórios básicos</strong></p>
           </div>
         </div>
       </div>
@@ -408,7 +408,7 @@
           
           <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div class="bg-white/10 rounded-lg p-4 backdrop-blur">
-              <h4 class="font-semibold mb-2">� Formulários Automáticos</h4>
+              <h4 class="font-semibold mb-2">📋 Formulários Automáticos</h4>
               <p class="text-sm text-purple-100">Relatórios fiscais preenchidos automaticamente</p>
             </div>
             <div class="bg-white/10 rounded-lg p-4 backdrop-blur">
@@ -420,11 +420,11 @@
               <p class="text-sm text-purple-100">Rankings e comparativos automáticos</p>
             </div>
             <div class="bg-white/10 rounded-lg p-4 backdrop-blur">
-              <h4 class="font-semibold mb-2">� Insights com IA <span class="text-xs bg-orange-500 px-2 py-1 rounded">PRO</span></h4>
+              <h4 class="font-semibold mb-2">🤖 Insights com IA <span class="text-xs bg-orange-500 px-2 py-1 rounded">PRO</span></h4>
               <p class="text-sm text-purple-100">IA identifica padrões e anomalias nos dados</p>
             </div>
             <div class="bg-white/10 rounded-lg p-4 backdrop-blur">
-              <h4 class="font-semibold mb-2">� Integrações Avançadas <span class="text-xs bg-orange-500 px-2 py-1 rounded">PRO</span></h4>
+              <h4 class="font-semibold mb-2">🔗 Integrações Avançadas <span class="text-xs bg-orange-500 px-2 py-1 rounded">PRO</span></h4>
               <p class="text-sm text-purple-100">Conecte com sistemas contábeis e ERPs</p>
             </div>
             <div class="bg-white/10 rounded-lg p-4 backdrop-blur">
@@ -436,7 +436,7 @@
 
         <div class="mt-8 text-center">
           <p class="text-sm text-gray-600 mb-4">
-            Conversão sempre com mesma qualidade • Diferença apenas nos limites de uso
+            Conversão sempre com mesma qualidade • Diferença apenas nos limites de uso (750 XMLs grátis/mês)
           </p>
           <button @click="goToApp" class="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition font-semibold disabled:opacity-75 disabled:cursor-not-allowed flex items-center justify-center gap-2" :disabled="isLoadingApp">
             <svg v-if="isLoadingApp" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
@@ -490,7 +490,7 @@
         </svg>
         {{ isLoadingApp ? 'Carregando...' : 'Começar Agora' }}
       </button>
-      <p class="text-center text-xs text-gray-500 mt-2">200 XMLs grátis/mês</p>
+      <p class="text-center text-xs text-gray-500 mt-2">750 XMLs grátis/mês</p>
     </div>
 
     <!-- Toast Responsivo -->
