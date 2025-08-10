@@ -93,7 +93,7 @@ A interface oferece uma experiência moderna com:
 
 ### **Validações**
 - Formato XML obrigatório
-- Limite de 50 arquivos por vez
+- Limite de 200 arquivos por vez
 - Tamanho máximo de 5MB por arquivo
 - Verificação de estrutura NFe
 
