@@ -26,7 +26,7 @@ except ImportError:
     from utils.excel_handler import salvar_em_excel
 
 import config
-from utils.validators import validar_xml_nfe, validar_tamanho_arquivo, contar_itens_xml
+from validador import validar_xml_nfe, validar_tamanho_arquivo, contar_itens_xml
 
 # Configurar logging para ambiente serverless (Vercel)
 # No Vercel, só podemos usar stdout/stderr, não arquivos

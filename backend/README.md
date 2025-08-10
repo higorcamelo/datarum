@@ -96,7 +96,7 @@ ENVIRONMENT=development  # development/staging/production
 
 # Limites
 MAX_FILE_SIZE=5242880   # 5MB
-MAX_FILES_COUNT=200      # Máximo de arquivos por request
+MAX_FILES_COUNT=50      # Máximo de arquivos por request
 
 # Performance
 MAX_CONCURRENT_REQUESTS=10  # Requests simultâneas

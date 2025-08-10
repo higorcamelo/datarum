@@ -77,11 +77,11 @@
               </div>
               <div class="flex items-start gap-2">
                 <span class="text-purple-400 mt-0.5">•</span>
-                <span>Máximo {{ maxFiles }} arquivos por conversão</span>
+                <span>Máximo 200 arquivos por conversão</span>
               </div>
               <div class="flex items-start gap-2">
                 <span class="text-purple-400 mt-0.5">•</span>
-                <span>{{ limiteXmlsMensal }} XMLs gratuitos por mês</span>
+                <span>750 XMLs gratuitos por mês</span>
               </div>
               <div class="flex items-start gap-2">
                 <span class="text-purple-400 mt-0.5">•</span>
@@ -136,7 +136,7 @@
         <!-- Área de upload com drag & drop -->
         <section class="mb-8">
           <label class="block text-sm font-semibold text-purple-700 mb-2">
-            Selecione arquivos XML (máx. {{ maxFiles }} por conversão • {{ limiteXmlsMensal }}/mês grátis)
+            Selecione arquivos XML (máx. 200 por conversão • 750/mês grátis)
           </label>
           <div 
             @dragover.prevent="dragOver = true"
@@ -162,7 +162,7 @@
               <p class="text-lg font-medium text-purple-600 mb-1">
                 <span class="underline">Clique para selecionar</span> ou arraste arquivos XML aqui
               </p>
-              <p class="text-sm text-gray-500">Máximo {{ maxFiles }} por vez, {{ maxFileSizeMB }}MB cada • {{ limiteXmlsMensal }} XMLs grátis/mês</p>
+              <p class="text-sm text-gray-500">Máximo 200 por vez, 5MB cada • 750 XMLs grátis/mês</p>
             </div>
           </div>
           
@@ -492,11 +492,6 @@ export default {
       dragOver: false,
       validationMessage: null,
       
-      // Configurações do ambiente
-      maxFiles: parseInt(import.meta.env.VITE_MAX_FILES || '200'),
-      maxFileSizeMB: parseInt(import.meta.env.VITE_MAX_FILE_SIZE_MB || '5'),
-      limiteXmlsMensal: parseInt(import.meta.env.VITE_LIMITE_XMLS_MENSAL || '750'),
-      
       // Customização da extração
       mostrarCamposPersonalizados: false,
       presetAtivo: 'basico',
@@ -577,10 +572,10 @@ export default {
         this.showValidation('warning', `${files.length - xmlFiles.length} arquivo(s) ignorado(s) (apenas XML aceitos)`);
       }
       
-      // Limitar a arquivos máximos permitidos
-      if (xmlFiles.length > this.maxFiles) {
-        this.showValidation('error', `Máximo ${this.maxFiles} arquivos permitidos. Alguns foram removidos.`);
-        this.selectedFiles = xmlFiles.slice(0, this.maxFiles);
+      // Limitar a 200 arquivos
+      if (xmlFiles.length > 200) {
+        this.showValidation('error', 'Máximo 200 arquivos permitidos. Alguns foram removidos.');
+        this.selectedFiles = xmlFiles.slice(0, 200);
       } else {
         this.selectedFiles = xmlFiles;
       }
@@ -588,11 +583,10 @@ export default {
       this.validateFiles();
     },
     validateFiles() {
-      const maxSizeBytes = this.maxFileSizeMB * 1024 * 1024;
-      const oversizedFiles = this.selectedFiles.filter(file => file.size > maxSizeBytes);
+      const oversizedFiles = this.selectedFiles.filter(file => file.size > 5 * 1024 * 1024);
       
       if (oversizedFiles.length > 0) {
-        this.showValidation('error', `${oversizedFiles.length} arquivo(s) muito grande(s) (máx. ${this.maxFileSizeMB}MB)`);
+        this.showValidation('error', `${oversizedFiles.length} arquivo(s) muito grande(s) (máx. 5MB)`);
       } else if (this.selectedFiles.length > 0) {
         this.validationMessage = null;
       }
@@ -923,10 +917,10 @@ export default {
         this.showValidation('warning', `${files.length - xmlFiles.length} arquivo(s) não XML foram ignorados`);
       }
       
-      // Limitar arquivos baseado na configuração
-      if (xmlFiles.length > this.maxFiles) {
-        this.selectedFiles = xmlFiles.slice(0, this.maxFiles);
-        this.showValidation('warning', `Apenas os primeiros ${this.maxFiles} arquivos foram selecionados (${xmlFiles.length} total)`);
+      // Limitar a 200 arquivos
+      if (xmlFiles.length > 200) {
+        this.selectedFiles = xmlFiles.slice(0, 200);
+        this.showValidation('warning', `Apenas os primeiros 200 arquivos foram selecionados (${xmlFiles.length} total)`);
       } else {
         this.selectedFiles = xmlFiles;
       }
@@ -935,11 +929,10 @@ export default {
     },
     
     validateFiles() {
-      const maxSizeBytes = this.maxFileSizeMB * 1024 * 1024;
-      const oversizedFiles = this.selectedFiles.filter(file => file.size > maxSizeBytes);
+      const oversizedFiles = this.selectedFiles.filter(file => file.size > 5 * 1024 * 1024);
       
       if (oversizedFiles.length > 0) {
-        this.showValidation('error', `${oversizedFiles.length} arquivo(s) muito grande(s) (máx. ${this.maxFileSizeMB}MB)`);
+        this.showValidation('error', `${oversizedFiles.length} arquivo(s) muito grande(s) (máx. 5MB)`);
       } else if (this.selectedFiles.length > 0) {
         this.showValidation('success', `${this.selectedFiles.length} arquivo(s) XML válido(s) selecionado(s)`);
       }
@@ -954,11 +947,10 @@ export default {
     
     getFileStatus(file) {
       const isXml = file.name.toLowerCase().endsWith('.xml');
-      const maxSizeBytes = this.maxFileSizeMB * 1024 * 1024;
-      const isValidSize = file.size <= maxSizeBytes;
+      const isValidSize = file.size <= 5 * 1024 * 1024;
       return {
         valid: isXml && isValidSize,
-        error: !isXml ? 'Não é XML' : !isValidSize ? `Muito grande (>${this.maxFileSizeMB}MB)` : null
+        error: !isXml ? 'Não é XML' : !isValidSize ? 'Muito grande' : null
       };
     },
     
