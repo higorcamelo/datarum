@@ -3,10 +3,6 @@ from pathlib import Path
 from typing import Union, List, Dict
 
 def validate_nfe_version(xml_dict: dict) -> dict:
-    """
-    Valida se é uma NFe válida e identifica a versão.
-    Retorna informações sobre a versão e validade.
-    """
     # Tentar encontrar a estrutura NFe
     nfe_root = xml_dict.get("NFe") \
         or xml_dict.get("nfeProc", {}).get("NFe") \
@@ -40,22 +36,6 @@ def validate_nfe_version(xml_dict: dict) -> dict:
     }
 
 def parse_nfe(xml_content: str, campos_selecionados: List[str] = None) -> List[Dict]:
-    """
-    Extrai informações estruturadas de uma NF-e (versões 1.10, 2.00, 3.10, 4.00).
-    Retorna uma lista de dicionários, um por item (det) da nota.
-    
-    Args:
-        xml_content: Conteúdo XML da NFe como string
-        campos_selecionados: Lista de campos específicos para extrair (None = todos)
-    """
-    # TESTE URGENTE - VERSÃO COM LOGS FORÇADOS
-    print("=" * 80)
-    print("🚨 PARSE_NFE EXECUTANDO - VERSÃO NOVA COM FILTROS! 🚨")
-    print(f"[DEBUG CRÍTICO] parse_nfe chamado com campos_selecionados: {campos_selecionados}")
-    print(f"[DEBUG CRÍTICO] Tipo de campos_selecionados: {type(campos_selecionados)}")
-    print(f"[DEBUG CRÍTICO] Tamanho de campos_selecionados: {len(campos_selecionados) if campos_selecionados else 'N/A'}")
-    print("=" * 80)
-
     xml_dict = xmltodict.parse(xml_content.encode('utf-8') if isinstance(xml_content, str) else xml_content)
 
     # Valida versão da NFe

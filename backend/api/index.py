@@ -29,7 +29,6 @@ app.add_middleware(
 )
 
 def processar_xml(content: bytes):
-    """Processa um arquivo XML de NFe usando o parser do utils"""
     try:
         xml_dict = xmltodict.parse(content.decode('utf-8'))
         

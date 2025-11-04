@@ -130,20 +130,7 @@ async def processar(
     campos_selecionados: str = Form(None),
     opcoes: str = Form(None),
     preset: str = Form("basico")
-):
-    """Processa XMLs de NFe e retorna planilha Excel - Versão v1.1 com customização"""
-    
-    # LOGS CRÍTICOS PARA DEBUG
-    print("🔥" * 80)
-    print("🔥 ENDPOINT /processar CHAMADO - VERSÃO v1.1 🔥")
-    print(f"🔥 Parâmetros recebidos:")
-    print(f"🔥   - xmls: {len(xmls)} arquivos")
-    print(f"🔥   - planilha: '{planilha}'")
-    print(f"🔥   - campos_selecionados (raw): '{campos_selecionados}'")
-    print(f"🔥   - opcoes (raw): '{opcoes}'")  
-    print(f"🔥   - preset: '{preset}'")
-    print("🔥" * 80)
-    
+):    
     start_time = time.time()
     request_id = str(uuid.uuid4())[:8]
     

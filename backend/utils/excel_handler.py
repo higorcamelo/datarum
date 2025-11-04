@@ -4,14 +4,6 @@ from pathlib import Path
 from typing import Dict, List, Any
 
 def salvar_em_excel(dados: list[dict], caminho_planilha: str, configuracao: Dict[str, Any] = None):
-    """
-    Salva os dados extraídos em uma nova planilha Excel v1.1 com opções avançadas.
-    
-    Args:
-        dados: Lista de dicionários com os dados extraídos
-        caminho_planilha: Caminho onde salvar a planilha
-        configuracao: Configurações de customização (campos, opções, etc.)
-    """
     if not dados:
         return 0
     
@@ -184,7 +176,6 @@ def _adicionar_linha_totais(writer, df_final, nome_aba):
 
 
 def _criar_aba_resumo(writer, dados, arquivos_processados, campos_selecionados, preset):
-    """Cria aba de resumo estatístico simples"""
     try:
         resumo_data = {
             'Estatística': [
@@ -208,7 +199,6 @@ def _criar_aba_resumo(writer, dados, arquivos_processados, campos_selecionados, 
 
 
 def _criar_agrupamento_emitente(writer, df_final):
-    """Cria aba com dados agrupados por emitente"""
     try:
         # Encontrar coluna do emitente
         col_emitente = None
