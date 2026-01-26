@@ -17,7 +17,7 @@
       <div class="flex items-center gap-4">
         <!-- Indicador de versão -->
         <div class="hidden md:flex items-center gap-2 bg-purple-50 px-3 py-1 rounded-full">
-          <span class="text-xs font-medium text-purple-600">v1.0 Beta</span>
+          <span class="text-xs font-medium text-purple-600">v1.0</span>
         </div>
         <button @click="currentView = 'landing'" class="text-purple-600 hover:text-purple-700 text-sm font-medium transition">
           ← Voltar ao início

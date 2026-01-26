@@ -47,7 +47,18 @@ def parse_nfe(xml_path: Union[str, Path]) -> List[Dict]:
 
     with open(xml_path, 'rb') as file:
         raw = file.read()
-        xml_dict = xmltodict.parse(raw)
+
+        # Proteção básica contra XXE: rejeitar DOCTYPE/ENTITY
+        try:
+            raw_text = raw.decode('utf-8', errors='ignore')
+        except Exception:
+            raw_text = raw.decode('latin-1', errors='ignore')
+
+        upper = raw_text.upper()
+        if '<!DOCTYPE' in upper or '<!ENTITY' in upper:
+            raise ValueError('XML contém declarações DOCTYPE/ENTITY e foi recusado por segurança')
+
+        xml_dict = xmltodict.parse(raw_text)
 
     # Valida versão da NFe
     validacao = validate_nfe_version(xml_dict)

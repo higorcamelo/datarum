@@ -12,10 +12,10 @@
             </div>
           </div>
           <div class="flex items-center gap-4">
-            <button @click="scrollTo('features')" class="hidden md:block text-gray-600 hover:text-purple-600 transition">Recursos</button>
-            <button @click="scrollTo('how-it-works')" class="hidden md:block text-gray-600 hover:text-purple-600 transition">Como Funciona</button>
-            <button @click="goToApp" class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition font-medium">
-              Começar Agora
+            <button aria-label="Ir para Recursos" @click="scrollTo('features')" class="hidden md:block text-gray-600 hover:text-purple-600 transition">Recursos</button>
+            <button aria-label="Ir para Como Funciona" @click="scrollTo('how-it-works')" class="hidden md:block text-gray-600 hover:text-purple-600 transition">Como Funciona</button>
+            <button aria-label="Começar" @click="goToApp" class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition font-medium">
+              Começar
             </button>
           </div>
         </div>
@@ -28,28 +28,27 @@
         <div class="grid lg:grid-cols-2 gap-12 items-center">
           <div class="text-center lg:text-left">
             <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-purple-800 leading-tight mb-6">
-              Datarum transforma seus XMLs fiscais em planilhas inteligentes
+              Datarum — converta XMLs em planilhas localmente
             </h1>
             <p class="text-xl text-gray-600 mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-              Automatize relatórios contábeis, reduza erros e ganhe tempo. Tudo direto no navegador — sem instalações, sem enrolação.
+              Processamento local no seu navegador — simples, confiável e sem instalações.
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <button @click="goToApp" class="bg-purple-700 hover:bg-purple-800 text-white font-semibold py-4 px-8 rounded-lg shadow-lg transition text-lg">
-                Usar gratuitamente
+              <button aria-label="Começar" @click="goToApp" class="bg-purple-700 hover:bg-purple-800 text-white font-semibold py-4 px-8 rounded-lg shadow-lg transition text-lg">
+                Começar
               </button>
-              <button @click="scrollTo('demo')" class="border-2 border-purple-600 text-purple-600 px-8 py-4 rounded-lg hover:bg-purple-50 transition font-semibold text-lg">
+              <button aria-label="Ver demonstração" @click="scrollTo('demo')" class="border-2 border-purple-600 text-purple-600 px-8 py-4 rounded-lg hover:bg-purple-50 transition font-semibold text-lg">
                 Ver Demonstração
               </button>
             </div>
             <p class="text-sm text-gray-600 mt-4 text-center lg:text-left">
-              Lançamento Beta — use gratuitamente enquanto aprimoramos a plataforma.
+              Uso direto • Sem cadastro • Processamento local
             </p>
             <div class="flex items-center gap-6 mt-6 justify-center lg:justify-start text-sm text-gray-500">
               <div class="flex items-center gap-2">
                 <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                 </svg>
-                <span>Beta disponível sem custo</span>
               </div>
               <div class="flex items-center gap-2">
                 <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
@@ -63,7 +62,7 @@
                 </svg>
                 <span>Processamento Local</span>
               </div>
-              <span class="font-medium text-sm text-purple-600">Ajude com seu feedback</span>
+              <span class="font-medium text-sm text-purple-600">Envie feedback</span>
             </div>
           </div>
           <div class="relative">
@@ -108,15 +107,15 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"/>
             </svg>
             <h3 class="text-xl font-semibold mb-2 text-gray-900">Upload em massa</h3>
-            <p class="text-gray-600">Arraste vários XMLs de uma vez só, sem limites artificiais.</p>
+            <p class="text-gray-600">Arraste vários XMLs de uma vez.</p>
           </div>
           
           <div class="bg-white p-6 rounded-lg shadow-lg text-center border border-gray-100">
             <svg class="w-10 h-10 text-purple-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
             </svg>
-            <h3 class="text-xl font-semibold mb-2 text-gray-900">Processamento instantâneo</h3>
-            <p class="text-gray-600">Conversão automática em segundos, direto no seu navegador.</p>
+            <h3 class="text-xl font-semibold mb-2 text-gray-900">Processamento local</h3>
+            <p class="text-gray-600">Conversão automática, direto no navegador.</p>
           </div>
           
           <div class="bg-white p-6 rounded-lg shadow-lg text-center border border-gray-100">
@@ -150,7 +149,7 @@
               </svg>
             </div>
             <h3 class="text-xl font-semibold text-gray-900 mb-2">Super Rápido</h3>
-            <p class="text-gray-600">Processe até 50 XMLs simultaneamente em segundos. Não perca mais tempo com conversões manuais.</p>
+            <p class="text-gray-600">Suporta múltiplos arquivos; desempenho depende do navegador.</p>
           </div>
 
           <div class="text-center p-6">
@@ -159,8 +158,8 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
               </svg>
             </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-2">Todas as Versões NFe</h3>
-            <p class="text-gray-600">Suporte completo para NFe versões 1.10, 2.00, 3.10 e 4.00. Funciona com qualquer XML válido.</p>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">Compatibilidade</h3>
+            <p class="text-gray-600">Compatível com formatos NFe comuns.</p>
           </div>
 
           <div class="text-center p-6">
@@ -179,19 +178,11 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
               </svg>
             </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-2">Excel Profissional</h3>
-            <p class="text-gray-600">Planilhas bem formatadas com todas as informações importantes organizadas e prontas para uso.</p>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">Planilhas Prontas</h3>
+            <p class="text-gray-600">Planilhas formatadas para uso imediato.</p>
           </div>
 
-          <div class="text-center p-6">
-            <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
-              </svg>
-            </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-2">Totalmente Gratuito*</h3>
-            <p class="text-gray-600">Durante o período beta! Sem custos, sem cadastros, sem limitações. Ajude-nos com feedback.</p>
-          </div>
+          
 
           <div class="text-center p-6">
             <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
@@ -226,7 +217,7 @@
             <h3 class="text-xl font-semibold text-gray-900 mb-4">Selecione os XMLs</h3>
             <p class="text-gray-600 mb-6">
               Arraste e solte seus arquivos XML de NFe ou clique para selecioná-los. 
-              Suporte para até 50 arquivos de uma vez.
+              Suporte para múltiplos arquivos.
             </p>
             <div class="bg-white p-4 rounded-lg border border-gray-200">
               <div class="border-2 border-dashed border-purple-300 rounded-lg p-6">
@@ -387,13 +378,13 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
               </svg>
             </div>
-            <h3 class="text-lg font-semibold text-gray-900 mb-2">v1.0 - Beta Público</h3>
-            <p class="text-gray-600 text-sm">Conversor XML → Excel básico. Versão gratuita para testes e validação com usuários reais.</p>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Conversor Básico</h3>
+            <p class="text-gray-600 text-sm">Conversor XML → Excel básico.</p>
           </div>
 
           <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 relative">
             <div class="absolute -top-2 -right-2 bg-blue-500 text-white px-2 py-1 rounded-full text-xs font-bold">
-              v1.1
+              EM BREVE
             </div>
             <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-4">
               <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -401,12 +392,12 @@
               </svg>
             </div>
             <h3 class="text-lg font-semibold text-gray-900 mb-2">O que vem por aí</h3>
-            <p class="text-gray-600 text-sm">Recursos avançados de análise, colunas personalizadas, totalizações automáticas — tudo no seu navegador. Uma versão gratuita continuará disponível para uso leve.</p>
+            <p class="text-gray-600 text-sm">Recursos avançados de análise, colunas personalizadas, totalizações automáticas — tudo no seu navegador.</p>
           </div>
 
           <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 relative">
             <div class="absolute -top-2 -right-2 bg-purple-500 text-white px-2 py-1 rounded-full text-xs font-bold">
-              v1.2
+              PLANEJADO
             </div>
             <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
               <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -459,13 +450,12 @@
 
         <div class="mt-12 text-center">
           <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-6 rounded-2xl max-w-2xl mx-auto">
-            <h3 class="text-xl font-bold mb-2">🧪 Ajude-nos a melhorar!</h3>
+            <h3 class="text-xl font-bold mb-2">🧪 Experimente e envie feedback</h3>
             <p class="mb-4">
-              Use a v1.0 gratuitamente e nos diga o que funciona, o que não funciona e o que falta. 
-              Seu feedback define as próximas versões.
+              Experimente a ferramenta e nos diga o que podemos melhorar. Seu feedback orienta o desenvolvimento.
             </p>
             <button @click="goToApp" class="bg-white text-purple-600 px-6 py-3 rounded-lg hover:bg-gray-50 transition font-semibold">
-              Testar Agora - v1.0 Beta
+              Começar
             </button>
           </div>
         </div>
@@ -485,12 +475,11 @@
             <h3 class="text-2xl font-bold text-gray-900">Seu feedback é fundamental!</h3>
           </div>
           <p class="text-gray-600 mb-6 max-w-2xl mx-auto">
-            Esta versão está disponível <strong>gratuitamente por tempo limitado</strong> durante nosso período de testes. 
             Clique no botão abaixo para acessar nosso formulário de feedback e nos ajudar a melhorar o Datarum.
           </p>
           <div class="mb-6">
-            <button @click="openGoogleForms()" 
-                    class="bg-purple-600 text-white px-8 py-4 rounded-lg hover:bg-purple-700 transition font-semibold text-lg flex items-center justify-center gap-3 mx-auto shadow-lg">
+                <button aria-label="Enviar feedback" @click="openGoogleForms()" 
+                  class="bg-purple-600 text-white px-8 py-4 rounded-lg hover:bg-purple-700 transition font-semibold text-lg flex items-center justify-center gap-3 mx-auto shadow-lg">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/>
               </svg>
@@ -516,11 +505,11 @@
         <p class="text-xl text-purple-100 mb-8">
           Comece agora e transforme seus XMLs em planilhas organizadas em segundos
         </p>
-        <button @click="goToApp" class="bg-white text-purple-600 px-8 py-4 rounded-lg hover:bg-gray-50 transition font-semibold text-lg shadow-lg">
-          Começar Agora - Beta Gratuito!
+        <button aria-label="Começar" @click="goToApp" class="bg-white text-purple-600 px-8 py-4 rounded-lg hover:bg-gray-50 transition font-semibold text-lg shadow-lg">
+          Começar
         </button>
         <p class="text-purple-200 text-sm mt-4">
-          Versão beta • Sem cadastro • Sem custos • Acesso antecipado garantido
+          Sem cadastro • Processamento local
         </p>
       </div>
     </section>
@@ -534,12 +523,12 @@
             <span class="text-2xl font-bold">Datarum</span>
           </div>
           <p class="text-gray-400 mb-6">
-            Automação fiscal com inteligência e clareza
+            Conversão de XML para planilhas
           </p>
           <div class="flex justify-center gap-8 text-sm text-gray-400 mb-8">
             <button @click="scrollTo('features')" class="hover:text-white transition">Recursos</button>
             <button @click="scrollTo('how-it-works')" class="hover:text-white transition">Como Funciona</button>
-            <button @click="goToApp" class="hover:text-white transition">Aplicativo Beta</button>
+            <button @click="goToApp" class="hover:text-white transition">Abrir Aplicativo</button>
           </div>
           <div class="border-t border-gray-800 pt-8">
             <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mb-4">
@@ -550,7 +539,7 @@
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                 </svg>
-                <span>Versão 1.0 Beta</span>
+                <span>Versão 1.0</span>
               </div>
             </div>
           </div>
@@ -621,6 +610,14 @@ export default {
   }
   50% {
     opacity: 0.5;
+  }
+}
+
+/* Respeitar preferência de movimento reduzido */
+@media (prefers-reduced-motion: reduce) {
+  .animate-pulse,
+  .animate-spin {
+    animation: none !important;
   }
 }
 </style>
