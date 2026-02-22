@@ -20,7 +20,7 @@ def test_imports():
         return False
     
     try:
-        import config
+        import backend.api.config as config
         print("OK - config.py")
         assert hasattr(config, 'CORS_ORIGINS'), "config.py deve ter 'CORS_ORIGINS'"
     except Exception as e:

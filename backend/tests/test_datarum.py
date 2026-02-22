@@ -117,7 +117,7 @@ class TestConfig:
     
     def test_config_existe(self):
         """Testa se arquivo de config existe e tem variáveis necessárias"""
-        import config
+        import backend.api.config as config
         
         # Verifica se variáveis obrigatórias existem
         assert hasattr(config, 'CORS_ORIGINS')

@@ -137,21 +137,22 @@ const camposSelecionados = ref(['nfe', 'data_emissao', 'valor_total']);
 
 const camposDisponiveis = {
   identificacao: [
-    { id: 'nfe', nome: 'Número NF-e' },
+    { id: 'numero_nf', nome: 'Número NF-e' },
     { id: 'serie', nome: 'Série' },
     { id: 'data_emissao', nome: 'Data Emissão' },
-    { id: 'valor_total', nome: 'Valor Total NF' }
+    { id: 'valor_total_nf', nome: 'Valor Total NF' }
   ],
   parceiros: [
     { id: 'cnpj_emitente', nome: 'CNPJ Emitente' },
-    { id: 'nome_emitente', nome: 'Razão Social Emitente' },
-    { id: 'cnpj_dest', nome: 'CNPJ Destinatário' }
+    { id: 'emitente', nome: 'Razão Social Emitente' },
+    { id: 'cnpj_destinatario', nome: 'CNPJ Destinatário' }
   ],
   itens: [
-    { id: 'xprod', nome: 'Descrição Produto' },
-    { id: 'ucom', nome: 'Unidade' },
-    { id: 'vuncom', nome: 'Valor Unitário' },
-    { id: 'qcom', nome: 'Quantidade' }
+    { id: 'descricao_produto', nome: 'Descrição Produto' },
+    { id: 'unidade_comercial', nome: 'Unidade' },
+    { id: 'valor_unitario', nome: 'Valor Unitário' },
+    { id: 'quantidade_comercial', nome: 'Quantidade' },
+    { id: 'valor_total_item', nome: 'Total Item' }
   ]
 };
 
@@ -168,9 +169,22 @@ const voltarParaInicio = () => {
 
 // Lógica de Presets
 watch(presetAtivo, (novo) => {
-  if (novo === 'basico') camposSelecionados.value = ['nfe', 'data_emissao', 'valor_total'];
-  else if (novo === 'completo') camposSelecionados.value = Object.values(camposDisponiveis).flat().map(c => c.id);
-  else if (novo === 'fiscal') camposSelecionados.value = ['nfe', 'data_emissao', 'cnpj_emitente', 'nome_emitente', 'vuncom'];
+  if (novo === 'basico')
+    camposSelecionados.value = ['numero_nf', 'data_emissao', 'valor_total_nf'];
+
+  else if (novo === 'completo')
+    camposSelecionados.value = Object.values(camposDisponiveis)
+      .flat()
+      .map(c => c.id);
+
+  else if (novo === 'fiscal')
+    camposSelecionados.value = [
+      'numero_nf',
+      'data_emissao',
+      'cnpj_emitente',
+      'emitente',
+      'valor_unitario'
+    ];
 });
 
 // Arquivos
@@ -196,20 +210,34 @@ const usarSugestao = () => {
 const enviarArquivos = async () => {
   loading.value = true;
   mensagem.value = '';
+
   const formData = new FormData();
-  selectedFiles.value.forEach(f => formData.append('xmls', f));
-  formData.append('planilha', nomePlanilha.value || 'extração');
-  formData.append('campos', JSON.stringify(camposSelecionados.value));
+
+  selectedFiles.value.forEach(f => formData.append('files', f));
+  formData.append('planilha_nome', nomePlanilha.value || 'extracao');
+
+  formData.append(
+    'campos_selecionados',
+    JSON.stringify(camposSelecionados.value)
+  );
+  formData.append('preset', presetAtivo.value);
 
   try {
-    const response = await fetch(ENDPOINTS.PROCESSAR_EXCEL, { method: 'POST', body: formData });
+    const response = await fetch(ENDPOINTS.PROCESSAR_EXCEL, {
+      method: 'POST',
+      body: formData
+    });
+
     if (!response.ok) throw new Error();
+
     const blob = await response.blob();
     const url = window.URL.createObjectURL(blob);
+
     const a = document.createElement('a');
     a.href = url;
     a.download = `${nomePlanilha.value || 'relatorio'}.xlsx`;
     a.click();
+
     mensagem.value = '✅ Planilha gerada com sucesso!';
   } catch (err) {
     mensagem.value = '❌ Erro na comunicação com o servidor.';
