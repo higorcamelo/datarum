@@ -1,10 +1,5 @@
-#!/usr/bin/env python3
-"""
-Script SIMPLES para executar o Datarum
-"""
-
 if __name__ == "__main__":
-    print("🚀 Iniciando Datarum API...")
+    print("Iniciando Datarum API...")
     print()
     
     try:
@@ -12,15 +7,7 @@ if __name__ == "__main__":
         from main import app
         import config
         
-        print("📍 Servidor rodando em: http://localhost:8000")
-        print("📖 Documentação em: http://localhost:8000/docs")
-        print("🔄 Auto-reload ativado para desenvolvimento")
         print(f"🌐 CORS permitido para: {', '.join(config.CORS_ORIGINS)}")
-        print()
-        print("⚠️  IMPORTANTE sobre URLs:")
-        print("   Para produção, edite o arquivo config.py")
-        print("   e adicione suas URLs reais na lista CORS_ORIGINS")
-        print()
         
         uvicorn.run(
             "main:app", 
@@ -31,7 +18,7 @@ if __name__ == "__main__":
         )
         
     except ImportError as e:
-        print(f"❌ Dependência não encontrada: {e}")
-        print("📦 Execute: pip install -r requirements.txt")
+        print(f"Dependência não encontrada: {e}")
+
     except Exception as e:
-        print(f"❌ Erro ao iniciar: {e}")
+        print(f"Erro ao iniciar: {e}")
