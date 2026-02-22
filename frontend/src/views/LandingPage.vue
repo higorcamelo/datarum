@@ -1,25 +1,45 @@
 <template>
   <div class="min-h-screen bg-white">
-    <header class="bg-white/95 backdrop-blur fixed w-full top-0 z-50 border-b border-gray-100">
-      <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center py-4">
-          <div class="flex items-center gap-3">
-            <span class="inline-flex items-center justify-center w-10 h-10 bg-purple-600 rounded-full text-white text-xl font-bold">D</span>
-            <div class="flex flex-col">
-              <span class="text-xl font-bold text-purple-700">Datarum</span>
-              <span class="text-xs text-purple-600 hidden sm:block">Automação fiscal inteligente</span>
-            </div>
+  <header class="bg-white/95 backdrop-blur fixed w-full top-0 z-50 border-b border-gray-100">
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center py-4">
+        
+        <router-link to="/" class="flex items-center gap-3 group">
+          <span class="inline-flex items-center justify-center w-10 h-10 bg-purple-600 rounded-full text-white text-xl font-bold group-hover:bg-purple-700 transition">D</span>
+          <div class="flex flex-col">
+            <span class="text-xl font-bold text-purple-700">Datarum</span>
+            <span class="text-xs text-purple-600 hidden sm:block">Automação fiscal inteligente</span>
           </div>
-          <div class="flex items-center gap-4">
-            <button aria-label="Ir para Recursos" @click="scrollTo('features')" class="hidden md:block text-gray-600 hover:text-purple-600 transition">Recursos</button>
-            <button aria-label="Ir para Como Funciona" @click="scrollTo('how-it-works')" class="hidden md:block text-gray-600 hover:text-purple-600 transition">Como Funciona</button>
-            <button aria-label="Começar" @click="goToApp" class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition font-medium">
-              Começar
-            </button>
-          </div>
+        </router-link>
+
+        <div class="flex items-center gap-4">
+          <button 
+            aria-label="Ir para Recursos" 
+            @click="handleNav('features')" 
+            class="hidden md:block text-gray-600 hover:text-purple-600 transition"
+          >
+            Recursos
+          </button>
+          
+          <button 
+            aria-label="Ir para Como Funciona" 
+            @click="handleNav('how-it-works')" 
+            class="hidden md:block text-gray-600 hover:text-purple-600 transition"
+          >
+            Como Funciona
+          </button>
+
+          <button 
+            aria-label="Começar" 
+            @click="$router.push('/conversor')" 
+            class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition font-medium"
+          >
+            Começar
+          </button>
         </div>
-      </nav>
-    </header>
+      </div>
+    </nav>
+  </header>
 
     <section class="pt-20 pb-16 bg-gradient-to-br from-purple-50 via-white to-purple-100">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -32,7 +52,7 @@
               Processamento local no seu navegador — simples, confiável e sem instalações.
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <button aria-label="Começar" @click="goToApp" class="bg-purple-700 hover:bg-purple-800 text-white font-semibold py-4 px-8 rounded-lg shadow-lg transition text-lg">
+              <button aria-label="Começar" @click="$router.push('/conversor')" class="bg-purple-700 hover:bg-purple-800 text-white font-semibold py-4 px-8 rounded-lg shadow-lg transition text-lg">
                 Começar
               </button>
               <button aria-label="Ver demonstração" @click="scrollTo('demo')" class="border-2 border-purple-600 text-purple-600 px-8 py-4 rounded-lg hover:bg-purple-50 transition font-semibold text-lg">
@@ -43,11 +63,6 @@
               Uso direto • Sem cadastro • Processamento local
             </p>
             <div class="flex items-center gap-6 mt-6 justify-center lg:justify-start text-sm text-gray-500">
-              <div class="flex items-center gap-2">
-                <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                </svg>
-              </div>
               <div class="flex items-center gap-2">
                 <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
@@ -155,73 +170,76 @@
             Como funciona?
           </h2>
           <p class="text-xl text-gray-600">
-            Em apenas 3 passos simples você terá sua planilha pronta
+            Um fluxo inteligente desenhado para a sua produtividade
           </p>
         </div>
 
         <div class="grid md:grid-cols-3 gap-8">
           <div class="text-center">
-            <div class="w-20 h-20 bg-purple-600 text-white rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold">
+            <div class="w-16 h-16 bg-purple-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 text-2xl font-bold shadow-lg transform -rotate-3">
               1
             </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-4">Selecione os XMLs</h3>
-            <p class="text-gray-600 mb-6">
-              Arraste e solte seus arquivos XML de NFe ou clique para selecioná-los.
-              Suporte para múltiplos arquivos.
+            <h3 class="text-xl font-semibold text-gray-900 mb-4">Importe seus XMLs</h3>
+            <p class="text-gray-600 mb-6 text-sm">
+              Selecione múltiplos arquivos de NF-e de uma vez. O sistema identifica os dados instantaneamente.
             </p>
-            <div class="bg-white p-4 rounded-lg border border-gray-200">
-              <div class="border-2 border-dashed border-purple-300 rounded-lg p-6">
-                <svg class="w-12 h-12 text-purple-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+            <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+              <div class="border-2 border-dashed border-purple-200 rounded-lg p-6 bg-purple-50/30">
+                <svg class="w-10 h-10 text-purple-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
                 </svg>
-                <p class="text-sm text-gray-500">Arraste XMLs aqui</p>
+                <p class="text-[10px] uppercase tracking-wider font-bold text-purple-400">Upload de Arquivos</p>
               </div>
             </div>
           </div>
 
           <div class="text-center">
-            <div class="w-20 h-20 bg-purple-600 text-white rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold">
+            <div class="w-16 h-16 bg-purple-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 text-2xl font-bold shadow-lg">
               2
             </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-4">Processamento Automático</h3>
-            <p class="text-gray-600 mb-6">
-              O sistema analisa automaticamente todos os XMLs, extrai as informações importantes
-              e organiza tudo em uma planilha profissional.
+            <h3 class="text-xl font-semibold text-gray-900 mb-4">Escolha os Dados</h3>
+            <p class="text-gray-600 mb-6 text-sm">
+              Use um <b>Preset</b> (Básico, Fiscal, Completo) ou selecione apenas as colunas que você realmente precisa.
             </p>
-            <div class="bg-white p-4 rounded-lg border border-gray-200">
+            <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
               <div class="space-y-2">
-                <div class="flex items-center gap-2">
-                  <div class="w-4 h-4 bg-purple-600 rounded animate-pulse"></div>
-                  <div class="text-sm text-gray-600">Analisando XMLs...</div>
+                <div class="flex items-center gap-2 p-2 bg-purple-50 rounded-md border border-purple-100">
+                  <div class="w-3 h-3 rounded-full bg-purple-600"></div>
+                  <div class="h-2 w-16 bg-purple-200 rounded"></div>
+                  <div class="ml-auto text-[10px] font-bold text-purple-600 italic">Preset Ativo</div>
                 </div>
-                <div class="flex items-center gap-2">
-                  <div class="w-4 h-4 bg-purple-600 rounded animate-pulse"></div>
-                  <div class="text-sm text-gray-600">Extraindo dados...</div>
-                </div>
-                <div class="flex items-center gap-2">
-                  <div class="w-4 h-4 bg-purple-600 rounded animate-pulse"></div>
-                  <div class="text-sm text-gray-600">Gerando planilha...</div>
+                <div class="grid grid-cols-2 gap-2">
+                  <div class="h-6 border border-gray-100 rounded flex items-center px-2 gap-1">
+                    <div class="w-2 h-2 bg-green-400 rounded-sm"></div>
+                    <div class="h-1 w-8 bg-gray-200 rounded"></div>
+                  </div>
+                  <div class="h-6 border border-gray-100 rounded flex items-center px-2 gap-1">
+                    <div class="w-2 h-2 bg-green-400 rounded-sm"></div>
+                    <div class="h-1 w-8 bg-gray-200 rounded"></div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
           <div class="text-center">
-            <div class="w-20 h-20 bg-purple-600 text-white rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold">
+            <div class="w-16 h-16 bg-purple-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 text-2xl font-bold shadow-lg rotate-3">
               3
             </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-4">Download Automático</h3>
-            <p class="text-gray-600 mb-6">
-              Sua planilha Excel é gerada automaticamente e o download inicia na hora.
-              Pronta para abrir no Excel, Google Sheets ou qualquer programa de planilhas.
+            <h3 class="text-xl font-semibold text-gray-900 mb-4">Baixe seu Excel</h3>
+            <p class="text-gray-600 mb-6 text-sm">
+              O Datarum gera uma planilha limpa, formatada e pronta para análise ou importação em outros sistemas.
             </p>
-            <div class="bg-white p-4 rounded-lg border border-gray-200">
-              <div class="bg-green-50 border border-green-200 rounded-lg p-4">
-                <div class="flex items-center gap-2 text-green-700">
-                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+            <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+              <div class="bg-green-50 border border-green-200 rounded-lg p-3 flex items-center justify-center gap-3">
+                <div class="bg-green-600 p-1.5 rounded-lg text-white">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                   </svg>
-                  <span class="text-sm font-medium">planilha.xlsx baixado!</span>
+                </div>
+                <div class="text-left">
+                  <p class="text-[10px] font-bold text-green-800 leading-none">RELATORIO.XLSX</p>
+                  <p class="text-[9px] text-green-600">Download concluído</p>
                 </div>
               </div>
             </div>
@@ -337,7 +355,7 @@
           <div class="flex justify-center gap-8 text-sm text-gray-400 mb-8">
             <button @click="scrollTo('features')" class="hover:text-white transition">Recursos</button>
             <button @click="scrollTo('how-it-works')" class="hover:text-white transition">Como Funciona</button>
-            <button @click="goToApp" class="hover:text-white transition">Abrir Aplicativo</button>
+            <button @click="$router.push('/conversor')" class="hover:text-white transition">Abrir Aplicativo</button>
           </div>
           <div class="border-t border-gray-800 pt-8">
             <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mb-4">
@@ -359,12 +377,12 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import RoadmapCard from '../components/RoadmapCard.vue';
 import FeatureCard from '../components/FeatureCard.vue';
 
-const emit = defineEmits(['goToApp']);
-
+const router = useRouter();
+const route = useRoute();
 // Dados das Features
 const features = [
   { title: "Super Rápido", desc: "Suporta múltiplos arquivos localmente.", icon: "M13 10V3L4 14h7v7l9-11h-7z" },
@@ -411,13 +429,23 @@ const roadmapItems = [
   }
 ];
 
-// Métodos
 const scrollTo = (id) => {
-  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  const element = document.getElementById(id);
+  if (element) {
+    // Offset de 80px por causa do header fixo
+    const y = element.getBoundingClientRect().top + window.pageYOffset - 80;
+    window.scrollTo({ top: y, behavior: 'smooth' });
+  }
 };
 
-const goToApp = () => emit('goToApp');
-
+const handleNav = async (id) => {
+  if (route.path !== '/') {
+    await router.push('/');
+    setTimeout(() => scrollTo(id), 300);
+  } else {
+    scrollTo(id);
+  }
+};
 </script>
 
  <style scoped>

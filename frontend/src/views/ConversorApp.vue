@@ -1,64 +1,112 @@
 <template>
-  <div class="min-h-screen flex flex-col bg-gradient-to-br from-purple-100 via-white to-purple-200">
-    <header class="p-4">
-       <button @click="$emit('back')" class="text-purple-600 font-semibold hover:underline">
-         ← Voltar para o Início
-       </button>
+    <div class="min-h-screen flex flex-col bg-gradient-to-br from-purple-100 via-white to-purple-200">
+    <header class="w-full bg-white/80 backdrop-blur shadow-md py-3 px-8 flex items-center justify-between fixed top-0 left-0 z-10 border-b border-purple-100">
+      <div class="flex items-center gap-3">
+        <button @click="voltarParaInicio" class="flex items-center gap-3 hover:opacity-80 transition text-left">
+          <span class="inline-flex items-center justify-center w-11 h-11 bg-purple-600 rounded-full text-white text-2xl font-bold shadow">D</span>
+          <div class="flex flex-col">
+            <span class="text-2xl font-extrabold text-purple-700 tracking-tight">Datarum</span>
+            <span class="text-xs text-purple-600 font-medium">Automação fiscal inteligente</span>
+          </div>
+        </button>
+      </div>
+      
+      <button @click="voltarParaInicio" class="text-purple-600 hover:text-purple-700 text-sm font-bold transition flex items-center gap-1">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+        Sair
+      </button>
     </header>
+
+    <div class="h-20"></div>
 
     <main class="flex-1 flex justify-center px-4 py-8">
       <div class="w-full max-w-7xl flex flex-col lg:flex-row gap-6 lg:gap-8">
         
-        <div class="lg:w-80 space-y-6">
-           <div class="bg-white p-6 rounded-2xl shadow-sm border border-purple-100">
-              <h3 class="font-bold text-gray-800 mb-2">Resumo da Seleção</h3>
-              <p class="text-3xl font-bold text-purple-600">{{ selectedFiles.length }}</p>
-              <p class="text-sm text-gray-500">Arquivos XML selecionados</p>
-              <button v-if="selectedFiles.length > 0" @click="clearFiles" class="mt-4 text-xs text-red-500 hover:underline">Remover todos</button>
-           </div>
-        </div>
-
-        <div class="flex-1 max-w-2xl mx-auto order-1 lg:order-2">
-          <div class="bg-white/90 rounded-3xl shadow-2xl p-10 border border-purple-100">
-            
-            <div 
-              @dragover.prevent="dragOver = true" 
-              @dragleave.prevent="dragOver = false" 
-              @drop.prevent="handleDrop"
-              :class="['border-2 border-dashed rounded-2xl p-8 text-center transition-all', dragOver ? 'border-purple-500 bg-purple-50' : 'border-purple-200']"
-            >
-              <input type="file" id="xmlUpload" multiple accept=".xml" class="hidden" @change="handleFileChange">
-              <label for="xmlUpload" class="cursor-pointer block">
-                <div class="text-purple-500 mb-2 text-4xl">📁</div>
-                <p class="text-gray-600 font-medium">Arraste seus XMLs ou clique para selecionar</p>
-              </label>
-            </div>
-
-            <ConfigPanel 
-              v-if="selectedFiles.length > 0"
-              v-model="camposSelecionados"
-              v-model:preset="presetAtivo"
-              :camposDisponiveis="camposDisponiveis"
-            />
-
-            <div class="mt-8">
-              <label class="block text-sm font-semibold text-purple-700 mb-2">Nome da Planilha de Saída</label>
-              <div class="flex gap-2">
-                <input v-model="nomePlanilha" type="text" class="flex-1 p-3 rounded-xl border border-purple-200 focus:ring-2 focus:ring-purple-500 outline-none" placeholder="Ex: Notas_Janeiro_2024">
-                <button @click="usarSugestao" class="px-4 text-xs bg-purple-50 text-purple-600 rounded-lg border border-purple-100">Sugerir</button>
+        <aside class="w-full lg:w-72 order-2 lg:order-1">
+          <div class="bg-white/90 rounded-2xl shadow-lg p-6 border border-purple-100">
+            <h3 class="font-bold text-purple-700 mb-4 flex items-center gap-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+              Sessão Atual
+            </h3>
+            <div class="space-y-3 text-sm">
+              <div class="flex justify-between">
+                <span class="text-gray-600">Arquivos:</span>
+                <span class="font-bold text-purple-600">{{ selectedFiles.length }}</span>
+              </div>
+              <div class="flex justify-between" v-if="selectedFiles.length > 0">
+                <span class="text-gray-600">Colunas:</span>
+                <span class="font-bold text-purple-600">{{ camposSelecionados.length }}</span>
               </div>
             </div>
-            
-            <button 
-              @click="enviarArquivos"
-              :disabled="loading || selectedFiles.length === 0"
-              class="w-full mt-8 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-300 text-white py-4 rounded-2xl font-bold shadow-lg shadow-purple-200 transition-all transform active:scale-[0.98]"
-            >
-              <span v-if="!loading">Gerar Planilha Excel</span>
-              <span v-else>Processando... Aguarde</span>
-            </button>
+          </div>
+        </aside>
 
-            <div v-if="mensagem" class="mt-6 p-4 rounded-xl bg-gray-50 border border-gray-100 text-sm text-gray-700 whitespace-pre-line">
+        <div class="flex-1 max-w-2xl mx-auto order-1 lg:order-2">
+          <div class="bg-white/90 rounded-3xl shadow-2xl p-8 border border-purple-100">
+            
+            <div class="text-center mb-8">
+              <h1 class="text-3xl font-extrabold text-purple-700 mb-2">Extração de Dados</h1>
+              <p class="text-gray-500 text-sm">Selecione seus arquivos XML para começar.</p>
+            </div>
+
+            <section class="mb-8">
+              <div 
+                @dragover.prevent="dragOver = true"
+                @dragleave.prevent="dragOver = false"
+                @drop.prevent="handleDrop"
+                :class="['relative border-2 border-dashed rounded-xl p-10 transition-all text-center cursor-pointer',
+                         dragOver ? 'border-purple-500 bg-purple-50' : 'border-purple-200 hover:border-purple-300']">
+                <input type="file" multiple accept=".xml" @change="handleFileChange" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
+                <div class="space-y-3">
+                  <svg class="mx-auto h-12 w-12 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  <p class="text-purple-600 font-bold">Clique ou arraste múltiplos XMLs aqui</p>
+                  <p class="text-xs text-gray-400">Limite de 50 arquivos por vez</p>
+                </div>
+              </div>
+              
+              <div v-if="selectedFiles.length" class="mt-4">
+                <div class="flex justify-between items-center mb-2">
+                  <span class="text-xs font-bold text-purple-700 uppercase">Arquivos carregados</span>
+                  <button @click="clearFiles" class="text-xs text-red-500 hover:underline">Remover todos</button>
+                </div>
+                <div class="max-h-32 overflow-y-auto space-y-2 border border-purple-50 p-2 rounded-lg">
+                  <div v-for="(file, idx) in selectedFiles" :key="idx" class="flex justify-between items-center bg-white p-2 rounded border border-purple-100 text-xs shadow-sm">
+                    <span class="truncate pr-4 text-gray-700">{{ file.name }}</span>
+                    <button @click="removeFile(idx)" class="text-gray-400 hover:text-red-500 transition">✕</button>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <transition name="fade-slide">
+              <div v-if="selectedFiles.length > 0" class="space-y-8 py-6 border-t border-purple-50">
+                
+                <ConfigPanel 
+                  v-model="camposSelecionados"
+                  v-model:presetAtivo="presetAtivo"
+                  :camposDisponiveis="camposDisponiveis"
+                />
+
+                <section>
+                  <label class="block text-sm font-bold text-purple-700 mb-2">Nome da Planilha Excel</label>
+                  <div class="flex gap-2">
+                    <input v-model="nomePlanilha" type="text" placeholder="Ex: Notas_Entrada_Jan" 
+                           class="flex-1 rounded-lg border-purple-200 focus:ring-purple-600 focus:border-purple-600 p-2.5 text-sm" />
+                    <button @click="usarSugestao" class="bg-purple-100 text-purple-700 px-4 py-2 rounded-lg text-xs font-bold hover:bg-purple-200 transition">Sugestão</button>
+                  </div>
+                </section>
+
+                <button 
+                  @click="enviarArquivos" 
+                  :disabled="loading"
+                  class="w-full bg-purple-600 text-white py-4 rounded-xl hover:bg-purple-700 disabled:bg-gray-300 font-extrabold shadow-lg transition-all flex items-center justify-center gap-3 text-lg">
+                  <span v-if="loading" class="animate-spin">↻</span>
+                  {{ loading ? 'Processando XMLs...' : 'Gerar e Baixar Planilha' }}
+                </button>
+              </div>
+            </transition>
+
+            <div v-if="mensagem" :class="['mt-4 p-4 rounded-xl text-sm font-bold shadow-inner', mensagem.includes('✅') ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-red-50 text-red-700 border border-red-200']">
               {{ mensagem }}
             </div>
 
@@ -69,115 +117,118 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
 import { ENDPOINTS } from '../config/api';
-import ConfigPanel from '../components/ConfigPanel.vue'; // Certifique-se que o caminho está correto
+import ConfigPanel from '../components/ConfigPanel.vue';
 
-export default {
-  components: {
-    ConfigPanel
-  },
-  data() {
-    return {
-      selectedFiles: [],
-      mensagem: '',
-      nomePlanilha: '',
-      loading: false,
-      dragOver: false,
-      validationMessage: null,
+const router = useRouter();
 
-      // Configurações do ConfigPanel
-      presetAtivo: 'basico',
-      camposSelecionados: ['nfe', 'data_emissao', 'cnpj_emitente', 'nome_emitente', 'valor_total'],
-      
-      camposDisponiveis: {
-        nota: [
-          { id: 'nfe', nome: 'Número NF-e' },
-          { id: 'serie', nome: 'Série' },
-          { id: 'data_emissao', nome: 'Data Emissão' },
-          { id: 'chave', nome: 'Chave de Acesso' }
-        ],
-        emitente: [
-          { id: 'cnpj_emitente', nome: 'CNPJ Emitente' },
-          { id: 'nome_emitente', nome: 'Razão Social' },
-          { id: 'uf_emitente', nome: 'UF' }
-        ],
-        produtos: [
-          { id: 'cprod', nome: 'Cód. Produto' },
-          { id: 'xprod', nome: 'Descrição' },
-          { id: 'vuncom', nome: 'Valor Unitário' }
-        ],
-        impostos: [
-          { id: 'vicms', nome: 'Valor ICMS' },
-          { id: 'vipi', nome: 'Valor IPI' }
-        ]
-      }
-    };
-  },
-  methods: {
-    handleFileChange(event) {
-      const files = Array.from(event.target.files);
-      this.processFiles(files);
-    },
-    handleDrop(event) {
-      this.dragOver = false;
-      const files = Array.from(event.dataTransfer.files);
-      this.processFiles(files);
-    },
-    processFiles(files) {
-      const xmlFiles = files.filter(file => file.name.toLowerCase().endsWith('.xml'));
-      if (xmlFiles.length > 50) {
-        this.selectedFiles = xmlFiles.slice(0, 50);
-      } else {
-        this.selectedFiles = xmlFiles;
-      }
-    },
-    clearFiles() {
-      this.selectedFiles = [];
-      this.mensagem = '';
-    },
-    usarSugestao() {
-      const data = new Date().toLocaleDateString('pt-BR').replace(/\//g, '-');
-      this.nomePlanilha = `planilha_${data}`;
-    },
-    async enviarArquivos() {
-      if (!this.selectedFiles.length || !this.nomePlanilha.trim()) return;
+// Estado
+const selectedFiles = ref([]);
+const mensagem = ref('');
+const nomePlanilha = ref('');
+const loading = ref(false);
+const dragOver = ref(false);
+const presetAtivo = ref('basico');
+const camposSelecionados = ref(['nfe', 'data_emissao', 'valor_total']);
 
-      this.loading = true;
-      this.mensagem = '';
 
-      const formData = new FormData();
-      this.selectedFiles.forEach(file => formData.append('xmls', file));
-      formData.append('planilha', this.nomePlanilha);
-      
-      // Adicionando os campos selecionados no ConfigPanel para enviar ao Backend
-      formData.append('campos', JSON.stringify(this.camposSelecionados));
+const camposDisponiveis = {
+  identificacao: [
+    { id: 'nfe', nome: 'Número NF-e' },
+    { id: 'serie', nome: 'Série' },
+    { id: 'data_emissao', nome: 'Data Emissão' },
+    { id: 'valor_total', nome: 'Valor Total NF' }
+  ],
+  parceiros: [
+    { id: 'cnpj_emitente', nome: 'CNPJ Emitente' },
+    { id: 'nome_emitente', nome: 'Razão Social Emitente' },
+    { id: 'cnpj_dest', nome: 'CNPJ Destinatário' }
+  ],
+  itens: [
+    { id: 'xprod', nome: 'Descrição Produto' },
+    { id: 'ucom', nome: 'Unidade' },
+    { id: 'vuncom', nome: 'Valor Unitário' },
+    { id: 'qcom', nome: 'Quantidade' }
+  ]
+};
 
-      try {
-        const responseInfo = await fetch(ENDPOINTS.PROCESSAR_INFO, {
-          method: 'POST',
-          body: formData
-        });
-
-        if (!responseInfo.ok) throw new Error(`Erro: ${responseInfo.status}`);
-        const info = await responseInfo.json();
-
-        this.mensagem = `✅ Processamento concluído!\n📁 Arquivos: ${info.arquivos_processados}\n💰 Valor: R$ ${info.valor_total.toLocaleString('pt-BR')}`;
-
-        // Lógica de download (simplificada)
-        const responseExcel = await fetch(ENDPOINTS.PROCESSAR_EXCEL, { method: 'POST', body: formData });
-        const blob = await responseExcel.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `${this.nomePlanilha}.xlsx`;
-        a.click();
-      } catch (error) {
-        this.mensagem = `❌ Erro: ${error.message}`;
-      } finally {
-        this.loading = false;
-      }
+// Reseta tudo ao voltar
+const voltarParaInicio = () => {
+  if (selectedFiles.value.length > 0) {
+    if (confirm('Deseja sair? Os arquivos serão perdidos.')) {
+      router.push('/');
     }
+  } else {
+    router.push('/');
+  }
+};
+
+// Lógica de Presets
+watch(presetAtivo, (novo) => {
+  if (novo === 'basico') camposSelecionados.value = ['nfe', 'data_emissao', 'valor_total'];
+  else if (novo === 'completo') camposSelecionados.value = Object.values(camposDisponiveis).flat().map(c => c.id);
+  else if (novo === 'fiscal') camposSelecionados.value = ['nfe', 'data_emissao', 'cnpj_emitente', 'nome_emitente', 'vuncom'];
+});
+
+// Arquivos
+const handleFileChange = (e) => processFiles(Array.from(e.target.files));
+const handleDrop = (e) => { dragOver.value = false; processFiles(Array.from(e.dataTransfer.files)); };
+const processFiles = (files) => {
+  const xmls = files.filter(f => f.name.toLowerCase().endsWith('.xml'));
+  selectedFiles.value = [...selectedFiles.value, ...xmls].slice(0, 50);
+  mensagem.value = '';
+};
+const removeFile = (idx) => selectedFiles.value.splice(idx, 1);
+const clearFiles = () => { 
+  selectedFiles.value = []; 
+  mensagem.value = ''; 
+  nomePlanilha.value = '';
+};
+const usarSugestao = () => {
+  const data = new Date().toLocaleDateString('pt-BR').replace(/\//g, '_');
+  nomePlanilha.value = `Relatorio_Datarum_${data}`;
+};
+
+// API
+const enviarArquivos = async () => {
+  loading.value = true;
+  mensagem.value = '';
+  const formData = new FormData();
+  selectedFiles.value.forEach(f => formData.append('xmls', f));
+  formData.append('planilha', nomePlanilha.value || 'extração');
+  formData.append('campos', JSON.stringify(camposSelecionados.value));
+
+  try {
+    const response = await fetch(ENDPOINTS.PROCESSAR_EXCEL, { method: 'POST', body: formData });
+    if (!response.ok) throw new Error();
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${nomePlanilha.value || 'relatorio'}.xlsx`;
+    a.click();
+    mensagem.value = '✅ Planilha gerada com sucesso!';
+  } catch (err) {
+    mensagem.value = '❌ Erro na comunicação com o servidor.';
+  } finally {
+    loading.value = false;
   }
 };
 </script>
+
+<style scoped>
+.fade-slide-enter-active, .fade-slide-leave-active {
+  transition: all 0.4s ease;
+}
+.fade-slide-enter-from {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+</style>
