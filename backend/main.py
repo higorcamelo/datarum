@@ -126,13 +126,37 @@ async def health_check():
 @app.post("/processar")
 async def processar(
     xmls: List[UploadFile] = File(...),
-    planilha: str = Form(...)
-):
-    """Processa XMLs de NFe e retorna planilha Excel - Versão com logging"""
+    planilha: str = Form(...),
+    campos_selecionados: str = Form(None),
+    opcoes: str = Form(None),
+    preset: str = Form("basico")
+):    
     start_time = time.time()
     request_id = str(uuid.uuid4())[:8]
     
-    logger.info(f"[{request_id}] Iniciando processamento: {len(xmls)} arquivos, planilha='{planilha}'")
+    logger.info(f"[{request_id}] Iniciando processamento v1.1: {len(xmls)} arquivos, planilha='{planilha}', preset='{preset}'")
+    
+    # Parse dos parâmetros de customização
+    import json
+    try:
+        campos_lista = json.loads(campos_selecionados) if campos_selecionados else []
+        opcoes_dict = json.loads(opcoes) if opcoes else {}
+    except json.JSONDecodeError:
+        logger.warning(f"[{request_id}] Erro ao processar parâmetros customização")
+        campos_lista = []
+        opcoes_dict = {}
+    
+    logger.info(f"[{request_id}] Customização: {len(campos_lista)} campos, preset='{preset}', opções={list(opcoes_dict.keys())}")
+    
+    # Debug detalhado v1.1
+    print(f"[DEBUG main.py] campos_selecionados recebido: {campos_selecionados}")
+    print(f"[DEBUG main.py] campos_lista processada: {campos_lista}")
+    print(f"[DEBUG main.py] Tipo campos_lista: {type(campos_lista)}")
+    print(f"[DEBUG main.py] Tamanho campos_lista: {len(campos_lista)}")
+    if campos_lista:
+        print(f"[DEBUG main.py] Primeiros 5 campos: {campos_lista[:5]}")
+    print(f"[DEBUG main.py] Preset: {preset}")
+    print(f"[DEBUG main.py] Opções: {opcoes_dict}")
     
     try:
         # Validações de segurança
@@ -162,58 +186,122 @@ async def processar(
         
         todos_itens = []
         total_size = 0
+        arquivos_com_erro = []
+        arquivos_processados = []
 
         # Usar diretório temporário seguro para XMLs
         with tempfile.TemporaryDirectory() as temp_dir:
             for i, xml in enumerate(xmls):
                 filename = xml.filename
                 
-                # Validar tipo de arquivo
-                if not filename.lower().endswith('.xml'):
-                    logger.error(f"[{request_id}] Arquivo não-XML: {filename}")
-                    raise HTTPException(status_code=400, detail=f"Arquivo {filename} não é XML")
-                
-                # Validar tamanho do arquivo
-                contents = await xml.read()
-                file_size = len(contents)
-                total_size += file_size
-                
-                # Validação SIMPLES do tamanho
-                validacao_tamanho = validar_tamanho_arquivo(file_size, config.MAX_FILE_SIZE)
-                if not validacao_tamanho["valido"]:
-                    logger.error(f"[{request_id}] Arquivo muito grande: {filename}")
-                    raise HTTPException(status_code=400, detail=f"{filename}: {validacao_tamanho['erro']}")
-                
-                # Validação SIMPLES do XML NFe
-                validacao_xml = validar_xml_nfe(contents)
-                if not validacao_xml["valido"]:
-                    logger.error(f"[{request_id}] XML inválido: {filename} - {validacao_xml['erro']}")
-                    raise HTTPException(status_code=400, detail=f"{filename}: {validacao_xml['erro']}")
-                
-                # Log dos dados básicos encontrados
-                dados = validacao_xml["dados"]
-                itens_count = contar_itens_xml(contents)
-                logger.info(f"[{request_id}] Processando {filename}: NFe {dados.get('numero', 'N/A')} ({itens_count} itens)")
-                
-                # Criar arquivo temporário seguro
-                temp_file = Path(temp_dir) / f"{request_id}_{i}_{uuid.uuid4().hex[:8]}.xml"
-                temp_file.write_bytes(contents)
-                
                 try:
-                    # Processar XML
-                    xml_start = time.time()
-                    itens = parse_nfe(temp_file)
-                    xml_time = time.time() - xml_start
+                    # Validar tipo de arquivo
+                    if not filename.lower().endswith('.xml'):
+                        erro_msg = f"Arquivo {filename} não é XML"
+                        arquivos_com_erro.append({
+                            "arquivo": filename,
+                            "erro": erro_msg,
+                            "tipo": "formato_invalido"
+                        })
+                        if not opcoes_dict.get('processarParcialmente', True):
+                            logger.error(f"[{request_id}] {erro_msg}")
+                            raise HTTPException(status_code=400, detail=erro_msg)
+                        continue
                     
-                    todos_itens.extend(itens)
-                    logger.info(f"[{request_id}] Processado {filename}: {len(itens)} itens em {xml_time:.2f}s")
+                    # Validar tamanho do arquivo
+                    contents = await xml.read()
+                    file_size = len(contents)
+                    total_size += file_size
                     
+                    # Validação SIMPLES do tamanho
+                    validacao_tamanho = validar_tamanho_arquivo(file_size, config.MAX_FILE_SIZE)
+                    if not validacao_tamanho["valido"]:
+                        erro_msg = f"{filename}: {validacao_tamanho['erro']}"
+                        arquivos_com_erro.append({
+                            "arquivo": filename,
+                            "erro": validacao_tamanho['erro'],
+                            "tipo": "tamanho_excedido",
+                            "tamanho_mb": round(file_size / (1024*1024), 2)
+                        })
+                        if not opcoes_dict.get('processarParcialmente', True):
+                            logger.error(f"[{request_id}] {erro_msg}")
+                            raise HTTPException(status_code=400, detail=erro_msg)
+                        continue
+                    
+                    # Validação SIMPLES do XML NFe
+                    validacao_xml = validar_xml_nfe(contents)
+                    if not validacao_xml["valido"]:
+                        erro_msg = f"{filename}: {validacao_xml['erro']}"
+                        arquivos_com_erro.append({
+                            "arquivo": filename,
+                            "erro": validacao_xml['erro'],
+                            "tipo": "xml_invalido"
+                        })
+                        if not opcoes_dict.get('processarParcialmente', True):
+                            logger.error(f"[{request_id}] {erro_msg}")
+                            raise HTTPException(status_code=400, detail=erro_msg)
+                        continue
+                    
+                    # Log dos dados básicos encontrados
+                    dados = validacao_xml["dados"]
+                    itens_count = contar_itens_xml(contents)
+                    logger.info(f"[{request_id}] Processando {filename}: NFe {dados.get('numero', 'N/A')} ({itens_count} itens)")
+                    
+                    # Criar arquivo temporário seguro
+                    temp_file = Path(temp_dir) / f"{request_id}_{i}_{uuid.uuid4().hex[:8]}.xml"
+                    temp_file.write_bytes(contents)
+                    
+                    try:
+                        # Processar XML com campos customizados
+                        xml_start = time.time()
+                        # Ler o conteúdo do arquivo para passar para parse_nfe
+                        xml_content = temp_file.read_text(encoding='utf-8')
+                        itens = parse_nfe(xml_content, campos_selecionados=campos_lista)
+                        xml_time = time.time() - xml_start
+                        
+                        todos_itens.extend(itens)
+                        arquivos_processados.append({
+                            "arquivo": filename,
+                            "itens": len(itens),
+                            "tempo": xml_time,
+                            "nfe_numero": dados.get('numero', 'N/A')
+                        })
+                        logger.info(f"[{request_id}] Processado {filename}: {len(itens)} itens em {xml_time:.2f}s")
+                        
+                    except Exception as e:
+                        erro_msg = f"Erro ao processar {filename}: {str(e)}"
+                        arquivos_com_erro.append({
+                            "arquivo": filename,
+                            "erro": str(e),
+                            "tipo": "erro_processamento"
+                        })
+                        if not opcoes_dict.get('processarParcialmente', True):
+                            logger.error(f"[{request_id}] {erro_msg}")
+                            raise HTTPException(status_code=400, detail=erro_msg)
+                        logger.warning(f"[{request_id}] {erro_msg} (continuando processamento)")
+                        
                 except Exception as e:
-                    logger.error(f"[{request_id}] Erro processando {filename}: {str(e)}")
-                    raise HTTPException(status_code=400, detail=f"Erro ao processar {filename}: {str(e)}")
+                    erro_msg = f"Erro inesperado com {filename}: {str(e)}"
+                    arquivos_com_erro.append({
+                        "arquivo": filename,
+                        "erro": str(e),
+                        "tipo": "erro_inesperado"
+                    })
+                    if not opcoes_dict.get('processarParcialmente', True):
+                        logger.error(f"[{request_id}] {erro_msg}")
+                        raise HTTPException(status_code=400, detail=erro_msg)
+                    logger.warning(f"[{request_id}] {erro_msg} (continuando processamento)")
 
-        # Gerar Excel
-        logger.info(f"[{request_id}] Gerando Excel: {len(todos_itens)} itens totais")
+        # Verificar se conseguiu processar pelo menos alguns arquivos
+        if not todos_itens and arquivos_com_erro:
+            logger.error(f"[{request_id}] Nenhum arquivo foi processado com sucesso")
+            raise HTTPException(
+                status_code=400, 
+                detail=f"Nenhum arquivo foi processado. Erros: {'; '.join([e['erro'] for e in arquivos_com_erro[:3]])}"
+            )
+
+        # Gerar Excel com customizações
+        logger.info(f"[{request_id}] Gerando Excel v1.1: {len(todos_itens)} itens, {len(arquivos_com_erro)} erros")
         
         # Criar arquivo temporário para Excel
         temp_excel_fd, temp_excel_path = tempfile.mkstemp(suffix='.xlsx', prefix=f'{planilha}_{request_id}_')
@@ -221,13 +309,28 @@ async def processar(
         
         try:
             excel_start = time.time()
-            rows_saved = salvar_em_excel(todos_itens, temp_excel_path)
+            
+            # Configurações para o Excel handler
+            configuracao_excel = {
+                'campos_selecionados': campos_lista,
+                'opcoes': opcoes_dict,
+                'preset': preset,
+                'arquivos_com_erro': arquivos_com_erro if opcoes_dict.get('incluirRelatorioErros', True) else [],
+                'arquivos_processados': arquivos_processados
+            }
+            
+            rows_saved = salvar_em_excel(todos_itens, temp_excel_path, configuracao=configuracao_excel)
             excel_time = time.time() - excel_start
             
             total_time = time.time() - start_time
             file_size = os.path.getsize(temp_excel_path)
             
-            logger.info(f"[{request_id}] Sucesso! {rows_saved} linhas, {file_size} bytes, {total_time:.2f}s total")
+            success_msg = f"Sucesso v1.1! {rows_saved} linhas, {len(arquivos_processados)} arquivos OK"
+            if arquivos_com_erro:
+                success_msg += f", {len(arquivos_com_erro)} com erro"
+            success_msg += f", {file_size} bytes, {total_time:.2f}s total"
+            
+            logger.info(f"[{request_id}] {success_msg}")
 
             # Classe para limpeza automática
             class FileResponseWithCleanup(FileResponse):
@@ -276,20 +379,60 @@ async def processar(
 @app.post("/processar-info")
 async def processar_info(
     xmls: List[UploadFile] = File(...),
-    planilha: str = Form(...)
+    planilha: str = Form(...),
+    campos_selecionados: str = Form(None),
+    opcoes: str = Form(None),
+    preset: str = Form("basico")
 ):
-    """Retorna apenas informações sobre o processamento, sem arquivo"""
+    """Retorna apenas informações sobre o processamento v1.1, sem arquivo"""
+    request_id = str(uuid.uuid4())[:8]
+    logger.info(f"[{request_id}] Gerando info v1.1 para {len(xmls)} arquivos")
+    
+    # Parse dos parâmetros
+    import json
+    try:
+        campos_lista = json.loads(campos_selecionados) if campos_selecionados else []
+        opcoes_dict = json.loads(opcoes) if opcoes else {}
+    except json.JSONDecodeError:
+        campos_lista = []
+        opcoes_dict = {}
+    
     todos_itens = []
+    arquivos_com_erro = []
 
     # Usar diretório temporário seguro
     with tempfile.TemporaryDirectory() as temp_dir:
-        for xml in xmls:
-            contents = await xml.read()
-            temp_file = Path(temp_dir) / f"{uuid.uuid4()}.xml"
-            temp_file.write_bytes(contents)
-            
-            itens = parse_nfe(temp_file)
-            todos_itens.extend(itens)
+        for i, xml in enumerate(xmls):
+            try:
+                contents = await xml.read()
+                
+                # Validação básica
+                validacao_xml = validar_xml_nfe(contents)
+                if not validacao_xml["valido"]:
+                    arquivos_com_erro.append({
+                        "arquivo": xml.filename,
+                        "erro": validacao_xml['erro'],
+                        "tipo": "xml_invalido"
+                    })
+                    if not opcoes_dict.get('processarParcialmente', True):
+                        continue
+                
+                temp_file = Path(temp_dir) / f"{request_id}_{i}_{uuid.uuid4().hex[:8]}.xml"
+                temp_file.write_bytes(contents)
+                
+                # Ler o conteúdo do arquivo para passar para parse_nfe  
+                xml_content = temp_file.read_text(encoding='utf-8')
+                itens = parse_nfe(xml_content, campos_selecionados=campos_lista)
+                todos_itens.extend(itens)
+                
+            except Exception as e:
+                arquivos_com_erro.append({
+                    "arquivo": xml.filename,
+                    "erro": str(e),
+                    "tipo": "erro_processamento"
+                })
+                if not opcoes_dict.get('processarParcialmente', True):
+                    continue
 
     # Resumo para feedback com estatísticas avançadas
     numeros_nfe = list({item["numero_nf"] for item in todos_itens if "numero_nf" in item})
@@ -316,13 +459,20 @@ async def processar_info(
 
     return {
         "itens_processados": len(todos_itens),
-        "arquivos_processados": len(xmls),
+        "arquivos_processados": len(xmls) - len(arquivos_com_erro),
+        "arquivos_com_erro": len(arquivos_com_erro),
         "notas_encontradas": numeros_nfe,
         "emitentes": emitentes,
         "versoes_nfe": versoes_nfe,
         "periodo": periodo,
         "valor_total": round(valor_total, 2) if valor_total > 0 else 0,
-        "planilha_destino": f"{planilha}.xlsx"
+        "planilha_destino": f"{planilha}.xlsx",
+        "customizacao": {
+            "preset": preset,
+            "campos_selecionados": len(campos_lista),
+            "opcoes_ativas": list(k for k, v in opcoes_dict.items() if v)
+        },
+        "erros_resumo": arquivos_com_erro[:3] if arquivos_com_erro else []
     }
 
 # Rota catch-all para servir frontend em qualquer path que não seja API
