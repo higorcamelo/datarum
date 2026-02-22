@@ -133,66 +133,22 @@
     <section id="features" class="py-20 bg-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
-          <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-            Por que escolher o Datarum?
-          </h2>
-          <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-            A solução mais simples e eficiente para converter XMLs de NFe em planilhas organizadas
-          </p>
+          <h2 class="text-3xl font-bold text-gray-900">Recursos de Especialista</h2>
         </div>
-
+        
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <div class="text-center p-6">
-            <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+          <FeatureCard 
+            v-for="feature in features" 
+            :key="feature.title"
+            :title="feature.title"
+            :description="feature.desc"
+          >
+            <template #icon>
               <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="feature.icon"/>
               </svg>
-            </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-2">Super Rápido</h3>
-            <p class="text-gray-600">Suporta múltiplos arquivos; desempenho depende do navegador.</p>
-          </div>
-
-          <div class="text-center p-6">
-            <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
-            </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-2">Compatibilidade</h3>
-            <p class="text-gray-600">Compatível com formatos NFe comuns.</p>
-          </div>
-
-          <div class="text-center p-6">
-            <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-              </svg>
-            </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-2">100% Seguro</h3>
-            <p class="text-gray-600">Processamento local no seu navegador. Seus dados nunca saem do seu computador.</p>
-          </div>
-
-          <div class="text-center p-6">
-            <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-              </svg>
-            </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-2">Planilhas Prontas</h3>
-            <p class="text-gray-600">Planilhas formatadas para uso imediato.</p>
-          </div>
-
-          
-
-          <div class="text-center p-6">
-            <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"/>
-              </svg>
-            </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-2">Arrastar e Soltar</h3>
-            <p class="text-gray-600">Interface super simples. Basta arrastar seus XMLs e pronto! Download automático da planilha.</p>
-          </div>
+            </template>
+          </FeatureCard>
         </div>
       </div>
     </section>
@@ -351,7 +307,7 @@
     </section>
 
     <!-- Roadmap Section -->
-    <section class="py-20 bg-gradient-to-br from-gray-50 to-gray-100">
+    <section id="roadmap" class="py-20 bg-gradient-to-br from-gray-50 to-gray-100">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
           <div class="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
@@ -360,159 +316,22 @@
             </svg>
             Em desenvolvimento
           </div>
-          <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-            Próximas versões
-          </h2>
+          <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Próximas versões</h2>
           <p class="text-xl text-gray-600 max-w-3xl mx-auto">
             Baseado no seu feedback, vamos evoluir o Datarum com funcionalidades que realmente importam
           </p>
         </div>
 
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 relative">
-            <div class="absolute -top-2 -right-2 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-bold">
-              DISPONÍVEL
-            </div>
-            <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-4">
-              <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-              </svg>
-            </div>
-            <h3 class="text-lg font-semibold text-gray-900 mb-2">Conversor Básico</h3>
-            <p class="text-gray-600 text-sm">Conversor XML → Excel básico.</p>
-          </div>
-
-          <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 relative">
-            <div class="absolute -top-2 -right-2 bg-blue-500 text-white px-2 py-1 rounded-full text-xs font-bold">
-              EM BREVE
-            </div>
-            <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-4">
-              <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"/>
-              </svg>
-            </div>
-            <h3 class="text-lg font-semibold text-gray-900 mb-2">O que vem por aí</h3>
-            <p class="text-gray-600 text-sm">Recursos avançados de análise, colunas personalizadas, totalizações automáticas — tudo no seu navegador.</p>
-          </div>
-
-          <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 relative">
-            <div class="absolute -top-2 -right-2 bg-purple-500 text-white px-2 py-1 rounded-full text-xs font-bold">
-              PLANEJADO
-            </div>
-            <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
-              <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-              </svg>
-            </div>
-            <h3 class="text-lg font-semibold text-gray-900 mb-2">Relatórios Básicos</h3>
-            <p class="text-gray-600 text-sm">Totais por CFOP, por fornecedor, períodos. Aba extra na planilha com resumo fiscal inteligente.</p>
-          </div>
-
-          <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 relative opacity-75">
-            <div class="absolute -top-2 -right-2 bg-gray-400 text-white px-2 py-1 rounded-full text-xs font-bold">
-              FUTURO
-            </div>
-            <div class="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center mb-4">
-              <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
-            </div>
-            <h3 class="text-lg font-semibold text-gray-700 mb-2">Insights Automáticos</h3>
-            <p class="text-gray-500 text-sm">Análises de padrões de compra, detecção de ICMS ST, sugestões baseadas nos dados.</p>
-          </div>
-
-          <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 relative opacity-75">
-            <div class="absolute -top-2 -right-2 bg-gray-400 text-white px-2 py-1 rounded-full text-xs font-bold">
-              FUTURO
-            </div>
-            <div class="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center mb-4">
-              <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
-              </svg>
-            </div>
-            <h3 class="text-lg font-semibold text-gray-700 mb-2">Recursos Colaborativos</h3>
-            <p class="text-gray-500 text-sm">Upload por pasta, histórico de exportações, compartilhamento de relatórios.</p>
-          </div>
-
-          <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 relative opacity-75">
-            <div class="absolute -top-2 -right-2 bg-gray-400 text-white px-2 py-1 rounded-full text-xs font-bold">
-              FUTURO
-            </div>
-            <div class="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center mb-4">
-              <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2z"/>
-              </svg>
-            </div>
-            <h3 class="text-lg font-semibold text-gray-700 mb-2">Integrações</h3>
-            <p class="text-gray-500 text-sm">Baseado na demanda: APIs, conectores com ERPs, sistemas contábeis.</p>
-          </div>
-        </div>
-
-        <div class="mt-12 text-center">
-          <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-6 rounded-2xl max-w-2xl mx-auto">
-            <h3 class="text-xl font-bold mb-2">🧪 Experimente e envie feedback</h3>
-            <p class="mb-4">
-              Experimente a ferramenta e nos diga o que podemos melhorar. Seu feedback orienta o desenvolvimento.
-            </p>
-            <button @click="goToApp" class="bg-white text-purple-600 px-6 py-3 rounded-lg hover:bg-gray-50 transition font-semibold">
-              Começar
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Feedback Section -->
-    <section class="py-16 bg-gradient-to-r from-green-50 to-blue-50">
-      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <div class="bg-white rounded-2xl shadow-xl p-8 border border-gray-200">
-          <div class="flex items-center justify-center gap-3 mb-6">
-            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-              <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/>
-              </svg>
-            </div>
-            <h3 class="text-2xl font-bold text-gray-900">Seu feedback é fundamental!</h3>
-          </div>
-          <p class="text-gray-600 mb-6 max-w-2xl mx-auto">
-            Clique no botão abaixo para acessar nosso formulário de feedback e nos ajudar a melhorar o Datarum.
-          </p>
-          <div class="mb-6">
-                <button aria-label="Enviar feedback" @click="openGoogleForms()" 
-                  class="bg-purple-600 text-white px-8 py-4 rounded-lg hover:bg-purple-700 transition font-semibold text-lg flex items-center justify-center gap-3 mx-auto shadow-lg">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/>
-              </svg>
-              Enviar Feedback
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-              </svg>
-            </button>
-          </div>
-          <p class="text-sm text-gray-500">
-            💡 <strong>Dica:</strong> O formulário possui seções diferentes para sugestões e problemas - você escolhe no primeiro campo
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="py-20 bg-gradient-to-br from-purple-600 to-purple-700">
-      <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">
-          Pronto para simplificar seu trabalho?
-        </h2>
-        <p class="text-xl text-purple-100 mb-8">
-          Comece agora e transforme seus XMLs em planilhas organizadas em segundos
-        </p>
-        <button aria-label="Começar" @click="goToApp" class="bg-white text-purple-600 px-8 py-4 rounded-lg hover:bg-gray-50 transition font-semibold text-lg shadow-lg">
-          Começar
-        </button>
-        <p class="text-purple-200 text-sm mt-4">
-          Sem cadastro • Processamento local
-        </p>
-      </div>
-    </section>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <RoadmapCard 
+        v-for="item in roadmapItems" 
+        :key="item.title"
+        v-bind="item" 
+        class="h-full"
+      />
+    </div>
+  </div>
+</section>
 
     <!-- Footer -->
     <footer class="bg-gray-900 text-white py-12">
@@ -546,56 +365,72 @@
         </div>
       </div>
     </footer>
-
-    <!-- Toast de Confirmação -->
-    <div v-if="showFeedbackToast" 
-         class="fixed bottom-4 right-4 bg-purple-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 flex items-center gap-2">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-      </svg>
-      Redirecionando para o formulário...
-    </div>
   </div>
 </template>
 
-<script>
-export default {
-  name: 'LandingPage',
-  data() {
-    return {
-      showFeedbackToast: false
-    };
+<script setup>
+import { ref } from 'vue';
+// 1. Importe o novo componente (ajuste o caminho conforme sua pasta)
+import RoadmapCard from '../components/RoadmapCard.vue';
+import FeatureCard from '../components/FeatureCard.vue';
+
+const emit = defineEmits(['goToApp']);
+
+const showFeedbackToast = ref(false);
+const FORMS_URL = import.meta.env.VITE_FORMS_URL;
+
+// Dados das Features (Mantidos)
+const features = [
+  { title: "Super Rápido", desc: "Suporta múltiplos arquivos localmente.", icon: "M13 10V3L4 14h7v7l9-11h-7z" },
+  { title: "Compatibilidade", desc: "Formatos NFe comuns (v4.00).", icon: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" },
+  { title: "100% Seguro", desc: "Dados nunca saem do seu computador.", icon: "M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" }
+];
+
+// 2. Adicione o Array do Roadmap (Secando o HTML anterior)
+const roadmapItems = [
+  { 
+    title: "Datarum v1.0", 
+    description: "Conversão XML para Excel com seleção de colunas, ordenação personalizada e sumário de totais.", 
+    status: "DISPONÍVEL", 
+    type: "success", 
+    icon: "M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" 
   },
-  methods: {
-    scrollTo(elementId) {
-      const element = document.getElementById(elementId);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-      }
-    },
-    goToApp() {
-      this.$emit('goToApp');
-    },
-    openGoogleForms() {
-      // URL do seu Google Forms
-      const formsUrl = 'https://forms.gle/w4NigAgBfVFv3saG8';
-      
-      // Mostrar feedback visual
-      this.showFeedbackToast = true;
-      
-      // Auto-ocultar toast
-      setTimeout(() => {
-        this.showFeedbackToast = false;
-      }, 2000);
-      
-      // Abrir o Google Forms em nova aba
-      window.open(formsUrl, '_blank');
-      
-      // Log para desenvolvimento
-      console.log('📝 Redirecionando para formulário de feedback');
-    }
+  { 
+    title: "Relatórios Básicos", 
+    description: "Totais por CFOP, fornecedor e resumo fiscal inteligente.", 
+    status: "PLANEJADO", 
+    type: "warning", 
+    icon: "M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" 
+  },
+  { 
+    title: "Insights Automáticos", 
+    description: "Análise de padrões de compra e detecção de ICMS ST.", 
+    status: "FUTURO", 
+    type: "neutral", 
+    icon: "M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" 
+  },
+  { 
+    title: "Recursos Colaborativos", 
+    description: "Upload por pasta e histórico de exportações.", 
+    status: "FUTURO", 
+    type: "neutral", 
+    icon: "M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" 
+  },
+  { 
+    title: "Integrações", 
+    description: "APIs e conectores com ERPs conforme a demanda.", 
+    status: "FUTURO", 
+    type: "neutral", 
+    icon: "M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2z" 
   }
+];
+
+// Métodos
+const scrollTo = (id) => {
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 };
+
+const goToApp = () => emit('goToApp');
 </script>
 
 <style scoped>
