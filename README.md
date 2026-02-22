@@ -119,10 +119,6 @@ A interface oferece uma experiência moderna com:
 - [ ] Histórico de processamentos
 - [ ] Alertas e notificações inteligentes
 
-## 🎨 **Identidade Visual**
-
-O Datarum utiliza uma paleta de cores profissional baseada em tons de índigo e cinza, transmitindo confiança, tecnologia e inteligência. A interface foi projetada para ser limpa, moderna e focada na experiência do usuário.
-
 ## 📄 **Licença**
 
 © 2024 Datarum. Projeto desenvolvido para transformar dados em inteligência.

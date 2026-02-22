@@ -23,7 +23,20 @@ def validar_xml_nfe(xml_content: bytes, detalhado: bool = False) -> dict:
     
     try:
         # Tenta fazer parse do XML
-        xml_str = xml_content.decode('utf-8')
+        # Segurança: rejeitar XMLs com DOCTYPE ou ENTITY (mitigar XXE)
+        try:
+            xml_str = xml_content.decode('utf-8', errors='ignore')
+        except Exception:
+            xml_str = xml_content.decode('latin-1', errors='ignore')
+
+        upper = xml_str.upper()
+        if '<!DOCTYPE' in upper or '<!ENTITY' in upper:
+            return {
+                "valido": False,
+                "erro": "XML contém declarações DOCTYPE/ENTITY — arquivo recusado por segurança",
+                "dados": {}
+            }
+
         dados_xml = xmltodict.parse(xml_str)
         
         # Detecta namespaces
