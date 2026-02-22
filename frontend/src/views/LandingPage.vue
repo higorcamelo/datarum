@@ -1,6 +1,5 @@
 <template>
-  <div class="min-h-screen bg-white pb-20 lg:pb-0">
-    <!-- Header Essencial -->
+  <div class="min-h-screen bg-white">
     <header class="bg-white/95 backdrop-blur fixed w-full top-0 z-50 border-b border-gray-100">
       <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center py-4">
@@ -22,7 +21,6 @@
       </nav>
     </header>
 
-    <!-- Hero Section -->
     <section class="pt-20 pb-16 bg-gradient-to-br from-purple-50 via-white to-purple-100">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid lg:grid-cols-2 gap-12 items-center">
@@ -74,40 +72,32 @@
                   <div class="w-3 h-3 bg-green-400 rounded-full"></div>
                   <span class="text-sm text-gray-500 ml-auto">XMLs NFe → Excel</span>
                 </div>
-                <span class="text-gray-700"><strong>Versão gratuita</strong> • 750 XMLs/mês</span>
-              </div>
-              
-              <div class="flex items-center gap-2 lg:gap-3 justify-center lg:justify-start">
-                <div class="w-5 h-5 lg:w-6 lg:h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
-                  <svg class="w-3 h-3 lg:w-4 lg:h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                  </svg>
+                <div class="space-y-2">
+                  <div class="bg-purple-100 p-2 rounded text-sm text-purple-700">📄 nota_fiscal_001.xml</div>
+                  <div class="bg-purple-100 p-2 rounded text-sm text-purple-700">📄 nota_fiscal_002.xml</div>
+                  <div class="bg-purple-100 p-2 rounded text-sm text-purple-700">📄 nota_fiscal_003.xml</div>
                 </div>
-                <span class="text-gray-700"><strong>Rápido</strong> • Centenas em segundos</span>
               </div>
-              
-              <div class="flex items-center gap-2 lg:gap-3 justify-center lg:justify-start">
-                <div class="w-5 h-5 lg:w-6 lg:h-6 bg-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
-                  <svg class="w-3 h-3 lg:w-4 lg:h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm6.293-6.707a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L12 12.586V3a1 1 0 10-2 0v9.586l-1.707-1.707z" clip-rule="evenodd"/>
+              <div class="text-center py-4">
+                <div class="inline-flex items-center gap-2 text-purple-600">
+                  <svg class="w-6 h-6 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
                   </svg>
+                  <span class="font-medium">Processando...</span>
                 </div>
-                <span class="text-gray-700"><strong>Completo</strong> • Todos os dados</span>
               </div>
-              
-              <div class="flex items-center gap-2 lg:gap-3 justify-center lg:justify-start">
-                <div class="w-5 h-5 lg:w-6 lg:h-6 bg-orange-500 rounded-full flex items-center justify-center flex-shrink-0">
-                  <svg class="w-3 h-3 lg:w-4 lg:h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+              <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                <div class="flex items-center gap-2 text-green-700">
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                   </svg>
+                  <span class="font-medium">📊 planilha_notas_fiscais.xlsx</span>
                 </div>
-                <span class="text-gray-700"><strong>Prático</strong> • Direto no navegador</span>
               </div>
             </div>
           </div>
         </div>
         
-        <!-- Quick Benefits Grid -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 max-w-5xl mx-auto">
           <div class="bg-white p-6 rounded-lg shadow-lg text-center border border-gray-100">
             <svg class="w-10 h-10 text-purple-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -136,7 +126,6 @@
       </div>
     </section>
 
-    <!-- Features Section -->
     <section id="features" class="py-20 bg-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
@@ -144,12 +133,11 @@
         </div>
         
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <FeatureCard 
-            v-for="feature in features" 
+          <FeatureCard
+            v-for="feature in features"
             :key="feature.title"
             :title="feature.title"
-            :description="feature.desc"
-          >
+            :description="feature.desc">
             <template #icon>
               <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="feature.icon"/>
@@ -160,7 +148,6 @@
       </div>
     </section>
 
-    <!-- How it Works Section -->
     <section id="how-it-works" class="py-20 bg-gray-50">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
@@ -179,7 +166,7 @@
             </div>
             <h3 class="text-xl font-semibold text-gray-900 mb-4">Selecione os XMLs</h3>
             <p class="text-gray-600 mb-6">
-              Arraste e solte seus arquivos XML de NFe ou clique para selecioná-los. 
+              Arraste e solte seus arquivos XML de NFe ou clique para selecioná-los.
               Suporte para múltiplos arquivos.
             </p>
             <div class="bg-white p-4 rounded-lg border border-gray-200">
@@ -198,7 +185,7 @@
             </div>
             <h3 class="text-xl font-semibold text-gray-900 mb-4">Processamento Automático</h3>
             <p class="text-gray-600 mb-6">
-              O sistema analisa automaticamente todos os XMLs, extrai as informações importantes 
+              O sistema analisa automaticamente todos os XMLs, extrai as informações importantes
               e organiza tudo em uma planilha profissional.
             </p>
             <div class="bg-white p-4 rounded-lg border border-gray-200">
@@ -225,7 +212,7 @@
             </div>
             <h3 class="text-xl font-semibold text-gray-900 mb-4">Download Automático</h3>
             <p class="text-gray-600 mb-6">
-              Sua planilha Excel é gerada automaticamente e o download inicia na hora. 
+              Sua planilha Excel é gerada automaticamente e o download inicia na hora.
               Pronta para abrir no Excel, Google Sheets ou qualquer programa de planilhas.
             </p>
             <div class="bg-white p-4 rounded-lg border border-gray-200">
@@ -243,63 +230,75 @@
       </div>
     </section>
 
-    <!-- Benefícios Principais -->
-    <section class="py-12 lg:py-16 bg-white">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-8 lg:mb-12">
-          <h2 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-3 lg:mb-4">
-            Por que usar o Datarum?
+    <section id="demo" class="py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+            Veja o que é extraído dos XMLs
           </h2>
-          <p class="text-lg lg:text-xl text-gray-600">
-            Economize tempo e tenha dados organizados
+          <p class="text-xl text-gray-600">
+            Todas as informações importantes organizadas em colunas
           </p>
         </div>
-        
-        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-          <div class="text-center p-4 lg:p-6 bg-purple-50 rounded-xl border border-purple-100">
-            <div class="w-10 h-10 lg:w-12 lg:h-12 bg-purple-600 rounded-xl flex items-center justify-center mx-auto mb-3 lg:mb-4">
-              <svg class="w-5 h-5 lg:w-6 lg:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-              </svg>
-            </div>
-            <h3 class="text-base lg:text-lg font-bold mb-2 text-purple-800">Super Rápido</h3>
-            <p class="text-gray-600 text-sm">Processa <strong>200+ XMLs</strong> em menos de <strong>10 segundos</strong></p>
-          </div>
 
-          <div class="text-center p-4 lg:p-6 bg-green-50 rounded-xl border border-green-100">
-            <div class="w-10 h-10 lg:w-12 lg:h-12 bg-green-600 rounded-xl flex items-center justify-center mx-auto mb-3 lg:mb-4">
-              <svg class="w-5 h-5 lg:w-6 lg:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
-              </svg>
+        <div class="bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden">
+          <div class="bg-gray-50 px-6 py-4 border-b border-gray-200">
+            <div class="flex items-center gap-2">
+              <div class="w-3 h-3 bg-red-400 rounded-full"></div>
+              <div class="w-3 h-3 bg-yellow-400 rounded-full"></div>
+              <div class="w-3 h-3 bg-green-400 rounded-full"></div>
+              <span class="text-sm text-gray-600 ml-4">planilha_nfe_exemplo.xlsx</span>
             </div>
-            <h3 class="text-base lg:text-lg font-bold mb-2 text-green-800">Simples e Prático</h3>
-            <p class="text-gray-600 text-sm"><strong>Fácil de usar</strong> • <strong>Sem instalação</strong></p>
           </div>
-
-          <div class="text-center p-4 lg:p-6 bg-blue-50 rounded-xl border border-blue-100">
-            <div class="w-10 h-10 lg:w-12 lg:h-12 bg-blue-600 rounded-xl flex items-center justify-center mx-auto mb-3 lg:mb-4">
-              <svg class="w-5 h-5 lg:w-6 lg:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-              </svg>
-            </div>
-            <h3 class="text-base lg:text-lg font-bold mb-2 text-blue-800">Excel Customizável</h3>
-            <p class="text-gray-600 text-sm"><strong>Escolha os campos</strong> • <strong>25+ opções</strong> disponíveis</p>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead class="bg-purple-50">
+                <tr>
+                  <th class="px-4 py-3 text-left font-semibold text-purple-700">Nº Nota</th>
+                  <th class="px-4 py-3 text-left font-semibold text-purple-700">Data Emissão</th>
+                  <th class="px-4 py-3 text-left font-semibold text-purple-700">CNPJ Emitente</th>
+                  <th class="px-4 py-3 text-left font-semibold text-purple-700">Razão Social</th>
+                  <th class="px-4 py-3 text-left font-semibold text-purple-700">Valor Total</th>
+                  <th class="px-4 py-3 text-left font-semibold text-purple-700">Série</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200">
+                <tr class="hover:bg-gray-50">
+                  <td class="px-4 py-3">000000123</td>
+                  <td class="px-4 py-3">15/07/2025</td>
+                  <td class="px-4 py-3">12.345.678/0001-90</td>
+                  <td class="px-4 py-3">Empresa Exemplo Ltda</td>
+                  <td class="px-4 py-3">R$ 1.250,00</td>
+                  <td class="px-4 py-3">1</td>
+                </tr>
+                <tr class="hover:bg-gray-50">
+                  <td class="px-4 py-3">000000124</td>
+                  <td class="px-4 py-3">16/07/2025</td>
+                  <td class="px-4 py-3">98.765.432/0001-10</td>
+                  <td class="px-4 py-3">Fornecedor ABC S.A.</td>
+                  <td class="px-4 py-3">R$ 3.780,50</td>
+                  <td class="px-4 py-3">1</td>
+                </tr>
+                <tr class="hover:bg-gray-50">
+                  <td class="px-4 py-3">000000125</td>
+                  <td class="px-4 py-3">17/07/2025</td>
+                  <td class="px-4 py-3">11.222.333/0001-44</td>
+                  <td class="px-4 py-3">Produtos XYZ Eireli</td>
+                  <td class="px-4 py-3">R$ 850,25</td>
+                  <td class="px-4 py-3">1</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-
-          <div class="text-center p-4 lg:p-6 bg-orange-50 rounded-xl border border-orange-100">
-            <div class="w-10 h-10 lg:w-12 lg:h-12 bg-orange-600 rounded-xl flex items-center justify-center mx-auto mb-3 lg:mb-4">
-              <svg class="w-5 h-5 lg:w-6 lg:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
-              </svg>
-            </div>
-            <h3 class="text-base lg:text-lg font-bold mb-2 text-orange-800">Versão Gratuita</h3>
-            <p class="text-gray-600 text-sm"><strong>750 XMLs/mês</strong> • <strong>Relatórios básicos</strong></p>
+          <div class="bg-gray-50 px-6 py-4 border-t border-gray-200">
+            <p class="text-sm text-gray-600 text-center">
+              E mais 15+ campos incluindo: Chave NFe, CEP, UF, Valor ICMS, Valor IPI, Produtos, etc.
+            </p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Roadmap Section -->
     <section id="roadmap" class="py-20 bg-gradient-to-br from-gray-50 to-gray-100">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
@@ -316,17 +315,15 @@
         </div>
 
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-      <RoadmapCard 
-        v-for="item in roadmapItems" 
+      <RoadmapCard
+        v-for="item in roadmapItems"
         :key="item.title"
-        v-bind="item" 
-        class="h-full"
-      />
+        v-bind="item"
+        />
     </div>
   </div>
 </section>
 
-    <!-- Footer -->
     <footer class="bg-gray-900 text-white py-12">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center">
@@ -356,9 +353,6 @@
             </div>
           </div>
         </div>
-        <p class="text-gray-400 text-sm">
-          © {{ new Date().getFullYear() }} Datarum • v1.1 • XML → Excel automatizado
-        </p>
       </div>
     </footer>
   </div>
@@ -366,65 +360,85 @@
 
 <script setup>
 import { ref } from 'vue';
-// 1. Importe o novo componente (ajuste o caminho conforme sua pasta)
 import RoadmapCard from '../components/RoadmapCard.vue';
 import FeatureCard from '../components/FeatureCard.vue';
 
 const emit = defineEmits(['goToApp']);
 
-const showFeedbackToast = ref(false);
-const FORMS_URL = import.meta.env.VITE_FORMS_URL;
-
-// Dados das Features (Mantidos)
+// Dados das Features
 const features = [
-  { title: "Super Rápido", desc: "Suporta múltiplos arquivos localmente.", icon: "M13 10V3L4 14h7v7l9-11h-7z" },
-  { title: "Compatibilidade", desc: "Formatos NFe comuns (v4.00).", icon: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" },
-  { title: "100% Seguro", desc: "Dados nunca saem do seu computador.", icon: "M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" }
+  { title: "Super Rápido", desc: "Suporta múltiplos arquivos localmente.", icon: "M13 10V3L4 14h7v7l9-11h-7z" },
+  { title: "Compatibilidade", desc: "Formatos NFe comuns (v4.00).", icon: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" },
+  { title: "100% Seguro", desc: "Dados nunca saem do seu computador.", icon: "M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" }
 ];
 
-// 2. Adicione o Array do Roadmap (Secando o HTML anterior)
+// Array do Roadmap 
 const roadmapItems = [
-  { 
-    title: "Datarum v1.0", 
-    description: "Conversão XML para Excel com seleção de colunas, ordenação personalizada e sumário de totais.", 
-    status: "DISPONÍVEL", 
-    type: "success", 
-    icon: "M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" 
-  },
-  { 
-    title: "Relatórios Básicos", 
-    description: "Totais por CFOP, fornecedor e resumo fiscal inteligente.", 
-    status: "PLANEJADO", 
-    type: "warning", 
-    icon: "M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" 
-  },
-  { 
-    title: "Insights Automáticos", 
-    description: "Análise de padrões de compra e detecção de ICMS ST.", 
-    status: "FUTURO", 
-    type: "neutral", 
-    icon: "M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" 
-  },
-  { 
-    title: "Recursos Colaborativos", 
-    description: "Upload por pasta e histórico de exportações.", 
-    status: "FUTURO", 
-    type: "neutral", 
-    icon: "M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" 
-  },
-  { 
-    title: "Integrações", 
-    description: "APIs e conectores com ERPs conforme a demanda.", 
-    status: "FUTURO", 
-    type: "neutral", 
-    icon: "M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2z" 
-  }
+  { 
+    title: "Datarum v1.0", 
+    description: "Conversão XML para Excel com seleção de colunas, ordenação personalizada e sumário de totais.", 
+    status: "DISPONÍVEL", 
+    type: "success", 
+    icon: "M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" 
+  },
+  { 
+    title: "Relatórios Básicos", 
+    description: "Totais por CFOP, fornecedor e resumo fiscal inteligente.", 
+    status: "PLANEJADO", 
+    type: "warning", 
+    icon: "M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" 
+  },
+  { 
+    title: "Insights Automáticos", 
+    description: "Análise de padrões de compra e detecção de ICMS ST.", 
+    status: "FUTURO", 
+    type: "neutral", 
+    icon: "M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" 
+  },
+  { 
+    title: "Recursos Colaborativos", 
+    description: "Upload por pasta e histórico de exportações.", 
+    status: "FUTURO", 
+    type: "neutral", 
+    icon: "M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" 
+  },
+  { 
+    title: "Integrações", 
+    description: "APIs e conectores com ERPs conforme a demanda.", 
+    status: "FUTURO", 
+    type: "neutral", 
+    icon: "M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2z" 
+  }
 ];
 
 // Métodos
 const scrollTo = (id) => {
-  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 };
 
 const goToApp = () => emit('goToApp');
+
 </script>
+
+ <style scoped>
+
+/* Animações e estilos adicionais*/
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+/* Respeitar preferência de movimento reduzido */
+@media (prefers-reduced-motion: reduce) {
+  .animate-pulse,
+  .animate-spin {
+    animation: none !important;
+  }
+}
+</style> 

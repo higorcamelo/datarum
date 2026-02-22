@@ -1,6 +1,9 @@
 <template>
   <div class="font-sans antialiased text-gray-900">
-    <LandingPage v-if="currentView === 'landing'" @start="currentView = 'app'" />
+    <LandingPage 
+      v-if="currentView === 'landing'" 
+      @goToApp="currentView = 'app'" 
+    />
     <ConversorApp v-else @back="currentView = 'landing'" />
     
   </div>
