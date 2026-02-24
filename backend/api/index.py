@@ -4,7 +4,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from mangum import Mangum
 from typing import List, Optional
 from api.config import PRESETS, MENSAGENS_ERRO
-from typing import List, Optional
 import tempfile
 import os
 import sys
@@ -32,89 +31,124 @@ app.add_middleware(
 async def root():
     return {"status": "online", "service": "Datarum Parser"}
 
+
 @app.post("/processar")
 async def processar_excel(
-    files: List[UploadFile] = File(...),
-    preset_nome: Optional[str] = Form("basico"),
-    campos: Optional[List[str]] = Form(None),
-    planilha_nome: Optional[str] = Form("datarum_extracao")
+    xmls: List[UploadFile] = File(...),
+    preset: Optional[str] = Form("basico"),
+    campos_selecionados: Optional[str] = Form(None),
+    planilha: Optional[str] = Form("datarum_extracao")
 ):
-    print(">>> CAMPOS RECEBIDOS:", campos)
-    print(">>> TIPO:", type(campos))
-    print(">>> PRESET:", preset_nome)
-    print("ASSINATURA ATUAL: files")
+    print(">>> CAMPOS RECEBIDOS (RAW):", campos_selecionados)
+    print(">>> PRESET:", preset)
+    print("ASSINATURA ATUAL: xmls")
+
     try:
-        # 1. Definir o que será extraído (Preset ou Campos Customizados)
-        if campos:
-            campos_lista = campos
+        # 1️⃣ Definir campos (Preset ou Customizado)
+        if campos_selecionados:
+            try:
+                campos_lista = json.loads(campos_selecionados)
+            except json.JSONDecodeError:
+                raise HTTPException(status_code=400, detail="JSON de campos inválido.")
+
             opcoes = {"incluirTotais": True, "incluirResumo": True}
+            preset_final = "personalizado"
+
         else:
-            preset_config = PRESETS.get(preset_nome)
+            preset_config = PRESETS.get(preset)
             if not preset_config:
-                raise HTTPException(status_code=400, detail=MENSAGENS_ERRO["preset_inexistente"].format(preset=preset_nome))
+                raise HTTPException(
+                    status_code=400,
+                    detail=MENSAGENS_ERRO["preset_inexistente"].format(preset=preset)
+                )
+
             campos_lista = preset_config["campos"]
             opcoes = preset_config["opcoes"]
+            preset_final = preset
 
         todos_dados = []
         arquivos_processados = []
 
-        # 2. Loop de processamento dos XMLs
-        for file in files:
-            if not file.filename.lower().endswith('.xml'):
+        # 2️⃣ Processar XMLs
+        for file in xmls:
+            if not file.filename.lower().endswith(".xml"):
                 continue
-            
+
             content = await file.read()
+
             try:
-                # O parse_nfe já filtra os campos internamente
                 dados_nfe = parse_nfe(content, campos_selecionados=campos_lista)
+
                 if dados_nfe:
                     todos_dados.extend(dados_nfe)
                     arquivos_processados.append(file.filename)
+
             except Exception as e:
                 print(f"Erro no arquivo {file.filename}: {str(e)}")
                 continue
 
         if not todos_dados:
-            return JSONResponse(status_code=400, content={"message": MENSAGENS_ERRO["sem_dados"]})
+            return JSONResponse(
+                status_code=400,
+                content={"message": MENSAGENS_ERRO["sem_dados"]}
+            )
 
-        # 3. Preparar configuração para o Excel Handler
+        # 3️⃣ Configuração do Excel
         config_excel = {
-            'campos_selecionados': campos_lista,
-            'preset': preset_nome if not campos else 'personalizado',
-            'arquivos_processados': arquivos_processados,
-            'opcoes': opcoes
+            "campos_selecionados": campos_lista,
+            "preset": preset_final,
+            "arquivos_processados": arquivos_processados,
+            "opcoes": opcoes,
         }
 
-        # 4. Gerar arquivo temporário
-        with tempfile.NamedTemporaryFile(delete=False, suffix='.xlsx') as tmp:
+        # 4️⃣ Criar arquivo temporário
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".xlsx") as tmp:
             tmp_path = tmp.name
 
-        # Salvar usando o handler profissional que você já tem
         salvar_em_excel(todos_dados, tmp_path, configuracao=config_excel)
 
-        # Ler para retornar na resposta
-        with open(tmp_path, 'rb') as f:
+        # 5️⃣ Ler conteúdo
+        with open(tmp_path, "rb") as f:
             excel_content = f.read()
 
         # Limpeza
         if os.path.exists(tmp_path):
             os.unlink(tmp_path)
 
-        nome_final = f"{planilha_nome}.xlsx" if not planilha_nome.endswith('.xlsx') else planilha_nome
+        # Sanitização simples do nome
+        planilha_limpa = "".join(
+            c for c in planilha if c.isalnum() or c in (" ", "_", "-")
+        ).strip()
+
+        if not planilha_limpa:
+            planilha_limpa = "datarum_extracao"
+
+        nome_final = (
+            f"{planilha_limpa}.xlsx"
+            if not planilha_limpa.endswith(".xlsx")
+            else planilha_limpa
+        )
 
         return Response(
             content=excel_content,
-            media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             headers={
-                'Content-Disposition': f'attachment; filename="{nome_final}"',
-                'Access-Control-Expose-Headers': 'Content-Disposition'
-            }
+                "Content-Disposition": f'attachment; filename="{nome_final}"',
+                "Access-Control-Expose-Headers": "Content-Disposition",
+            },
         )
+
+    except HTTPException:
+        raise
 
     except Exception as e:
         return JSONResponse(
-            status_code=500, 
-            content={"message": MENSAGENS_ERRO["processamento_erro"], "error": str(e)}
+            status_code=500,
+            content={
+                "message": MENSAGENS_ERRO["processamento_erro"],
+                "error": str(e),
+            },
         )
+
 
 handler = Mangum(app)
