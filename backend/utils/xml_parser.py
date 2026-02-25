@@ -46,11 +46,12 @@ def parse_nfe(xml_content: bytes, campos_selecionados: List[str] = None) -> List
     dh = g(ide, "dhEmi")
     de = g(ide, "dEmi")
 
+    chave = inf_nfe.get("@Id", ""),
     dados_comuns = {
         "numero_nf": g(ide, "nNF"),
         "serie": g(ide, "serie"),
         "data_emissao": (dh[:10] if dh else de),
-        "chave_nfe": inf_nfe.get("@Id", "").replace("NFe", ""),
+        "chave_nfe": chave.replace("NFe", "") if chave else "",
         "valor_total_nf": g(total_geral, "vNF"),
         "valor_produtos_total": g(total_geral, "vProd"),
         "valor_desconto_total": g(total_geral, "vDesc"),
@@ -124,7 +125,7 @@ def parse_nfe(xml_content: bytes, campos_selecionados: List[str] = None) -> List
             "cofins_valor": g(cofins, "vCOFINS"),
         }
 
-        if campos_selecionados:
+        if campos_selecionados is not None:
             resultado.append({
                 k: item_completo.get(k, "")
                 for k in campos_selecionados

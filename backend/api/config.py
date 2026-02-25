@@ -74,21 +74,56 @@ CAMPOS_DISPONIVEIS = {
 PRESETS = {
     "basico": {
         "nome": "Básico",
-        "campos": ["numero_nf", "data_emissao", "emitente", "valor_total_nf", "descricao_produto", "valor_total_item"],
-        "opcoes": {"incluirTotais": True, "agruparPorEmitente": False, "incluirResumo": False}
+        "campos": [
+            "numero_nf",
+            "data_emissao",
+            "emitente",
+            "descricao_produto",
+            "quantidade_comercial",
+            "valor_unitario",
+            "valor_total_item",
+            "valor_total_nf"
+        ],
+        "opcoes": {
+            "incluirTotais": True,
+            "agruparPorEmitente": False,
+            "incluirResumo": False
+        }
     },
     "fiscal": {
-        "nome": "Fiscal",
-        "campos": [
-            "numero_nf", "cnpj_emitente", "cfop", "ncm", "valor_total_item", 
-            "cst_icms", "base_icms", "icms_valor", "icms_st_valor", "pis_valor", "cofins_valor"
-        ],
-        "opcoes": {"incluirTotais": True, "agruparPorEmitente": True, "incluirResumo": True}
+    "nome": "Fiscal",
+    "campos": [
+        "numero_nf",
+        "data_emissao",
+        "cnpj_emitente",
+        "descricao_produto",
+        "cfop",
+        "ncm",
+        "quantidade_comercial",
+        "valor_total_item",
+        "cst_icms",
+        "base_icms",
+        "aliquota_icms",
+        "icms_valor",
+        "pis_valor",
+        "cofins_valor",
+        "valor_total_nf",
+        "valor_frete_total"
+    ],
+    "opcoes": {
+        "incluirTotais": True,
+        "agruparPorEmitente": True,
+        "incluirResumo": True
+    }
     },
     "completo": {
         "nome": "Completo",
         "campos": list(CAMPOS_DISPONIVEIS.keys()),
-        "opcoes": {"incluirTotais": True, "agruparPorEmitente": True, "incluirResumo": True}
+        "opcoes": {
+            "incluirTotais": True,
+            "agruparPorEmitente": True,
+            "incluirResumo": True
+        }
     }
 }
 
@@ -102,4 +137,6 @@ MENSAGENS_ERRO = {
 }
 
 def get_preset_config(nome: str) -> dict:
-    return PRESETS.get(nome, PRESETS["basico"])
+    if nome not in PRESETS:
+        raise ValueError(f"Preset inválido: {nome}")
+    return PRESETS[nome]

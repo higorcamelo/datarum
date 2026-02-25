@@ -132,27 +132,52 @@ const nomePlanilha = ref('');
 const loading = ref(false);
 const dragOver = ref(false);
 const presetAtivo = ref('basico');
-const camposSelecionados = ref(['nfe', 'data_emissao', 'valor_total']);
-
+const camposSelecionados = ref([
+  'numero_nf',
+  'data_emissao',
+  'valor_total_nf'
+]);
 
 const camposDisponiveis = {
   identificacao: [
     { id: 'numero_nf', nome: 'Número NF-e' },
     { id: 'serie', nome: 'Série' },
     { id: 'data_emissao', nome: 'Data Emissão' },
-    { id: 'valor_total_nf', nome: 'Valor Total NF' }
+    { id: 'chave_nfe', nome: 'Chave NFe' },
+    { id: 'valor_total_nf', nome: 'Valor Total NF' },
+    { id: 'valor_produtos_total', nome: 'Total Produtos' },
+    { id: 'valor_desconto_total', nome: 'Desconto Total' },
+    { id: 'valor_frete_total', nome: 'Frete Total' }
   ],
   parceiros: [
     { id: 'cnpj_emitente', nome: 'CNPJ Emitente' },
     { id: 'emitente', nome: 'Razão Social Emitente' },
-    { id: 'cnpj_destinatario', nome: 'CNPJ Destinatário' }
+    { id: 'uf_emitente', nome: 'UF Emitente' },
+    { id: 'cnpj_destinatario', nome: 'CNPJ Destinatário' },
+    { id: 'destinatario', nome: 'Razão Social Destinatário' },
+    { id: 'uf_destinatario', nome: 'UF Destinatário' }
   ],
   itens: [
+    { id: 'codigo_produto', nome: 'Código Produto' },
     { id: 'descricao_produto', nome: 'Descrição Produto' },
+    { id: 'ncm', nome: 'NCM' },
+    { id: 'cfop', nome: 'CFOP' },
     { id: 'unidade_comercial', nome: 'Unidade' },
-    { id: 'valor_unitario', nome: 'Valor Unitário' },
     { id: 'quantidade_comercial', nome: 'Quantidade' },
-    { id: 'valor_total_item', nome: 'Total Item' }
+    { id: 'valor_unitario', nome: 'Valor Unitário' },
+    { id: 'valor_total_item', nome: 'Total Item' },
+    { id: 'valor_desconto_item', nome: 'Desconto Item' }
+  ],
+  impostos: [
+    { id: 'cst_icms', nome: 'CST/CSOSN ICMS' },
+    { id: 'base_icms', nome: 'Base ICMS' },
+    { id: 'aliquota_icms', nome: 'Alíquota ICMS' },
+    { id: 'icms_valor', nome: 'Valor ICMS' },
+    { id: 'base_icms_st', nome: 'Base ICMS ST' },
+    { id: 'icms_st_valor', nome: 'Valor ICMS ST' },
+    { id: 'valor_ipi', nome: 'Valor IPI' },
+    { id: 'pis_valor', nome: 'PIS' },
+    { id: 'cofins_valor', nome: 'COFINS' }
   ]
 };
 
@@ -208,27 +233,41 @@ const usarSugestao = () => {
 
 // API
 const enviarArquivos = async () => {
+  if (!selectedFiles.value.length) {
+    mensagem.value = '❌ Selecione pelo menos um XML.';
+    return;
+  }
+
   loading.value = true;
   mensagem.value = '';
 
   const formData = new FormData();
 
-  selectedFiles.value.forEach(f => formData.append('files', f));
-  formData.append('planilha_nome', nomePlanilha.value || 'extracao');
+  // Nome correto do parâmetro
+  formData.append('planilha', nomePlanilha.value || 'extracao_datarum');
 
+  // Arquivos (nome correto: files)
+  selectedFiles.value.forEach(f => formData.append('files', f));
+
+  // Preset
+  formData.append('preset', presetAtivo.value);
+
+  // Campos personalizados
   formData.append(
     'campos_selecionados',
     JSON.stringify(camposSelecionados.value)
   );
-  formData.append('preset', presetAtivo.value);
 
   try {
-    const response = await fetch(ENDPOINTS.PROCESSAR_EXCEL, {
+    const response = await fetch('/processar', {
       method: 'POST',
       body: formData
     });
 
-    if (!response.ok) throw new Error();
+    if (!response.ok) {
+      const erro = await response.json();
+      throw new Error(erro.detail || 'Erro desconhecido');
+    }
 
     const blob = await response.blob();
     const url = window.URL.createObjectURL(blob);
@@ -236,11 +275,13 @@ const enviarArquivos = async () => {
     const a = document.createElement('a');
     a.href = url;
     a.download = `${nomePlanilha.value || 'relatorio'}.xlsx`;
+    document.body.appendChild(a);
     a.click();
+    a.remove();
 
     mensagem.value = '✅ Planilha gerada com sucesso!';
   } catch (err) {
-    mensagem.value = '❌ Erro na comunicação com o servidor.';
+    mensagem.value = `❌ ${err.message}`;
   } finally {
     loading.value = false;
   }
