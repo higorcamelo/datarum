@@ -238,38 +238,38 @@ const enviarArquivos = async () => {
     return;
   }
 
-  loading.value = true;
-  mensagem.value = '';
-
-  const formData = new FormData();
-
-  // Nome correto do parâmetro
-  formData.append('planilha', nomePlanilha.value || 'extracao_datarum');
-
-  // Arquivos (nome correto: files)
-  selectedFiles.value.forEach(f => formData.append('files', f));
-
-  // Preset
-  formData.append('preset', presetAtivo.value);
-
-  // Campos personalizados
-  formData.append(
-    'campos_selecionados',
-    JSON.stringify(camposSelecionados.value)
-  );
-
   try {
-    const response = await fetch('/processar', {
+    loading.value = true;
+    mensagem.value = '';
+
+    const formData = new FormData();
+
+    // Nome correto do parâmetro
+    formData.append('planilha', nomePlanilha.value || 'extracao_datarum');
+
+    // Arquivos (nome correto: files)
+    selectedFiles.value.forEach(f => formData.append('files', f));
+
+    // Preset
+    formData.append('preset', presetAtivo.value);
+
+    // Campos personalizados
+    formData.append(
+      'campos_selecionados',
+      JSON.stringify(camposSelecionados.value)
+    );
+
+    const response = await fetch(ENDPOINTS.PROCESSAR_EXCEL, {
       method: 'POST',
       body: formData
-    });
+    })
 
     if (!response.ok) {
-      const erro = await response.json();
-      throw new Error(erro.detail || 'Erro desconhecido');
+      const erro = await response.json()
+      throw new Error(erro.detail || "Erro ao processar")
     }
 
-    const blob = await response.blob();
+    const blob = await response.blob()
     const url = window.URL.createObjectURL(blob);
 
     const a = document.createElement('a');

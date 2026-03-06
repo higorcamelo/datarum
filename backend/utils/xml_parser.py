@@ -46,7 +46,7 @@ def parse_nfe(xml_content: bytes, campos_selecionados: List[str] = None) -> List
     dh = g(ide, "dhEmi")
     de = g(ide, "dEmi")
 
-    chave = inf_nfe.get("@Id", ""),
+    chave = inf_nfe.get("@Id", "")
     dados_comuns = {
         "numero_nf": g(ide, "nNF"),
         "serie": g(ide, "serie"),
@@ -72,7 +72,7 @@ def parse_nfe(xml_content: bytes, campos_selecionados: List[str] = None) -> List
     })
 
     # 3. Itens
-    detalhes = inf_nfe.get("det", [])
+    detalhes = inf_nfe.get("det") or []
 
     if isinstance(detalhes, dict):
         detalhes = [detalhes]
@@ -125,7 +125,7 @@ def parse_nfe(xml_content: bytes, campos_selecionados: List[str] = None) -> List
             "cofins_valor": g(cofins, "vCOFINS"),
         }
 
-        if campos_selecionados is not None:
+        if campos_selecionados:
             resultado.append({
                 k: item_completo.get(k, "")
                 for k in campos_selecionados
