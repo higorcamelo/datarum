@@ -1,23 +1,22 @@
-# 📊 Datarum
+# Datarum
 
 **Automação fiscal com inteligência e clareza**
 
-Sistema web profissional para processamento automático de arquivos XML de Notas Fiscais Eletrônicas (NFe), convertendo-os para planilhas Excel formatadas com inteligência de dados.
+Sistema web para processamento de arquivos XML de Notas Fiscais Eletrônicas (NFe), convertendo-os para planilhas Excel formatadas.
 
-## 🎯 **Sobre o Projeto**
+## **Sobre o Projeto**
 
-O Datarum revoluciona o processo de extração e organização de dados de NFes, eliminando a necessidade de processamento manual e oferecendo uma interface moderna e intuitiva que transforma dados brutos em insights valiosos.
+O Datarum facilita o processo de extração e organização de dados de NFes, reduzindo a necessidade de processamento manual.
 
 ### **Funcionalidades**
-- ✅ Upload de múltiplos arquivos XML via drag & drop
-- ✅ Validação automática de arquivos e tamanhos
-- ✅ Processamento inteligente de dados de NFe com parsing XML
-- ✅ Geração de planilhas Excel formatadas profissionalmente
-- ✅ Interface responsiva e moderna com feedback rico
-- ✅ Estatísticas em tempo real e análise de dados
-- ✅ Suporte para múltiplas versões de NFe (1.10, 2.00, 3.10, 4.00)
+-  Upload de múltiplos arquivos XML via drag & drop
+-  Validação automática de arquivos e tamanhos
+-  Processamento de dados de NFe com parsing de XML
+-  Geração de planilhas Excel formatadas
+-  Interface responsiva com feedback
+-  Suporte para múltiplas versões de NFe (1.10, 2.00, 3.10, 4.00)
 
-## 🛠️ **Tecnologias Utilizadas**
+## **Tecnologias Utilizadas**
 
 ### **Frontend**
 - **Vue.js 3** - Framework JavaScript reativo moderno
@@ -30,7 +29,7 @@ O Datarum revoluciona o processo de extração e organização de dados de NFes,
 - **OpenPyXL** - Geração de arquivos Excel com formatação profissional
 - **XML parsing** - Extração inteligente de dados estruturados
 
-## 🚀 **Como Executar**
+## **Como Executar**
 
 ### **Pré-requisitos**
 - Python 3.8+
@@ -55,45 +54,10 @@ npm run dev
 - Frontend: `http://localhost:5173`
 - API: `http://localhost:8000`
 
-## 📁 **Estrutura do Projeto**
-
-```
-sigonota-web/
-├── backend/
-│   ├── main.py              # API principal
-│   ├── excel_handler.py     # Processamento de Excel
-│   └── requirements.txt     # Dependências Python
-├── frontend/
-│   └── sigonota-frontend/
-│       ├── src/
-│       │   ├── App.vue      # Componente principal
-│       │   └── main.js      # Entry point
-│       └── package.json     # Dependências Node.js
-└── README.md
-```
-
-## 🎨 **Interface**
-
-A interface oferece uma experiência moderna com:
-- Upload por arrastar e soltar
-- Validação em tempo real
-- Lista de arquivos com status
-- Botões de ação intuitivos
-- Feedback visual de processamento
-
-## 📋 **Fluxo de Uso**
-
-1. **Upload**: Arraste arquivos XML ou clique para selecionar
-2. **Validação**: Sistema verifica formato e tamanho dos arquivos
-3. **Nomeação**: Defina o nome da planilha ou use sugestão automática
-4. **Processamento**: Clique em "Processar" e aguarde
-5. **Download**: Planilha Excel é gerada e baixada automaticamente
-
-## 🔧 **Funcionalidades Técnicas**
+## **Funcionalidades Técnicas**
 
 ### **Validações**
 - Formato XML obrigatório
-- Limite de 50 arquivos por vez
 - Tamanho máximo de 5MB por arquivo
 - Verificação de estrutura NFe
 
@@ -101,7 +65,7 @@ A interface oferece uma experiência moderna com:
 - Parsing XML com tratamento de erros
 - Extração de dados fiscais relevantes
 - Formatação automática de valores
-- Geração de Excel com estilos
+- Geração de planilha Excel
 
 ### **Segurança**
 - Validação de tipos de arquivo
@@ -109,23 +73,15 @@ A interface oferece uma experiência moderna com:
 - Tratamento de exceções
 - Limpeza de arquivos temporários
 
-## 💡 **Próximas Funcionalidades**
+## **Próximas Funcionalidades**
 
-- [ ] Dashboard analítico com insights avançados
-- [ ] Suporte a outros tipos de XML fiscal
+- [ ] Dashboard para visualização de dados
 - [ ] Templates personalizados de planilha
 - [ ] Relatórios automáticos de análise de dados
-- [ ] API para integrações externas
 - [ ] Histórico de processamentos
 - [ ] Alertas e notificações inteligentes
 
-## 📄 **Licença**
-
-© 2024 Datarum. Projeto desenvolvido para transformar dados em inteligência.
-
 ---
-
-**Datarum** - *Automação fiscal com inteligência e clareza*
 
 **Desenvolvido com ❤️ por Higor Camelo**
 
