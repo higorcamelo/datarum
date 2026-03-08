@@ -45,7 +45,7 @@ uvicorn main:app --reload
 
 ### **Frontend**
 ```bash
-cd frontend/sigonota-frontend
+cd frontend
 npm install
 npm run dev
 ```
