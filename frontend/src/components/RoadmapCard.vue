@@ -1,27 +1,27 @@
 <template>
-  <div 
-    :class="[
-      'bg-white p-6 rounded-2xl shadow-lg border relative transition-all duration-300',
-      isFuture ? 'opacity-75 grayscale-[0.5]' : 'hover:shadow-xl hover:-translate-y-1'
-    ]"
-  >
-    <div 
-      :class="[
-        'absolute -top-2 -right-2 text-white px-2 py-1 rounded-full text-xs font-bold shadow-sm',
-        config.badge
-      ]"
-    >
-      {{ status }}
-    </div>
+  <div :class="['relative pl-8', isFuture && 'opacity-60']">
+    <!-- Linha vertical -->
+    <div class="absolute left-0 top-3 bottom-0 w-0.5 bg-gray-300"></div>
+    
+    <!-- Ponto na timeline -->
+    <div :class="[
+      'absolute -left-2 top-1.5 w-5 h-5 rounded-full border-2 border-white',
+      statusColor
+    ]"></div>
 
-    <div :class="['w-12 h-12 rounded-xl flex items-center justify-center mb-4', config.bg]">
-      <svg class="w-6 h-6" :class="config.text" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="icon" />
-      </svg>
+    <!-- Conteúdo -->
+    <div class="pb-8">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <h3 class="text-lg font-black text-gray-900">{{ title }}</h3>
+          <p class="text-sm text-gray-600 mt-1">{{ status }}</p>
+        </div>
+      </div>
+      
+      <ul class="space-y-2 mt-3 text-sm text-gray-600">
+        <slot></slot>
+      </ul>
     </div>
-
-    <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ title }}</h3>
-    <p class="text-gray-600 text-sm leading-relaxed">{{ description }}</p>
   </div>
 </template>
 
@@ -30,9 +30,7 @@ import { computed } from 'vue';
 
 const props = defineProps({
   title: String,
-  description: String,
   status: String,
-  icon: String,
   type: {
     type: String,
     default: 'neutral' // success, info, warning, neutral
@@ -41,14 +39,13 @@ const props = defineProps({
 
 const isFuture = computed(() => props.type === 'neutral');
 
-// Mapeamento de estilos centralizado
-const config = computed(() => {
-  const styles = {
-    success: { badge: 'bg-green-500', bg: 'bg-green-100', text: 'text-green-600' },
-    info:    { badge: 'bg-blue-500',  bg: 'bg-blue-100',  text: 'text-blue-600' },
-    warning: { badge: 'bg-purple-500',bg: 'bg-purple-100',text: 'text-purple-600' },
-    neutral: { badge: 'bg-gray-400',  bg: 'bg-gray-100',  text: 'text-gray-500' }
+const statusColor = computed(() => {
+  const colors = {
+    success: 'bg-green-500',
+    info:    'bg-orange-700',
+    warning: 'bg-gray-400',
+    neutral: 'bg-gray-300'
   };
-  return styles[props.type] || styles.neutral;
+  return colors[props.type] || colors.neutral;
 });
 </script>
