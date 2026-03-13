@@ -1,52 +1,31 @@
 <template>
-    <div class="min-h-screen flex flex-col bg-gradient-to-br from-purple-100 via-white to-purple-200">
-    <header class="w-full bg-white/80 backdrop-blur shadow-md py-3 px-8 flex items-center justify-between fixed top-0 left-0 z-10 border-b border-purple-100">
+    <div class="min-h-screen flex flex-col bg-gradient-to-b from-white via-orange-50 to-white">
+    <header class="w-full bg-white/95 shadow-md py-4 px-8 flex items-center justify-between fixed top-0 left-0 z-10 border-b border-gray-200 backdrop-blur-sm">
       <div class="flex items-center gap-3">
-        <button @click="voltarParaInicio" class="flex items-center gap-3 hover:opacity-80 transition text-left">
-          <span class="inline-flex items-center justify-center w-11 h-11 bg-purple-600 rounded-full text-white text-2xl font-bold shadow">D</span>
-          <div class="flex flex-col">
-            <span class="text-2xl font-extrabold text-purple-700 tracking-tight">Datarum</span>
-            <span class="text-xs text-purple-600 font-medium">Automação fiscal inteligente</span>
+        <button @click="voltarParaInicio" class="flex items-center gap-2 hover:opacity-80 transition text-left">
+          <span class="inline-flex items-center justify-center w-10 h-10 bg-gradient-to-br from-orange-700 to-orange-800 rounded-lg text-white font-black text-sm shadow-lg">D</span>
+          <div>
+            <span class="font-black text-gray-900 text-lg" style="letter-spacing: -0.5px;">Datarum</span>
+            <p class="text-xs text-gray-500 leading-none">Conversor XML</p>
           </div>
         </button>
       </div>
       
-      <button @click="voltarParaInicio" class="text-purple-600 hover:text-purple-700 text-sm font-bold transition flex items-center gap-1">
+      <button @click="voltarParaInicio" class="text-gray-600 hover:text-gray-900 text-sm font-semibold transition flex items-center gap-1.5 px-3 py-2 rounded-lg hover:bg-gray-100">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-        Sair
+        Voltar
       </button>
     </header>
 
-    <div class="h-20"></div>
+    <div class="h-24"></div>
 
     <main class="flex-1 flex justify-center px-4 py-8">
-      <div class="w-full max-w-7xl flex flex-col lg:flex-row gap-6 lg:gap-8">
-        
-        <aside class="w-full lg:w-72 order-2 lg:order-1">
-          <div class="bg-white/90 rounded-2xl shadow-lg p-6 border border-purple-100">
-            <h3 class="font-bold text-purple-700 mb-4 flex items-center gap-2">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-              Sessão Atual
-            </h3>
-            <div class="space-y-3 text-sm">
-              <div class="flex justify-between">
-                <span class="text-gray-600">Arquivos:</span>
-                <span class="font-bold text-purple-600">{{ selectedFiles.length }}</span>
-              </div>
-              <div class="flex justify-between" v-if="selectedFiles.length > 0">
-                <span class="text-gray-600">Colunas:</span>
-                <span class="font-bold text-purple-600">{{ camposSelecionados.length }}</span>
-              </div>
-            </div>
-          </div>
-        </aside>
-
-        <div class="flex-1 max-w-2xl mx-auto order-1 lg:order-2">
-          <div class="bg-white/90 rounded-3xl shadow-2xl p-8 border border-purple-100">
+      <div class="w-full max-w-2xl">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 border border-gray-200">
             
-            <div class="text-center mb-8">
-              <h1 class="text-3xl font-extrabold text-purple-700 mb-2">Extração de Dados</h1>
-              <p class="text-gray-500 text-sm">Selecione seus arquivos XML para começar.</p>
+            <div class="mb-8">
+              <h1 class="text-4xl font-black text-gray-900 mb-2" style="letter-spacing: -1px;">Converter XMLs em Excel</h1>
+              <p class="text-gray-600 text-base">Selecione seus arquivos e deixe a magia acontecer</p>
             </div>
 
             <section class="mb-8">
@@ -54,65 +33,80 @@
                 @dragover.prevent="dragOver = true"
                 @dragleave.prevent="dragOver = false"
                 @drop.prevent="handleDrop"
-                :class="['relative border-2 border-dashed rounded-xl p-10 transition-all text-center cursor-pointer',
-                         dragOver ? 'border-purple-500 bg-purple-50' : 'border-purple-200 hover:border-purple-300']">
+                :class="['relative border-2 border-dashed rounded-xl p-8 transition-all text-center cursor-pointer',
+                         dragOver ? 'border-orange-700 bg-orange-100 scale-105' : 'border-gray-300 hover:border-orange-400 hover:bg-orange-50']">
                 <input type="file" multiple accept=".xml" @change="handleFileChange" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
                 <div class="space-y-3">
-                  <svg class="mx-auto h-12 w-12 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  <p class="text-purple-600 font-bold">Clique ou arraste múltiplos XMLs aqui</p>
-                  <p class="text-xs text-gray-400">Limite de 50 arquivos por vez</p>
+                  <svg class="mx-auto h-12 w-12 text-orange-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  <div>
+                    <p class="text-gray-900 font-bold text-lg">Arraste XMLs aqui</p>
+                    <p class="text-gray-600 text-sm">ou clique para selecionar</p>
+                  </div>
+                  <p class="text-xs text-gray-500 font-medium">Até 50 arquivos por vez</p>
                 </div>
               </div>
               
               <div v-if="selectedFiles.length" class="mt-4">
-                <div class="flex justify-between items-center mb-2">
-                  <span class="text-xs font-bold text-purple-700 uppercase">Arquivos carregados</span>
-                  <button @click="clearFiles" class="text-xs text-red-500 hover:underline">Remover todos</button>
+                <div class="flex justify-between items-center mb-3">
+                  <div class="flex items-center gap-2">
+                    <span class="inline-block w-6 h-6 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white text-xs font-bold">{{ selectedFiles.length }}</span>
+                    <span class="text-sm font-bold text-gray-900">arquivo(s) selecionado(s)</span>
+                  </div>
+                  <button @click="clearFiles" class="text-xs text-gray-500 hover:text-red-600 transition font-semibold">Limpar tudo</button>
                 </div>
-                <div class="max-h-32 overflow-y-auto space-y-2 border border-purple-50 p-2 rounded-lg">
-                  <div v-for="(file, idx) in selectedFiles" :key="idx" class="flex justify-between items-center bg-white p-2 rounded border border-purple-100 text-xs shadow-sm">
-                    <span class="truncate pr-4 text-gray-700">{{ file.name }}</span>
-                    <button @click="removeFile(idx)" class="text-gray-400 hover:text-red-500 transition">✕</button>
+                <div class="max-h-28 overflow-y-auto space-y-1 bg-gradient-to-b from-orange-50 to-gray-50 p-3 rounded-lg border border-gray-200">
+                  <div v-for="(file, idx) in selectedFiles" :key="idx" class="flex justify-between items-center text-sm text-gray-700 py-2 px-3 bg-white rounded border border-gray-100">
+                    <span class="truncate font-medium">{{ file.name }}</span>
+                    <button @click="removeFile(idx)" class="text-gray-400 hover:text-red-600 ml-2 flex-shrink-0 font-bold">✕</button>
                   </div>
                 </div>
               </div>
             </section>
 
             <transition name="fade-slide">
-              <div v-if="selectedFiles.length > 0" class="space-y-8 py-6 border-t border-purple-50">
+              <div v-if="selectedFiles.length > 0" class="space-y-6 py-6 border-t border-gray-200 mt-6">
                 
-                <ConfigPanel 
-                  v-model="camposSelecionados"
-                  v-model:presetAtivo="presetAtivo"
-                  :camposDisponiveis="camposDisponiveis"
-                />
-
-                <section>
-                  <label class="block text-sm font-bold text-purple-700 mb-2">Nome da Planilha Excel</label>
-                  <div class="flex gap-2">
-                    <input v-model="nomePlanilha" type="text" placeholder="Ex: Notas_Entrada_Jan" 
-                           class="flex-1 rounded-lg border-purple-200 focus:ring-purple-600 focus:border-purple-600 p-2.5 text-sm" />
-                    <button @click="usarSugestao" class="bg-purple-100 text-purple-700 px-4 py-2 rounded-lg text-xs font-bold hover:bg-purple-200 transition">Sugestão</button>
+                <details class="bg-gradient-to-r from-orange-50 to-gray-50 rounded-lg p-4 border border-gray-200 cursor-pointer hover:bg-orange-100/50 transition shadow-sm">
+                  <summary class="font-bold text-gray-900 select-none flex items-center gap-2 text-base">
+                    <svg class="w-5 h-5 text-orange-700" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M9 4.804C9 4.393 9.448 4 10 4s1 .393 1 .804v4.392h4.392c.411 0 .804.448.804 1 0 .552-.393 1-.804 1H11v4.392c0 .411-.448.804-1 .804s-1-.393-1-.804v-4.392H4.608c-.411 0-.804-.448-.804-1 0-.552.393-1 .804-1h4.392V4.804z"/>
+                    </svg>
+                    Opções avançadas
+                  </summary>
+                  <div class="mt-4 pt-4 border-t border-gray-300">
+                    <ConfigPanel 
+                      v-model="camposSelecionados"
+                      v-model:presetAtivo="presetAtivo"
+                      :camposDisponiveis="camposDisponiveis"
+                    />
                   </div>
-                </section>
+                </details>
+
+                <div>
+                  <label class="block text-sm font-bold text-gray-900 mb-3">Nome do arquivo Excel</label>
+                  <div class="flex gap-2">
+                    <input v-model="nomePlanilha" type="text" placeholder="Ex: NF-e_Janeiro_2025" 
+                           class="flex-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent p-3 text-sm font-medium bg-white hover:border-orange-400 transition" />
+                    <button @click="usarSugestao" class="text-gray-700 border-2 border-gray-300 px-4 py-3 rounded-lg hover:bg-gray-50 hover:border-orange-400 transition text-sm font-bold bg-white">Auto</button>
+                  </div>
+                </div>
 
                 <button 
                   @click="enviarArquivos" 
                   :disabled="loading"
-                  class="w-full bg-purple-600 text-white py-4 rounded-xl hover:bg-purple-700 disabled:bg-gray-300 font-extrabold shadow-lg transition-all flex items-center justify-center gap-3 text-lg">
+                  class="w-full bg-gradient-to-r from-orange-700 to-orange-800 text-white py-4 rounded-lg hover:from-orange-800 hover:to-orange-900 disabled:from-gray-400 disabled:to-gray-400 disabled:cursor-not-allowed font-bold transition-all flex items-center justify-center gap-2 text-base shadow-lg hover:shadow-xl">
                   <span v-if="loading" class="animate-spin">↻</span>
-                  {{ loading ? 'Processando XMLs...' : 'Gerar e Baixar Planilha' }}
+                  {{ loading ? 'Processando seus XMLs...' : '⚡ Converter e Baixar' }}
                 </button>
               </div>
             </transition>
 
-            <div v-if="mensagem" :class="['mt-4 p-4 rounded-xl text-sm font-bold shadow-inner', mensagem.includes('✅') ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-red-50 text-red-700 border border-red-200']">
+            <div v-if="mensagem" :class="['mt-6 p-4 rounded-lg text-sm font-semibold border-2', mensagem.includes('✅') ? 'bg-amber-50 text-amber-900 border-amber-300' : 'bg-red-100 text-red-900 border-red-300']">
               {{ mensagem }}
             </div>
 
           </div>
         </div>
-      </div>
     </main>
   </div>
 </template>

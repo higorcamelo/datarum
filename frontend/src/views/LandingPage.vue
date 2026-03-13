@@ -1,375 +1,328 @@
 <template>
-  <div class="min-h-screen bg-white">
-  <header class="bg-white/95 backdrop-blur fixed w-full top-0 z-50 border-b border-gray-100">
-    <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between items-center py-4">
+  <div class="min-h-screen bg-gradient-to-b from-white via-white to-orange-50">
+    <!-- Padrão subtle de fundo -->
+    <div class="absolute inset-0 opacity-[0.02] pointer-events-none" style="background-image: radial-gradient(circle at 1px 1px, currentColor 0.5px, transparent 0.5px); background-size: 40px 40px;"></div>
+    
+  <header class="relative bg-white/95 fixed w-full top-0 z-50 border-b border-gray-200">
+    <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center py-3">
         
-        <router-link to="/" class="flex items-center gap-3 group">
-          <span class="inline-flex items-center justify-center w-10 h-10 bg-purple-600 rounded-full text-white text-xl font-bold group-hover:bg-purple-700 transition">D</span>
-          <div class="flex flex-col">
-            <span class="text-xl font-bold text-purple-700">Datarum</span>
-            <span class="text-xs text-purple-600 hidden sm:block">Automação fiscal inteligente</span>
+        <router-link to="/" class="flex items-center gap-2 group">
+          <span class="inline-flex items-center justify-center w-10 h-10 bg-gradient-to-br from-orange-700 to-orange-800 rounded-lg text-white font-black text-base group-hover:shadow-lg transition">D</span>
+          <div>
+            <span class="text-lg font-black text-gray-900" style="letter-spacing: -0.5px;">Datarum</span>
           </div>
         </router-link>
 
-        <div class="flex items-center gap-4">
-          <button 
-            aria-label="Ir para Recursos" 
-            @click="handleNav('features')" 
-            class="hidden md:block text-gray-600 hover:text-purple-600 transition"
-          >
-            Recursos
-          </button>
-          
-          <button 
-            aria-label="Ir para Como Funciona" 
-            @click="handleNav('how-it-works')" 
-            class="hidden md:block text-gray-600 hover:text-purple-600 transition"
-          >
-            Como Funciona
-          </button>
-
-          <button 
-            aria-label="Começar" 
-            @click="$router.push('/conversor')" 
-            class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition font-medium"
-          >
-            Começar
-          </button>
-        </div>
+        <button 
+          aria-label="Começar" 
+          @click="$router.push('/conversor')" 
+          class="bg-gradient-to-r from-orange-700 to-orange-800 text-white px-6 py-2.5 rounded-lg hover:shadow-lg hover:from-orange-800 hover:to-orange-900 transition font-semibold text-sm"
+        >
+          Abrir Aplicativo
+        </button>
       </div>
     </nav>
   </header>
 
-    <section class="pt-20 pb-16 bg-gradient-to-br from-purple-50 via-white to-purple-100">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid lg:grid-cols-2 gap-12 items-center">
-          <div class="text-center lg:text-left">
-            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-purple-800 leading-tight mb-6">
-              Datarum — converta XMLs em planilhas localmente
-            </h1>
-            <p class="text-xl text-gray-600 mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-              Processamento local no seu navegador — simples, confiável e sem instalações.
-            </p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <button aria-label="Começar" @click="$router.push('/conversor')" class="bg-purple-700 hover:bg-purple-800 text-white font-semibold py-4 px-8 rounded-lg shadow-lg transition text-lg">
-                Começar
-              </button>
-              <button aria-label="Ver demonstração" @click="scrollTo('demo')" class="border-2 border-purple-600 text-purple-600 px-8 py-4 rounded-lg hover:bg-purple-50 transition font-semibold text-lg">
-                Ver Demonstração
-              </button>
-            </div>
-            <p class="text-sm text-gray-600 mt-4 text-center lg:text-left">
-              Uso direto • Sem cadastro • Processamento local
-            </p>
-            <div class="flex items-center gap-6 mt-6 justify-center lg:justify-start text-sm text-gray-500">
-              <div class="flex items-center gap-2">
-                <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                </svg>
-                <span>Sem Cadastro</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                </svg>
-                <span>Processamento Local</span>
-              </div>
-              <span class="font-medium text-sm text-purple-600">Envie feedback</span>
-            </div>
-          </div>
-          <div class="relative">
-            <div class="bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
-              <div class="bg-gray-50 rounded-lg p-4 mb-4">
-                <div class="flex items-center gap-2 mb-2">
-                  <div class="w-3 h-3 bg-red-400 rounded-full"></div>
-                  <div class="w-3 h-3 bg-yellow-400 rounded-full"></div>
-                  <div class="w-3 h-3 bg-green-400 rounded-full"></div>
-                  <span class="text-sm text-gray-500 ml-auto">XMLs NFe → Excel</span>
-                </div>
-                <div class="space-y-2">
-                  <div class="bg-purple-100 p-2 rounded text-sm text-purple-700">📄 nota_fiscal_001.xml</div>
-                  <div class="bg-purple-100 p-2 rounded text-sm text-purple-700">📄 nota_fiscal_002.xml</div>
-                  <div class="bg-purple-100 p-2 rounded text-sm text-purple-700">📄 nota_fiscal_003.xml</div>
-                </div>
-              </div>
-              <div class="text-center py-4">
-                <div class="inline-flex items-center gap-2 text-purple-600">
-                  <svg class="w-6 h-6 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-                  </svg>
-                  <span class="font-medium">Processando...</span>
-                </div>
-              </div>
-              <div class="bg-green-50 p-4 rounded-lg border border-green-200">
-                <div class="flex items-center gap-2 text-green-700">
-                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                  </svg>
-                  <span class="font-medium">📊 planilha_notas_fiscais.xlsx</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 max-w-5xl mx-auto">
-          <div class="bg-white p-6 rounded-lg shadow-lg text-center border border-gray-100">
-            <svg class="w-10 h-10 text-purple-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"/>
-            </svg>
-            <h3 class="text-xl font-semibold mb-2 text-gray-900">Upload em massa</h3>
-            <p class="text-gray-600">Arraste vários XMLs de uma vez.</p>
+  <section class="relative pt-24 pb-16 bg-white overflow-hidden">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div class="z-10">
+          <div class="inline-block mb-6 px-3 py-1.5 bg-orange-100 text-orange-700 rounded-full text-xs font-bold tracking-wide">
+            ⚡ Sem complicações
           </div>
           
-          <div class="bg-white p-6 rounded-lg shadow-lg text-center border border-gray-100">
-            <svg class="w-10 h-10 text-purple-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-            </svg>
-            <h3 class="text-xl font-semibold mb-2 text-gray-900">Processamento local</h3>
-            <p class="text-gray-600">Conversão automática, direto no navegador.</p>
-          </div>
-          
-          <div class="bg-white p-6 rounded-lg shadow-lg text-center border border-gray-100">
-            <svg class="w-10 h-10 text-purple-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-            <h3 class="text-xl font-semibold mb-2 text-gray-900">100% seguro e privado</h3>
-            <p class="text-gray-600">Seus dados ficam apenas no seu computador, zero uploads.</p>
-          </div>
-        </div>
-      </div>
-    </section>
+          <h1 class="text-6xl sm:text-7xl font-black text-gray-900 leading-tight mb-6" style="letter-spacing: -1px;">
+            Converta XMLs em segundos
+          </h1>
 
-    <section id="features" class="py-20 bg-white">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-          <h2 class="text-3xl font-bold text-gray-900">Recursos de Especialista</h2>
-        </div>
-        
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <FeatureCard
-            v-for="feature in features"
-            :key="feature.title"
-            :title="feature.title"
-            :description="feature.desc">
-            <template #icon>
-              <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="feature.icon"/>
+          <p class="text-xl text-gray-600 mb-10 leading-relaxed max-w-lg">
+            Processamento 100% local. Seus dados nunca saem do PC. Rápido, seguro, simples.
+          </p>
+
+          <div class="flex flex-col sm:flex-row gap-4 mb-10">
+            <button
+              aria-label="Começar"
+              @click="$router.push('/conversor')"
+              class="inline-flex items-center justify-center bg-gradient-to-r from-orange-700 to-orange-800 hover:from-orange-800 hover:to-orange-900 text-white font-bold py-4 px-8 rounded-lg transition shadow-lg hover:shadow-xl text-lg"
+            >
+              Abrir Aplicativo →
+            </button>
+            <button
+              @click="scrollTo('demo')"
+              class="inline-flex items-center justify-center border-2 border-gray-300 text-gray-700 hover:border-gray-400 hover:bg-gray-50 px-8 py-4 rounded-lg transition font-semibold"
+            >
+              Ver Demo
+            </button>
+          </div>
+
+          <div class="flex flex-col gap-3 text-sm">
+            <div class="flex items-center gap-2 text-gray-600">
+              <svg class="w-5 h-5 text-orange-700 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
               </svg>
-            </template>
-          </FeatureCard>
-        </div>
-      </div>
-    </section>
-
-    <section id="how-it-works" class="py-20 bg-gray-50">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-          <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-            Como funciona?
-          </h2>
-          <p class="text-xl text-gray-600">
-            Um fluxo inteligente desenhado para a sua produtividade
-          </p>
-        </div>
-
-        <div class="grid md:grid-cols-3 gap-8">
-          <div class="text-center">
-            <div class="w-16 h-16 bg-purple-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 text-2xl font-bold shadow-lg transform -rotate-3">
-              1
+              <span>Nenhum cadastro obrigatório</span>
             </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-4">Importe seus XMLs</h3>
-            <p class="text-gray-600 mb-6 text-sm">
-              Selecione múltiplos arquivos de NF-e de uma vez. O sistema identifica os dados instantaneamente.
-            </p>
-            <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
-              <div class="border-2 border-dashed border-purple-200 rounded-lg p-6 bg-purple-50/30">
-                <svg class="w-10 h-10 text-purple-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
-                </svg>
-                <p class="text-[10px] uppercase tracking-wider font-bold text-purple-400">Upload de Arquivos</p>
-              </div>
+            <div class="flex items-center gap-2 text-gray-600">
+              <svg class="w-5 h-5 text-orange-700 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              </svg>
+              <span>Processamento local (dados no seu PC)</span>
+            </div>
+            <div class="flex items-center gap-2 text-gray-600">
+              <svg class="w-5 h-5 text-orange-700 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              </svg>
+              <span>Compatível com NF-e v4.00</span>
             </div>
           </div>
-
-          <div class="text-center">
-            <div class="w-16 h-16 bg-purple-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 text-2xl font-bold shadow-lg">
-              2
-            </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-4">Escolha os Dados</h3>
-            <p class="text-gray-600 mb-6 text-sm">
-              Use um <b>Preset</b> (Básico, Fiscal, Completo) ou selecione apenas as colunas que você realmente precisa.
-            </p>
-            <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+        </div>
+        
+        <!-- Visual lado direito -->
+        <div class="relative hidden lg:block">
+          <div class="absolute -inset-4 bg-gradient-to-br from-orange-100 to-amber-50 rounded-2xl blur-2xl opacity-40"></div>
+          <div class="relative bg-white rounded-2xl shadow-2xl p-8 border border-gray-200">
+            <div class="bg-gray-50 rounded-lg p-4 mb-4 border border-gray-100">
+              <div class="flex items-center gap-2 mb-3">
+                <div class="w-3 h-3 bg-red-400 rounded-full"></div>
+                <div class="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                <div class="w-3 h-3 bg-green-400 rounded-full"></div>
+                <span class="text-xs text-gray-500 ml-auto">XMLs → Excel</span>
+              </div>
               <div class="space-y-2">
-                <div class="flex items-center gap-2 p-2 bg-purple-50 rounded-md border border-purple-100">
-                  <div class="w-3 h-3 rounded-full bg-purple-600"></div>
-                  <div class="h-2 w-16 bg-purple-200 rounded"></div>
-                  <div class="ml-auto text-[10px] font-bold text-purple-600 italic">Preset Ativo</div>
-                </div>
-                <div class="grid grid-cols-2 gap-2">
-                  <div class="h-6 border border-gray-100 rounded flex items-center px-2 gap-1">
-                    <div class="w-2 h-2 bg-green-400 rounded-sm"></div>
-                    <div class="h-1 w-8 bg-gray-200 rounded"></div>
-                  </div>
-                  <div class="h-6 border border-gray-100 rounded flex items-center px-2 gap-1">
-                    <div class="w-2 h-2 bg-green-400 rounded-sm"></div>
-                    <div class="h-1 w-8 bg-gray-200 rounded"></div>
-                  </div>
-                </div>
+                <div class="bg-orange-50 px-3 py-2 rounded text-xs text-orange-700 font-medium">📄 nota_001.xml</div>
+                <div class="bg-orange-50 px-3 py-2 rounded text-xs text-orange-700 font-medium">📄 nota_002.xml</div>
+                <div class="bg-orange-50 px-3 py-2 rounded text-xs text-orange-700 font-medium">📄 nota_003.xml</div>
               </div>
             </div>
-          </div>
-
-          <div class="text-center">
-            <div class="w-16 h-16 bg-purple-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 text-2xl font-bold shadow-lg rotate-3">
-              3
+            <div class="text-center py-6">
+              <div class="inline-flex items-center gap-2 text-orange-700">
+                <svg class="w-6 h-6 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                </svg>
+                <span class="font-semibold text-sm">Convertendo...</span>
+              </div>
             </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-4">Baixe seu Excel</h3>
-            <p class="text-gray-600 mb-6 text-sm">
-              O Datarum gera uma planilha limpa, formatada e pronta para análise ou importação em outros sistemas.
-            </p>
-            <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
-              <div class="bg-green-50 border border-green-200 rounded-lg p-3 flex items-center justify-center gap-3">
-                <div class="bg-green-600 p-1.5 rounded-lg text-white">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                  </svg>
-                </div>
-                <div class="text-left">
-                  <p class="text-[10px] font-bold text-green-800 leading-none">RELATORIO.XLSX</p>
-                  <p class="text-[9px] text-green-600">Download concluído</p>
-                </div>
+            <div class="bg-green-50 px-4 py-3 rounded-lg border border-green-200">
+              <div class="flex items-center gap-2 text-green-700 text-sm font-semibold">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                </svg>
+                📊 relatorio.xlsx
               </div>
             </div>
           </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section id="demo" class="py-20 bg-white">
+    <section id="demo" class="py-24 bg-gradient-to-b from-white via-blue-50 to-white relative">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
-          <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-            Veja o que é extraído dos XMLs
+          <h2 class="text-5xl sm:text-6xl font-black text-gray-900 mb-4" style="letter-spacing: -1px;">
+            Veja exatamente o que é extraído
           </h2>
-          <p class="text-xl text-gray-600">
-            Todas as informações importantes organizadas em colunas
+          <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+            Suas planilhas organizadas, limpas e prontas para análise ou importação em qualquer sistema
           </p>
         </div>
 
-        <div class="bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden">
-          <div class="bg-gray-50 px-6 py-4 border-b border-gray-200">
+        <div class="bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden hover:shadow-3xl transition">
+          <div class="bg-gradient-to-r from-gray-50 to-orange-50 px-6 py-4 border-b border-gray-200">
             <div class="flex items-center gap-2">
               <div class="w-3 h-3 bg-red-400 rounded-full"></div>
               <div class="w-3 h-3 bg-yellow-400 rounded-full"></div>
               <div class="w-3 h-3 bg-green-400 rounded-full"></div>
-              <span class="text-sm text-gray-600 ml-4">planilha_nfe_exemplo.xlsx</span>
+              <span class="text-sm text-gray-600 ml-4 font-medium">planilha_nfe_exemplo.xlsx</span>
             </div>
           </div>
           <div class="overflow-x-auto">
             <table class="w-full text-sm">
-              <thead class="bg-purple-50">
+              <thead class="bg-gradient-to-r from-orange-50 to-amber-100 border-b border-gray-200">
                 <tr>
-                  <th class="px-4 py-3 text-left font-semibold text-purple-700">Nº Nota</th>
-                  <th class="px-4 py-3 text-left font-semibold text-purple-700">Data Emissão</th>
-                  <th class="px-4 py-3 text-left font-semibold text-purple-700">CNPJ Emitente</th>
-                  <th class="px-4 py-3 text-left font-semibold text-purple-700">Razão Social</th>
-                  <th class="px-4 py-3 text-left font-semibold text-purple-700">Valor Total</th>
-                  <th class="px-4 py-3 text-left font-semibold text-purple-700">Série</th>
+                  <th class="px-6 py-4 text-left font-bold text-orange-900">Nº Nota</th>
+                  <th class="px-6 py-4 text-left font-bold text-orange-900">Data Emissão</th>
+                  <th class="px-6 py-4 text-left font-bold text-orange-900">CNPJ Emitente</th>
+                  <th class="px-6 py-4 text-left font-bold text-orange-900">Razão Social</th>
+                  <th class="px-6 py-4 text-left font-bold text-orange-900">Valor Total</th>
+                  <th class="px-6 py-4 text-left font-bold text-orange-900">Série</th>
                 </tr>
               </thead>
-              <tbody class="divide-y divide-gray-200">
-                <tr class="hover:bg-gray-50">
-                  <td class="px-4 py-3">000000123</td>
-                  <td class="px-4 py-3">15/07/2025</td>
-                  <td class="px-4 py-3">12.345.678/0001-90</td>
-                  <td class="px-4 py-3">Empresa Exemplo Ltda</td>
-                  <td class="px-4 py-3">R$ 1.250,00</td>
-                  <td class="px-4 py-3">1</td>
+              <tbody class="divide-y divide-gray-100">
+                <tr class="hover:bg-orange-50 transition">
+                  <td class="px-6 py-4 font-semibold text-gray-900">000000123</td>
+                  <td class="px-6 py-4 text-gray-600">15/07/2025</td>
+                  <td class="px-6 py-4 text-gray-600 font-mono text-xs">12.345.678/0001-90</td>
+                  <td class="px-6 py-4 text-gray-700">Empresa Exemplo Ltda</td>
+                  <td class="px-6 py-4 font-semibold text-green-700">R$ 1.250,00</td>
+                  <td class="px-6 py-4 text-gray-600">1</td>
                 </tr>
-                <tr class="hover:bg-gray-50">
-                  <td class="px-4 py-3">000000124</td>
-                  <td class="px-4 py-3">16/07/2025</td>
-                  <td class="px-4 py-3">98.765.432/0001-10</td>
-                  <td class="px-4 py-3">Fornecedor ABC S.A.</td>
-                  <td class="px-4 py-3">R$ 3.780,50</td>
-                  <td class="px-4 py-3">1</td>
+                <tr class="hover:bg-orange-50 transition">
+                  <td class="px-6 py-4 font-semibold text-gray-900">000000124</td>
+                  <td class="px-6 py-4 text-gray-600">16/07/2025</td>
+                  <td class="px-6 py-4 text-gray-600 font-mono text-xs">98.765.432/0001-10</td>
+                  <td class="px-6 py-4 text-gray-700">Fornecedor ABC S.A.</td>
+                  <td class="px-6 py-4 font-semibold text-green-700">R$ 3.780,50</td>
+                  <td class="px-6 py-4 text-gray-600">1</td>
                 </tr>
-                <tr class="hover:bg-gray-50">
-                  <td class="px-4 py-3">000000125</td>
-                  <td class="px-4 py-3">17/07/2025</td>
-                  <td class="px-4 py-3">11.222.333/0001-44</td>
-                  <td class="px-4 py-3">Produtos XYZ Eireli</td>
-                  <td class="px-4 py-3">R$ 850,25</td>
-                  <td class="px-4 py-3">1</td>
+                <tr class="hover:bg-orange-50 transition">
+                  <td class="px-6 py-4 font-semibold text-gray-900">000000125</td>
+                  <td class="px-6 py-4 text-gray-600">17/07/2025</td>
+                  <td class="px-6 py-4 text-gray-600 font-mono text-xs">11.222.333/0001-44</td>
+                  <td class="px-6 py-4 text-gray-700">Produtos XYZ Eireli</td>
+                  <td class="px-6 py-4 font-semibold text-green-700">R$ 850,25</td>
+                  <td class="px-6 py-4 text-gray-600">1</td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <div class="bg-gray-50 px-6 py-4 border-t border-gray-200">
-            <p class="text-sm text-gray-600 text-center">
-              E mais 15+ campos incluindo: Chave NFe, CEP, UF, Valor ICMS, Valor IPI, Produtos, etc.
+          <div class="bg-gradient-to-r from-gray-50 to-orange-50 px-6 py-4 border-t border-gray-200">
+            <p class="text-sm text-gray-600 text-center font-medium">
+              E mais 15+ campos: Chave NFe, CEP, UF, Valor ICMS, IPI, Produtos, CFOP, e muito mais...
             </p>
           </div>
         </div>
       </div>
     </section>
 
-    <section id="roadmap" class="py-20 bg-gradient-to-br from-gray-50 to-gray-100">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-          <div class="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-            </svg>
-            Em desenvolvimento
-          </div>
-          <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Próximas versões</h2>
-          <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-            Baseado no seu feedback, vamos evoluir o Datarum com funcionalidades que realmente importam
+    <section id="roadmap" class="py-24 bg-gradient-to-b from-white to-gray-50">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-20">
+          <h2 class="text-5xl sm:text-6xl font-black text-gray-900 mb-4" style="letter-spacing: -1px;">
+            Roadmap
+          </h2>
+          <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+            Veja o que já está pronto e o que vem por aí
           </p>
         </div>
 
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-      <RoadmapCard
-        v-for="item in roadmapItems"
-        :key="item.title"
-        v-bind="item"
-        />
-    </div>
-  </div>
-</section>
-
-    <footer class="bg-gray-900 text-white py-12">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center">
-          <div class="flex items-center justify-center gap-3 mb-4">
-            <span class="inline-flex items-center justify-center w-10 h-10 bg-purple-600 rounded-full text-white text-xl font-bold">D</span>
-            <span class="text-2xl font-bold">Datarum</span>
-          </div>
-          <p class="text-gray-400 mb-6">
-            Conversão de XML para planilhas
-          </p>
-          <div class="flex justify-center gap-8 text-sm text-gray-400 mb-8">
-            <button @click="scrollTo('features')" class="hover:text-white transition">Recursos</button>
-            <button @click="scrollTo('how-it-works')" class="hover:text-white transition">Como Funciona</button>
-            <button @click="$router.push('/conversor')" class="hover:text-white transition">Abrir Aplicativo</button>
-          </div>
-          <div class="border-t border-gray-800 pt-8">
-            <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mb-4">
-              <p class="text-gray-500 text-sm">
-                &copy; {{ new Date().getFullYear() }} Datarum. Todos os direitos reservados.
-              </p>
-              <div class="flex items-center gap-2 text-blue-400 text-sm">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                </svg>
-                <span>Versão 1.0</span>
+        <div class="grid md:grid-cols-3 gap-8">
+          <!-- v1.0 - Released -->
+          <div class="relative">
+            <div class="absolute top-0 -left-4 w-8 h-8 bg-gradient-to-br from-green-400 to-green-600 rounded-full shadow-lg flex items-center justify-center">
+              <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <div class="ml-8 bg-white rounded-xl shadow-lg border border-gray-200 hover:shadow-xl hover:border-green-200 transition p-6">
+              <div class="inline-block mb-3 px-3 py-1 bg-green-100 text-green-700 rounded-lg text-xs font-bold">
+                ✓ Disponível
               </div>
+              <h3 class="text-xl font-black text-gray-900 mb-2">v1.0</h3>
+              <ul class="space-y-2 text-gray-600 text-sm">
+                <li class="flex items-center gap-2">
+                  <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                  <span>Extração de XML em Excel</span>
+                </li>
+                <li class="flex items-center gap-2">
+                  <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                  <span>Interface simples</span>
+                </li>
+                <li class="flex items-center gap-2">
+                  <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                  <span>Sem necessidade de login</span>
+                </li>
+              </ul>
             </div>
           </div>
+
+          <!-- v1.1 - Soon -->
+          <div class="relative">
+            <div class="absolute top-0 -left-4 w-8 h-8 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full shadow-lg flex items-center justify-center">
+              <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+              </svg>
+            </div>
+            <div class="ml-8 bg-white rounded-xl shadow-lg border border-gray-200 hover:shadow-xl hover:border-orange-200 transition p-6">
+              <div class="inline-block mb-3 px-3 py-1 bg-blue-100 text-blue-700 rounded-lg text-xs font-bold">
+                → Em desenvolvimento
+              </div>
+              <h3 class="text-xl font-black text-gray-900 mb-2">v1.1</h3>
+              <ul class="space-y-2 text-gray-600 text-sm">
+                <li class="flex items-center gap-2">
+                  <span class="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
+                  <span>Histórico de conversões</span>
+                </li>
+                <li class="flex items-center gap-2">
+                  <span class="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
+                  <span>Presets personalizados</span>
+                </li>
+                <li class="flex items-center gap-2">
+                  <span class="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
+                  <span>Template customizado</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- v2.0+ - Future -->
+          <div class="relative">
+            <div class="absolute top-0 -left-4 w-8 h-8 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full shadow-lg flex items-center justify-center">
+              <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.172 16.172a4 4 0 015.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5m0-2.828a4 4 0 015.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5"/>
+              </svg>
+            </div>
+            <div class="ml-8 bg-white rounded-xl shadow-lg border border-gray-200 hover:shadow-xl hover:border-purple-200 transition p-6 opacity-75">
+              <div class="inline-block mb-3 px-3 py-1 bg-gray-100 text-gray-700 rounded-lg text-xs font-bold">
+                ◯ Futuro
+              </div>
+              <h3 class="text-xl font-black text-gray-900 mb-2">v2.0+</h3>
+              <ul class="space-y-2 text-gray-600 text-sm">
+                <li class="flex items-center gap-2">
+                  <span class="w-1.5 h-1.5 bg-purple-500 rounded-full"></span>
+                  <span>Processamento em lote</span>
+                </li>
+                <li class="flex items-center gap-2">
+                  <span class="w-1.5 h-1.5 bg-purple-500 rounded-full"></span>
+                  <span>API para integrações</span>
+                </li>
+                <li class="flex items-center gap-2">
+                  <span class="w-1.5 h-1.5 bg-purple-500 rounded-full"></span>
+                  <span>Análise de dados avançada</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="bg-gradient-to-b from-gray-900 to-gray-950 text-white py-12 border-t border-gray-800">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid md:grid-cols-3 gap-12 mb-12">
+          <div>
+            <div class="flex items-center gap-2 mb-4">
+            <span class="inline-flex items-center justify-center w-8 h-8 bg-gradient-to-br from-orange-700 to-orange-800 rounded-lg text-white font-black text-xs">D</span>
+              <span class="text-sm font-bold">Datarum</span>
+            </div>
+            <p class="text-gray-400 text-sm">
+              Converta XMLs em planilhas com velocidade e segurança. 100% local.
+            </p>
+          </div>
+          <div>
+            <h4 class="font-bold text-sm mb-4 text-orange-700">Produto</h4>
+            <ul class="space-y-2 text-sm">
+              <li><button @click="$router.push('/conversor')" class="text-gray-400 hover:text-white transition">Abrir Aplicativo</button></li>
+              <li><a href="#demo" @click="scrollTo('demo')" class="text-gray-400 hover:text-white transition">Ver Demo</a></li>
+              <li><a href="#roadmap" @click="scrollTo('roadmap')" class="text-gray-400 hover:text-white transition">Roadmap</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-bold text-sm mb-4 text-orange-700">Sobre</h4>
+            <ul class="space-y-2 text-sm">
+              <li><a href="#" class="text-gray-400 hover:text-white transition">GitHub</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white transition">Contato</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white transition">Documentação</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="border-t border-gray-800 pt-8 flex flex-col sm:flex-row items-center justify-between">
+          <p class="text-gray-500 text-sm">© 2025 Datarum. Feito com ❤️ para converter XMLs.</p>
+          <button @click="$router.push('/conversor')" class="mt-4 sm:mt-0 inline-flex items-center gap-2 bg-gradient-to-r from-orange-700 to-orange-800 hover:from-orange-800 hover:to-orange-900 text-white px-6 py-2.5 rounded-lg transition font-semibold text-sm">
+            Começar Agora →
+          </button>
         </div>
       </div>
     </footer>
@@ -377,96 +330,18 @@
 </template>
 
 <script setup>
-import { useRouter, useRoute } from 'vue-router';
-import RoadmapCard from '../components/RoadmapCard.vue';
-import FeatureCard from '../components/FeatureCard.vue';
+import { useRouter } from 'vue-router';
 
 const router = useRouter();
-const route = useRoute();
-// Dados das Features
-const features = [
-  { title: "Super Rápido", desc: "Suporta múltiplos arquivos localmente.", icon: "M13 10V3L4 14h7v7l9-11h-7z" },
-  { title: "Compatibilidade", desc: "Formatos NFe comuns (v4.00).", icon: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" },
-  { title: "100% Seguro", desc: "Dados nunca saem do seu computador.", icon: "M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" }
-];
-
-// Array do Roadmap 
-const roadmapItems = [
-  { 
-    title: "Datarum v1.0", 
-    description: "Conversão XML para Excel com seleção de colunas, ordenação personalizada e sumário de totais.", 
-    status: "DISPONÍVEL", 
-    type: "success", 
-    icon: "M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" 
-  },
-  { 
-    title: "Relatórios Básicos", 
-    description: "Totais por CFOP, fornecedor e resumo fiscal inteligente.", 
-    status: "PLANEJADO", 
-    type: "warning", 
-    icon: "M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" 
-  },
-  { 
-    title: "Insights Automáticos", 
-    description: "Análise de padrões de compra e detecção de ICMS ST.", 
-    status: "FUTURO", 
-    type: "neutral", 
-    icon: "M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" 
-  },
-  { 
-    title: "Recursos Colaborativos", 
-    description: "Upload por pasta e histórico de exportações.", 
-    status: "FUTURO", 
-    type: "neutral", 
-    icon: "M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" 
-  },
-  { 
-    title: "Integrações", 
-    description: "APIs e conectores com ERPs conforme a demanda.", 
-    status: "FUTURO", 
-    type: "neutral", 
-    icon: "M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2z" 
-  }
-];
 
 const scrollTo = (id) => {
   const element = document.getElementById(id);
   if (element) {
-    // Offset de 80px por causa do header fixo
-    const y = element.getBoundingClientRect().top + window.pageYOffset - 80;
-    window.scrollTo({ top: y, behavior: 'smooth' });
-  }
-};
-
-const handleNav = async (id) => {
-  if (route.path !== '/') {
-    await router.push('/');
-    setTimeout(() => scrollTo(id), 300);
-  } else {
-    scrollTo(id);
+    element.scrollIntoView({ behavior: 'smooth' });
   }
 };
 </script>
 
- <style scoped>
-
-/* Animações e estilos adicionais*/
-.animate-pulse {
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
-/* Respeitar preferência de movimento reduzido */
-@media (prefers-reduced-motion: reduce) {
-  .animate-pulse,
-  .animate-spin {
-    animation: none !important;
-  }
-}
+<style scoped>
+/* Estilos mínimos para landing simples */
 </style> 

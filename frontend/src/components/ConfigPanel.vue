@@ -1,45 +1,45 @@
 <template>
-  <div class="bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl p-6 border border-purple-200">
-    <div class="flex items-center gap-3 mb-4">
-      <div class="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center">
-        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"/>
+  <div class="space-y-5">
+    <div>
+      <label class="block text-sm font-bold text-gray-900 mb-3 flex items-center gap-2">
+        <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z"/>
         </svg>
-      </div>
-      <h3 class="text-lg font-bold text-purple-700">Personalizar Extração</h3>
-    </div>
-
-    <div class="mb-6">
-      <label class="block text-sm font-semibold text-purple-700 mb-3">Presets de Colunas</label>
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        Preset de colunas
+      </label>
+      <div class="grid grid-cols-3 gap-2">
         <button v-for="p in ['basico', 'completo', 'fiscal']" :key="p"
           @click="$emit('update:presetAtivo', p)"
-          :class="['p-3 rounded-lg border transition-all text-sm capitalize font-medium', 
-                   presetAtivo === p ? 'bg-purple-600 text-white shadow-md border-purple-600' : 'bg-white text-purple-700 border-purple-200 hover:border-purple-400']">
-          {{ p }}
+          :class="['p-3 rounded-lg border-2 transition-all text-sm font-bold capitalize', 
+                   presetAtivo === p ? 'bg-gradient-to-br from-orange-700 to-orange-800 text-white border-orange-800 shadow-md' : 'bg-white text-gray-700 border-gray-300 hover:border-orange-400 hover:bg-orange-50']">
+          {{ p === 'basico' ? '📋' : p === 'completo' ? '📊' : '💰' }} {{ p }}
         </button>
       </div>
     </div>
 
-    <div v-show="mostrarDetalhes" class="space-y-4">
-      <div v-for="(campos, grupo) in camposDisponiveis" :key="grupo" class="bg-white rounded-lg p-4 border border-purple-100 shadow-sm">
-        <h4 class="text-sm font-bold text-purple-700 mb-3 capitalize border-b border-purple-50 pb-1">{{ grupo }}</h4>
-        <div class="grid grid-cols-2 gap-3">
-          <label v-for="campo in campos" :key="campo.id" class="flex items-center gap-2 text-sm cursor-pointer hover:text-purple-600 transition-colors">
-            <input type="checkbox" 
-                   :value="campo.id" 
-                   :checked="modelValue.includes(campo.id)"
-                   @change="toggleField(campo.id)"
-                   class="rounded border-purple-300 text-purple-600 focus:ring-purple-500">
-            <span class="text-gray-700">{{ campo.nome }}</span>
-          </label>
+    <details class="bg-gradient-to-br from-orange-50 to-gray-50 rounded-lg p-4 cursor-pointer border border-gray-200 hover:border-orange-300 transition">
+      <summary class="font-bold text-sm text-gray-900 select-none flex items-center gap-2 text-base">
+        <svg class="w-5 h-5 text-orange-700" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 17v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.454z" clip-rule="evenodd"/>
+        </svg>
+        Personalizar colunas
+      </summary>
+      <div v-show="mostrarDetalhes" class="space-y-4 mt-4 pt-4 border-t border-gray-300">
+        <div v-for="(campos, grupo) in camposDisponiveis" :key="grupo" class="text-sm">
+          <h4 class="font-bold text-gray-900 mb-3 capitalize text-base">{{ grupo }}</h4>
+          <div class="grid grid-cols-2 gap-3">
+            <label v-for="campo in campos" :key="campo.id" class="flex items-center gap-3 text-sm cursor-pointer p-2 rounded-lg hover:bg-white transition">
+              <input type="checkbox" 
+                     :value="campo.id" 
+                     :checked="modelValue.includes(campo.id)"
+                     @change="toggleField(campo.id)"
+                     class="w-4 h-4 rounded border-gray-300 text-orange-700 focus:ring-2 focus:ring-orange-500">
+              <span class="text-gray-700 font-medium">{{ campo.nome }}</span>
+            </label>
+          </div>
         </div>
       </div>
-    </div>
-    
-    <button @click="mostrarDetalhes = !mostrarDetalhes" class="mt-4 text-xs text-purple-600 font-bold hover:text-purple-800 underline w-full text-center uppercase tracking-wider">
-      {{ mostrarDetalhes ? '↑ Ocultar Seleção Manual' : '↓ Ver Todos os Campos (Seleção Manual)' }}
-    </button>
+    </details>
   </div>
 </template>
 
