@@ -38,7 +38,7 @@
           </h1>
 
           <p class="text-xl text-gray-600 mb-10 leading-relaxed max-w-lg">
-            Processamento 100% local. Seus dados nunca saem do PC. Rápido, seguro, simples.
+            Processamento seguro, rápido e simples. Seus arquivos não são armazenados.
           </p>
 
           <div class="flex flex-col sm:flex-row gap-4 mb-10">
@@ -68,7 +68,7 @@
               <svg class="w-5 h-5 text-orange-700 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
               </svg>
-              <span>Processamento local (dados no seu PC)</span>
+              <span>Personalização de campos</span>
             </div>
             <div class="flex items-center gap-2 text-gray-600">
               <svg class="w-5 h-5 text-orange-700 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -109,7 +109,7 @@
                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                 </svg>
-                ✓ relatorio.xlsx
+                <span class="font-medium"> relatorio.xlsx</span>
               </div>
             </div>
           </div>
@@ -120,56 +120,188 @@
 
     <section id="demo" class="py-20 bg-gradient-to-b from-white via-orange-50 to-white relative">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-14">
+        <div class="text-center mb-16">
           <h2 class="text-5xl sm:text-6xl font-black text-gray-900 mb-4" style="letter-spacing: -1px;">
-            Veja exatamente o que é extraído
+            Transformação Automática
           </h2>
           <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-            Suas planilhas organizadas, limpas e prontas para análise ou importação em qualquer sistema
+            De XML confuso para planilhas organizadas e prontas para análise
           </p>
         </div>
 
-        <div class="bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden hover:shadow-3xl transition">
-          <div class="overflow-x-auto">
-            <table class="w-full text-sm">
-              <thead class="bg-gradient-to-r from-orange-50 to-amber-100 border-b border-gray-200">
-                <tr>
-                  <th class="px-6 py-4 text-left font-bold text-orange-900">Nº Nota</th>
-                  <th class="px-6 py-4 text-left font-bold text-orange-900">Data Emissão</th>
-                  <th class="px-6 py-4 text-left font-bold text-orange-900">CNPJ Emitente</th>
-                  <th class="px-6 py-4 text-left font-bold text-orange-900">Razão Social</th>
-                  <th class="px-6 py-4 text-left font-bold text-orange-900">Valor Total</th>
-                  <th class="px-6 py-4 text-left font-bold text-orange-900">Série</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-gray-100">
-                <tr class="hover:bg-orange-50 transition">
-                  <td class="px-6 py-4 font-semibold text-gray-900">000000123</td>
-                  <td class="px-6 py-4 text-gray-600">15/07/2025</td>
-                  <td class="px-6 py-4 text-gray-600 font-mono text-xs">12.345.678/0001-90</td>
-                  <td class="px-6 py-4 text-gray-700">Empresa Exemplo Ltda</td>
-                  <td class="px-6 py-4 font-semibold text-gray-900">R$ 1.250,00</td>
-                  <td class="px-6 py-4 text-gray-600">1</td>
-                </tr>
-                <tr class="hover:bg-orange-50 transition">
-                  <td class="px-6 py-4 font-semibold text-gray-900">000000124</td>
-                  <td class="px-6 py-4 text-gray-600">16/07/2025</td>
-                  <td class="px-6 py-4 text-gray-600 font-mono text-xs">98.765.432/0001-10</td>
-                  <td class="px-6 py-4 text-gray-700">Fornecedor ABC S.A.</td>
-                  <td class="px-6 py-4 font-semibold text-gray-900">R$ 3.780,50</td>
-                  <td class="px-6 py-4 text-gray-600">1</td>
-                </tr>
-                <tr class="hover:bg-orange-50 transition">
-                  <td class="px-6 py-4 font-semibold text-gray-900">000000125</td>
-                  <td class="px-6 py-4 text-gray-600">17/07/2025</td>
-                  <td class="px-6 py-4 text-gray-600 font-mono text-xs">11.222.333/0001-44</td>
-                  <td class="px-6 py-4 text-gray-700">Produtos XYZ Eireli</td>
-                  <td class="px-6 py-4 font-semibold text-gray-900">R$ 850,25</td>
-                  <td class="px-6 py-4 text-gray-600">1</td>
-                </tr>
-              </tbody>
-            </table>
+        <!-- Two-column demo: XML → Spreadsheet -->
+        <div class="grid lg:grid-cols-2 gap-8 mb-8">
+          
+          <!-- LEFT: XML Bruto (Feio) -->
+          <div class="bg-gray-900 rounded-xl border-2 border-gray-700 overflow-hidden shadow-2xl">
+              <div class="bg-gray-800 px-4 py-3 border-b border-gray-700 flex items-center gap-2">
+                <div class="w-2 h-2 bg-red-500 rounded-full"></div>
+                <div class="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span class="text-xs text-gray-400 ml-auto font-mono">nota_fiscal_001.xml</span>
+              </div>
+              <pre class="text-xs text-gray-300 p-4 overflow-x-auto font-mono leading-relaxed max-h-96 overflow-y-auto bg-gray-900" style="background: #1a1a1a;">&lt;?xml version="1.0"?&gt;
+&lt;NFe xmlns="http://www.portalfiscal.inf.br/nfe"&gt;
+  &lt;infNFe Id="NFe..." versao="4.00"&gt;
+    &lt;ide&gt;
+      &lt;cUF&gt;35&lt;/cUF&gt;
+      &lt;natOp&gt;VENDA DE MERCADORIA&lt;/natOp&gt;
+      &lt;serie&gt;1&lt;/serie&gt;
+      &lt;n_NF&gt;123&lt;/n_NF&gt;
+    &lt;/ide&gt;
+    &lt;emit&gt;
+      &lt;CNPJ&gt;12.345.678/0001-90&lt;/CNPJ&gt;
+      &lt;xNome&gt;EMPRESA EXEMPLO&lt;/xNome&gt;
+      &lt;enderEmit&gt;
+        &lt;xLgr&gt;Rua Principal&lt;/xLgr&gt;
+        &lt;xBairro&gt;Centro&lt;/xBairro&gt;
+        &lt;UF&gt;SP&lt;/UF&gt;
+      &lt;/enderEmit&gt;
+    &lt;/emit&gt;
+    &lt;dest&gt;
+      &lt;CNPJ&gt;98.765.432/0001-10&lt;/CNPJ&gt;
+      &lt;xNome&gt;CLIENTE LTDA&lt;/xNome&gt;
+    &lt;/dest&gt;
+    &lt;det nItem="1"&gt;
+      &lt;prod&gt;
+        &lt;xProd&gt;PRODUTO EXEMPLO A&lt;/xProd&gt;
+        &lt;qCom&gt;10.00&lt;/qCom&gt;
+        &lt;vUnCom&gt;125.00&lt;/vUnCom&gt;
+        &lt;vItem&gt;1250.00&lt;/vItem&gt;
+      &lt;/prod&gt;
+    &lt;/det&gt;
+    &lt;det nItem="2"&gt;
+      &lt;prod&gt;
+        &lt;xProd&gt;SERVICO DE CONSULTORIA&lt;/xProd&gt;
+        &lt;qCom&gt;2.00&lt;/qCom&gt;
+        &lt;vUnCom&gt;1890.25&lt;/vUnCom&gt;
+        &lt;vItem&gt;3780.50&lt;/vItem&gt;
+      &lt;/prod&gt;
+    &lt;/det&gt;
+    &lt;det nItem="3"&gt;
+      &lt;prod&gt;
+        &lt;xProd&gt;MATERIAL ESCRITORIO&lt;/xProd&gt;
+        &lt;qCom&gt;5.00&lt;/qCom&gt;
+        &lt;vUnCom&gt;170.05&lt;/vUnCom&gt;
+        &lt;vItem&gt;850.25&lt;/vItem&gt;
+      &lt;/prod&gt;
+    &lt;/det&gt;
+    &lt;det nItem="4"&gt;
+      &lt;prod&gt;
+        &lt;xProd&gt;LICENCA SOFTWARE&lt;/xProd&gt;
+        &lt;qCom&gt;1.00&lt;/qCom&gt;
+        &lt;vUnCom&gt;2450.00&lt;/vUnCom&gt;
+        &lt;vItem&gt;2450.00&lt;/vItem&gt;
+      &lt;/prod&gt;
+    &lt;/det&gt;
+    &lt;det nItem="5"&gt;
+      &lt;prod&gt;
+        &lt;xProd&gt;EQUIPAMENTO ELETRONICO&lt;/xProd&gt;
+        &lt;qCom&gt;3.00&lt;/qCom&gt;
+        &lt;vUnCom&gt;890.50&lt;/vUnCom&gt;
+        &lt;vItem&gt;2671.50&lt;/vItem&gt;
+      &lt;/prod&gt;
+    &lt;/det&gt;
+    &lt;det nItem="6"&gt;
+      &lt;prod&gt;
+        &lt;xProd&gt;MANUTENCAO PREVENTIVA&lt;/xProd&gt;
+        &lt;qCom&gt;4.00&lt;/qCom&gt;
+        &lt;vUnCom&gt;325.75&lt;/vUnCom&gt;
+        &lt;vItem&gt;1303.00&lt;/vItem&gt;
+      &lt;/prod&gt;
+    &lt;/det&gt;
+  &lt;/infNFe&gt;
+&lt;/NFe&gt;</pre>
+            </div>
+
+          <!-- RIGHT: Planilha Formatada (Bonita) -->
+          <div class="bg-white rounded-xl border-2 border-gray-200 overflow-hidden shadow-2xl">
+              <div class="bg-gradient-to-r from-orange-50 to-amber-100 px-4 py-3 border-b border-gray-200">
+                <span class="text-xs font-bold text-orange-900">relatorio_nfe.xlsx</span>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="w-full text-xs">
+                  <thead class="bg-orange-100 border-b border-gray-300">
+                    <tr>
+                      <th class="px-3 py-2 text-left font-bold text-orange-900">Nº NF</th>
+                      <th class="px-3 py-2 text-left font-bold text-orange-900">Data</th>
+                      <th class="px-3 py-2 text-left font-bold text-orange-900">CNPJ Emitente</th>
+                      <th class="px-3 py-2 text-left font-bold text-orange-900">Emitente</th>
+                      <th class="px-3 py-2 text-left font-bold text-orange-900">Produto</th>
+                      <th class="px-3 py-2 text-left font-bold text-orange-900">Qtd</th>
+                      <th class="px-3 py-2 text-right font-bold text-orange-900">Valor</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-gray-100 text-gray-700">
+                    <tr class="hover:bg-orange-50 transition-colors">
+                      <td class="px-3 py-2 font-semibold">123</td>
+                      <td class="px-3 py-2">15/07/2025</td>
+                      <td class="px-3 py-2 font-mono text-xs">12.345.678/0001-90</td>
+                      <td class="px-3 py-2 whitespace-nowrap">Empresa Exemplo</td>
+                      <td class="px-3 py-2 truncate">Produto Exemplo A</td>
+                      <td class="px-3 py-2 text-center">10.00</td>
+                      <td class="px-3 py-2 text-right font-semibold text-orange-700">R$ 1.250,00</td>
+                    </tr>
+                    <tr class="bg-gray-50 hover:bg-orange-50 transition-colors">
+                      <td class="px-3 py-2 font-semibold">123</td>
+                      <td class="px-3 py-2">15/07/2025</td>
+                      <td class="px-3 py-2 font-mono text-xs">12.345.678/0001-90</td>
+                      <td class="px-3 py-2 whitespace-nowrap">Empresa Exemplo</td>
+                      <td class="px-3 py-2 truncate">Serviço de Consultoria</td>
+                      <td class="px-3 py-2 text-center">2.00</td>
+                      <td class="px-3 py-2 text-right font-semibold text-orange-700">R$ 3.780,50</td>
+                    </tr>
+                    <tr class="hover:bg-orange-50 transition-colors">
+                      <td class="px-3 py-2 font-semibold">123</td>
+                      <td class="px-3 py-2">15/07/2025</td>
+                      <td class="px-3 py-2 font-mono text-xs">12.345.678/0001-90</td>
+                      <td class="px-3 py-2 whitespace-nowrap">Empresa Exemplo</td>
+                      <td class="px-3 py-2 truncate">Material Escritório</td>
+                      <td class="px-3 py-2 text-center">5.00</td>
+                      <td class="px-3 py-2 text-right font-semibold text-orange-700">R$ 850,25</td>
+                    </tr>
+                    <tr class="bg-gray-50 hover:bg-orange-50 transition-colors">
+                      <td class="px-3 py-2 font-semibold">123</td>
+                      <td class="px-3 py-2">15/07/2025</td>
+                      <td class="px-3 py-2 font-mono text-xs">12.345.678/0001-90</td>
+                      <td class="px-3 py-2 whitespace-nowrap">Empresa Exemplo</td>
+                      <td class="px-3 py-2 truncate">Licença Software</td>
+                      <td class="px-3 py-2 text-center">1.00</td>
+                      <td class="px-3 py-2 text-right font-semibold text-orange-700">R$ 2.450,00</td>
+                    </tr>
+                    <tr class="hover:bg-orange-50 transition-colors">
+                      <td class="px-3 py-2 font-semibold">123</td>
+                      <td class="px-3 py-2">15/07/2025</td>
+                      <td class="px-3 py-2 font-mono text-xs">12.345.678/0001-90</td>
+                      <td class="px-3 py-2 whitespace-nowrap">Empresa Exemplo</td>
+                      <td class="px-3 py-2 truncate">Equipamento Eletrônico</td>
+                      <td class="px-3 py-2 text-center">3.00</td>
+                      <td class="px-3 py-2 text-right font-semibold text-orange-700">R$ 2.671,50</td>
+                    </tr>
+                    <tr class="bg-gray-50 hover:bg-orange-50 transition-colors">
+                      <td class="px-3 py-2 font-semibold">123</td>
+                      <td class="px-3 py-2">15/07/2025</td>
+                      <td class="px-3 py-2 font-mono text-xs">12.345.678/0001-90</td>
+                      <td class="px-3 py-2 whitespace-nowrap">Empresa Exemplo</td>
+                      <td class="px-3 py-2 truncate">Manutenção Preventiva</td>
+                      <td class="px-3 py-2 text-center">4.00</td>
+                      <td class="px-3 py-2 text-right font-semibold text-orange-700">R$ 1.303,00</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="bg-gray-50 px-4 py-3 border-t border-gray-200 text-xs text-gray-600">
+                <span class="font-semibold">Total:</span> 3 notas | <span class="font-semibold text-orange-700">R$ 5.880,75</span>
+              </div>
           </div>
+
+        </div>
+
+        <!-- Bottom CTA -->
+        <div class="text-center pt-8">
+          <p class="text-lg text-gray-600 mb-4">
+           Processa múltiplos XMLs em segundos. Personalize quais campos extrair.
+          </p>
         </div>
       </div>
     </section>
@@ -264,9 +396,6 @@
         </div>
         <div class="border-t border-gray-800 pt-8 flex flex-col sm:flex-row items-center justify-between">
           <p class="text-gray-500 text-sm">© 2025 Datarum. Feito com ❤️ por Higor Camelo.</p>
-          <button @click="$router.push('/conversor')" class="mt-4 sm:mt-0 inline-flex items-center gap-2 bg-gradient-to-r from-orange-700 to-orange-800 hover:from-orange-800 hover:to-orange-900 focus:outline-none focus:ring-2 focus:ring-orange-500 text-white px-6 py-2.5 rounded-lg transition-all duration-200 font-semibold text-sm">
-            Começar Agora →
-          </button>
         </div>
       </div>
     </footer>
