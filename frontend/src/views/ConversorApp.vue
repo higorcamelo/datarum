@@ -34,7 +34,7 @@
                 @dragleave.prevent="dragOver = false"
                 @drop.prevent="handleDrop"
                 :class="['relative border-2 border-dashed rounded-xl p-8 transition-all duration-150 text-center cursor-pointer',
-                         dragOver ? 'border-orange-700 bg-orange-100 scale-105' : 'border-gray-300 hover:border-orange-400 hover:bg-orange-50']"">
+                         dragOver ? 'border-orange-700 bg-orange-100 scale-105' : 'border-gray-300 hover:border-orange-400 hover:bg-orange-50']">
                 <input type="file" multiple accept=".xml" @change="handleFileChange" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
                 <div class="space-y-3">
                   <svg class="mx-auto h-12 w-12 text-orange-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -74,9 +74,9 @@
                 />
 
                 <div>
-                  <label class="block text-sm font-bold text-gray-900 mb-3">Nome do arquivo Excel</label>
+                  <label class="block text-sm font-bold text-gray-900 mb-3">Nome da planilha</label>
                   <div class="flex gap-2">
-                    <input v-model="nomePlanilha" type="text" placeholder="Ex: NF-e_Janeiro_2025" 
+                    <input v-model="nomePlanilha" type="text" placeholder="Ex: NFe_Consolidado" 
                            class="flex-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent p-3 text-sm font-medium bg-white hover:border-orange-400 transition-all duration-200" />
                     <button @click="usarSugestao" class="text-gray-700 border-2 border-gray-300 px-4 py-3 rounded-lg hover:bg-gray-50 hover:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-200 text-sm font-bold bg-white">Auto</button>
                   </div>

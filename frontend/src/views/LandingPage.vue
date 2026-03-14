@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-gradient-to-b from-white via-white to-orange-50">
-    <!-- Padrão subtle de fundo -->
+    <!-- Padrão de fundo -->
     <div class="absolute inset-0 opacity-[0.02] pointer-events-none" style="background-image: radial-gradient(circle at 1px 1px, currentColor 0.5px, transparent 0.5px); background-size: 40px 40px;"></div>
     
       <header class="bg-white/95 fixed w-full top-0 z-50 border-b border-gray-200 backdrop-blur-sm">
@@ -186,7 +186,7 @@
         </div>
 
         <div class="max-w-2xl">
-          <!-- v1.0 - Released -->
+          <!-- v1.0 -->
           <RoadmapCard title="v1.0" status="✓ Disponível" type="success">
             <li class="flex items-center gap-2">
               <span class="w-1 h-1 bg-gray-600 rounded-full"></span>
@@ -202,27 +202,23 @@
             </li>
           </RoadmapCard>
 
-          <!-- v1.1 - Soon -->
+          <!-- v1.1 - -->
           <RoadmapCard title="v1.1" status="→ Em desenvolvimento" type="info">
             <li class="flex items-center gap-2">
               <span class="w-1 h-1 bg-gray-600 rounded-full"></span>
-              <span>Histórico de conversões</span>
+              <span>Mais personalizações de planilhas</span>
             </li>
             <li class="flex items-center gap-2">
               <span class="w-1 h-1 bg-gray-600 rounded-full"></span>
-              <span>Presets personalizados</span>
-            </li>
-            <li class="flex items-center gap-2">
-              <span class="w-1 h-1 bg-gray-600 rounded-full"></span>
-              <span>Template customizado</span>
+              <span>Geração de relatórios baseado nas notas fiscais</span>
             </li>
           </RoadmapCard>
 
-          <!-- v2.0+ - Future -->
+          <!-- v2.0+ - -->
           <RoadmapCard title="v2.0+" status="◯ Futuro" type="neutral">
             <li class="flex items-center gap-2">
               <span class="w-1 h-1 bg-gray-600 rounded-full"></span>
-              <span>Processamento em lote</span>
+              <span>Processamento de notas fiscais em imagens ou PDFs</span>
             </li>
             <li class="flex items-center gap-2">
               <span class="w-1 h-1 bg-gray-600 rounded-full"></span>
@@ -230,7 +226,7 @@
             </li>
             <li class="flex items-center gap-2">
               <span class="w-1 h-1 bg-gray-600 rounded-full"></span>
-              <span>Análise de dados avançada</span>
+              <span>Análise de dados avançada com IA</span>
             </li>
           </RoadmapCard>
         </div>
@@ -292,5 +288,4 @@ const scrollTo = (id) => {
 </script>
 
 <style scoped>
-/* Estilos mínimos para landing simples */
 </style> 

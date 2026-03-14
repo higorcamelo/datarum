@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-4">
-    <!-- Presets Selection -->
+    <!-- Seleção de Presets -->
     <div>
       <div class="mb-3">
         <p class="text-xs font-bold text-gray-700 uppercase tracking-wide">Presets padrão</p>
@@ -15,7 +15,7 @@
       </div>
     </div>
 
-    <!-- Custom Fields Section -->
+    <!-- Campos Personalizados -->
     <div v-if="mostrarCustom">
       <div class="mb-3">
         <p class="text-xs font-bold text-gray-700 uppercase tracking-wide">Personalizar colunas</p>
@@ -37,7 +37,7 @@
       </div>
     </div>
 
-    <!-- Toggle Custom Button -->
+    <!-- Botão de Toggle -->
     <button 
       @click="mostrarCustom = !mostrarCustom"
       :class="['w-full py-2 text-sm font-semibold rounded-lg border-2 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500', 
