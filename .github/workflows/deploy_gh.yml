@@ -34,6 +34,9 @@ jobs:
       - name: Build project
         run: npm run build
         working-directory: frontend
+        env:
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          VITE_GCP_KEY: ${{ secrets.VITE_GCP_KEY }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
