@@ -108,6 +108,7 @@ import { useRouter } from 'vue-router';
 import { ENDPOINTS } from '../config/api';
 import ConfigPanel from '../components/ConfigPanel.vue';
 
+const GCP_KEY = import.meta.env.VITE_GCP_KEY;
 const router = useRouter();
 
 // Estado
@@ -168,6 +169,7 @@ const camposDisponiveis = {
 
 // Reseta tudo ao voltar
 const voltarParaInicio = () => {
+  console.log(import.meta.env.VITE_API_KEY)
   if (selectedFiles.value.length > 0) {
     if (confirm('Deseja sair? Os arquivos serão perdidos.')) {
       router.push('/');
@@ -246,6 +248,9 @@ const enviarArquivos = async () => {
 
     const response = await fetch(ENDPOINTS.PROCESSAR_EXCEL, {
       method: 'POST',
+      headers: {
+        'x-api-key': GCP_KEY
+      },
       body: formData
     })
 

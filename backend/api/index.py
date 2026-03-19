@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, File, Form, HTTPException
+from fastapi import FastAPI, UploadFile, File, Form, HTTPException, Request
 from fastapi.responses import Response, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from mangum import Mangum
@@ -9,7 +9,10 @@ import os
 import sys
 import pathlib
 import json
+from dotenv import load_dotenv
+load_dotenv() 
 
+GCP_KEY = os.getenv("GCP_KEY")
 # Ajuste de Path para Serverless
 BASE_DIR = pathlib.Path(__file__).resolve().parent.parent
 sys.path.append(str(BASE_DIR))
@@ -27,6 +30,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.middleware("http")
+async def check_api_key(request: Request, call_next):
+    # Permite o root (health check)
+    if request.url.path == "/":
+        return await call_next(request)
+
+    api_key = request.headers.get("x-api-key")
+
+    if api_key != GCP_KEY:
+        raise HTTPException(status_code=403, detail="Forbidden")
+
+    return await call_next(request)
+
 @app.get("/")
 async def root():
     return {"status": "online", "service": "Datarum Parser"}
@@ -39,12 +55,9 @@ async def processar_excel(
     campos_selecionados: Optional[str] = Form(None),
     planilha: Optional[str] = Form("datarum_extracao")
 ):
-    print(">>> CAMPOS RECEBIDOS (RAW):", campos_selecionados)
-    print(">>> PRESET:", preset)
-    print("ASSINATURA ATUAL: xmls")
 
     try:
-        # 1️⃣ Definir campos (Preset ou Customizado)
+        # Definir campos (Preset ou Customizado)
         if campos_selecionados:
             try:
                 campos_lista = json.loads(campos_selecionados)
@@ -69,7 +82,7 @@ async def processar_excel(
         todos_dados = []
         arquivos_processados = []
 
-        # 2️⃣ Processar XMLs
+        # Processar XMLs
         for file in xmls:
             if not file.filename.lower().endswith(".xml"):
                 continue
@@ -93,7 +106,7 @@ async def processar_excel(
                 content={"message": MENSAGENS_ERRO["sem_dados"]}
             )
 
-        # 3️⃣ Configuração do Excel
+        # Configuração do Excel
         config_excel = {
             "campos_selecionados": campos_lista,
             "preset": preset_final,
