@@ -108,13 +108,13 @@ import { useRouter } from 'vue-router';
 import { ENDPOINTS } from '../config/api';
 import ConfigPanel from '../components/ConfigPanel.vue';
 
-const GCP_KEY = import.meta.env.VITE_GCP_KEY;
+const GCP_KEY = import.meta.env.VITE_API_URL;
 const router = useRouter();
 
 // Estado
 const selectedFiles = ref([]);
 const mensagem = ref('');
-const nomePlanilha = ref('');
+const nomePlanilha = ref(''); 
 const loading = ref(false);
 const dragOver = ref(false);
 const presetAtivo = ref('basico');
@@ -169,7 +169,6 @@ const camposDisponiveis = {
 
 // Reseta tudo ao voltar
 const voltarParaInicio = () => {
-  console.log(import.meta.env.VITE_API_KEY)
   if (selectedFiles.value.length > 0) {
     if (confirm('Deseja sair? Os arquivos serão perdidos.')) {
       router.push('/');
