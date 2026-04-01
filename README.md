@@ -1,7 +1,5 @@
 # Datarum
 
-**Automação fiscal com inteligência e clareza**
-
 Sistema web para processamento de arquivos XML de Notas Fiscais Eletrônicas (NFe), convertendo-os para planilhas Excel formatadas.
 
 ## **Sobre o Projeto**
@@ -13,7 +11,6 @@ O Datarum facilita o processo de extração e organização de dados de NFes, re
 -  Validação automática de arquivos e tamanhos
 -  Processamento de dados de NFe com parsing de XML
 -  Geração de planilhas Excel formatadas
--  Interface responsiva com feedback
 -  Suporte para múltiplas versões de NFe (1.10, 2.00, 3.10, 4.00)
 
 ## **Tecnologias Utilizadas**
