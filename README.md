@@ -75,11 +75,9 @@ npm run dev
 
 ## **Próximas Funcionalidades**
 
-- [ ] Dashboard para visualização de dados
 - [ ] Templates personalizados de planilha
 - [ ] Relatórios automáticos de análise de dados
-- [ ] Histórico de processamentos
-- [ ] Alertas e notificações inteligentes
+
 
 ---
 
