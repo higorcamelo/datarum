@@ -184,7 +184,8 @@ import { useRouter } from 'vue-router';
 import { ENDPOINTS } from '../config/api';
 import ConfigPanel from '../components/ConfigPanel.vue';
 
-const GCP_KEY = import.meta.env.VITE_API_URL;
+const API_KEY = import.meta.env.VITE_GCP_KEY;
+const BASE_URL = import.meta.env.VITE_API_URL;
 const router = useRouter();
 
 // Estado
