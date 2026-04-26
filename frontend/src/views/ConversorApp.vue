@@ -308,7 +308,7 @@ const enviarArquivos = async () => {
   const timeoutId = setTimeout(() => controller.abort(), 60000);
 
   try {
-    const response = await fetch(`${GCP_KEY}${ENDPOINTS.converter}`, {
+    const response = await fetch(`${GCP_KEY}${ENDPOINTS.processar}`, {
       method: 'POST',
       body: formData,
       signal: controller.signal
