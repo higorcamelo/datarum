@@ -301,7 +301,7 @@ const enviarArquivos = async () => {
 
   loading.value = true;
   const formData = new FormData();
-  selectedFiles.value.forEach(f => formData.append('files', f));
+  selectedFiles.value.forEach(f => formData.append('xmls', f));
   formData.append('planilha', nomePlanilha.value);
   formData.append('campos_selecionados', JSON.stringify(camposSelecionados.value));
   formData.append('preset', presetAtivo.value);

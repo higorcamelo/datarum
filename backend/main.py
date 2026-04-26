@@ -117,7 +117,12 @@ async def processar(
 
         # 2. Parse de JSON
         try:
-            campos_lista = json.loads(campos_selecionados) if campos_selecionados else []
+            if campos_selecionados:
+                campos_lista = json.loads(campos_selecionados)
+                if not isinstance(campos_lista, list):
+                    raise HTTPException(400, "campos_selecionados deve ser lista")
+            else:
+                campos_lista = []
             opcoes_dict = json.loads(opcoes) if opcoes else {}
         except json.JSONDecodeError:
             raise HTTPException(status_code=400, detail="Parâmetros JSON mal formatados.")

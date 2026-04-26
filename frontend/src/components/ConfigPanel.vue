@@ -73,35 +73,53 @@
 </template>
 
 <script setup>
-import { ref, watch, computed } from 'vue';
+import { ref, watch, computed, onMounted } from 'vue';
 
 const props = defineProps({
-  modelValue: { type: Array, default: () => [] },
-  presetAtivo: { type: String, default: 'basico' },
-  camposDisponiveis: { type: Object, required: true }
+  modelValue: Array,
+  presetAtivo: String
 });
+
 
 const emit = defineEmits(['update:modelValue', 'update:presetAtivo']);
 
 const mostrarCustom = ref(false);
 
-const PRESETS = {
-  basico: ['id', 'data', 'valor'],
-  completo: ['id', 'data', 'valor', 'cliente', 'descricao'],
-  fiscal: ['id', 'cnpj', 'imposto']
-};
+const presets = ref({});
+const camposDisponiveis = ref({});
+const loading = ref(true);
 
-watch(() => props.presetAtivo, (novo) => {
-  if (novo !== 'custom') {
-    emit('update:modelValue', PRESETS[novo] || []);
+onMounted(async () => {
+  const res = await fetch(`${import.meta.env.VITE_API_URL}/config`);
+  const config = await res.json();
+
+  presets.value = config.presets;
+  camposDisponiveis.value = config.campos;
+
+  loading.value = false;
+});
+
+watch(() => props.presetAtivo, (preset) => {
+  if (loading.value) return;
+  if (!preset || preset === 'custom') return;
+
+  const campos = presets.value?.[preset]?.campos;
+  if (campos) {
+    emit('update:modelValue', [...campos]);
   }
 });
 
 watch(() => props.modelValue, (val) => {
-  const isPreset = Object.entries(PRESETS).some(
-    ([_, campos]) =>
-      campos.length === val.length &&
-      campos.every(c => val.includes(c))
+  if (loading.value) return;
+
+  const isSameSet = (a, b) => {
+    if (a.length !== b.length) return false;
+    const setB = new Set(b);
+    return a.every(x => setB.has(x));
+  };
+
+  const isPreset = Object.values(presets.value || {}).some(
+    p => isSameSet(p.campos || [], val)
   );
 
   if (!isPreset && props.presetAtivo !== 'custom') {

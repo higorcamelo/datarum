@@ -3,7 +3,7 @@ from fastapi.responses import Response, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from mangum import Mangum
 from typing import List, Optional
-from api.config import PRESETS, MENSAGENS_ERRO
+from api.config import PRESETS, MENSAGENS_ERRO, CAMPOS_DISPONIVEIS
 import tempfile
 import os
 import sys
@@ -51,19 +51,29 @@ async def root():
     return {"status": "online", "service": "Datarum Parser"}
 
 
+@app.get("/config")
+async def get_config():
+    return {
+        "presets": PRESETS,
+        "campos": CAMPOS_DISPONIVEIS
+    }
+    
 @app.post("/processar")
 async def processar_excel(
-    xmls: List[UploadFile] = File(...),
+    files: List[UploadFile] = File(...),
     preset: Optional[str] = Form("basico"),
     campos_selecionados: Optional[str] = Form(None),
     planilha: Optional[str] = Form("datarum_extracao")
 ):
 
-    try:
+    try:    
+        preset = (preset or "basico").strip().lower()
         # Definir campos (Preset ou Customizado)
         if campos_selecionados:
             try:
                 campos_lista = json.loads(campos_selecionados)
+                if not isinstance(campos_lista, list):
+                    raise HTTPException(400, "campos_selecionados precisa ser lista")
             except json.JSONDecodeError:
                 raise HTTPException(status_code=400, detail="JSON de campos inválido.")
 
@@ -86,7 +96,7 @@ async def processar_excel(
         arquivos_processados = []
 
         # Processar XMLs
-        for file in xmls:
+        for file in files:
             if not file.filename.lower().endswith(".xml"):
                 continue
 
