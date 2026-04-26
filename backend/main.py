@@ -73,7 +73,16 @@ def remover_arquivo_temporario(path: str):
     except Exception as e:
         logger.error(f"Erro ao remover arquivo temporário {path}: {e}")
 
-
+@app.get("/")
+async def root():
+    return {
+        "status": "online",
+        "service": "Datarum API",
+        "health": "/health",
+        "docs": "/docs"
+    }
+    
+    
 @app.get("/health")
 async def health():
     return {

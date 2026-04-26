@@ -1,26 +1,32 @@
 <template>
   <div :class="['relative pl-8', isFuture && 'opacity-60']">
-    <!-- Linha vertical -->
-    <div class="absolute left-0 top-3 bottom-0 w-0.5 bg-gray-300"></div>
-    
-    <!-- Ponto na timeline -->
+
+    <!-- linha vertical -->
+    <div class="absolute left-0 top-3 bottom-0 w-0.5 bg-slate-200"></div>
+
+    <!-- ponto -->
     <div :class="[
       'absolute -left-2 top-1.5 w-5 h-5 rounded-full border-2 border-white',
       statusColor
     ]"></div>
 
-    <!-- Conteúdo -->
+    <!-- conteúdo -->
     <div class="pb-8">
-      <div class="flex items-start justify-between gap-4">
-        <div>
-          <h3 class="text-lg font-black text-gray-900">{{ title }}</h3>
-          <p class="text-sm text-gray-600 mt-1">{{ status }}</p>
-        </div>
+
+      <div>
+        <h3 class="text-lg font-black text-slate-900">
+          {{ title }}
+        </h3>
+
+        <p class="text-sm text-slate-500 mt-1">
+          {{ status }}
+        </p>
       </div>
-      
-      <ul class="space-y-2 mt-3 text-sm text-gray-600">
-        <slot></slot>
+
+      <ul class="space-y-2 mt-3 text-sm text-slate-600">
+        <slot />
       </ul>
+
     </div>
   </div>
 </template>
@@ -33,19 +39,20 @@ const props = defineProps({
   status: String,
   type: {
     type: String,
-    default: 'neutral' // success, info, warning, neutral
+    default: 'idea' // stable | evolving | exploring | idea
   }
 });
 
-const isFuture = computed(() => props.type === 'neutral');
+const isFuture = computed(() => props.type !== 'stable');
 
 const statusColor = computed(() => {
   const colors = {
-    success: 'bg-green-500',
-    info:    'bg-orange-700',
-    warning: 'bg-gray-400',
-    neutral: 'bg-gray-300'
+    stable: 'bg-emerald-500',
+    evolving: 'bg-orange-600',
+    exploring: 'bg-slate-400',
+    idea: 'bg-slate-300'
   };
-  return colors[props.type] || colors.neutral;
+
+  return colors[props.type] || colors.idea;
 });
 </script>

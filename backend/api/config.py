@@ -9,7 +9,7 @@ load_dotenv()
 ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
 DEBUG = os.getenv("DEBUG", "true").lower() == "true"
 LOG_LEVEL = os.getenv("LOG_LEVEL", "DEBUG")
-VERSION = os.getenv("API_VERSION", "1.1.0")
+VERSION = os.getenv("API_VERSION", "1.0.0")
 
 # --- LIMITES E SEGURANÇA ---
 MAX_FILE_SIZE = int(os.getenv("MAX_SIZE_MB_ARQUIVO", 5)) * 1024 * 1024

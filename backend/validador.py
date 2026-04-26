@@ -67,7 +67,7 @@ def validar_xml_nfe(xml_content: bytes) -> dict:
         }
         
     except Exception as e:
-        return {"valido": False, "erro": f"Erro técnico no XML: {str(e)[:50]}", "dados": {}}
+        return {"valido": False, "erro": f"Erro técnico no XML: {str(e)[:500]}", "dados": {}}
 
 def validar_tamanho_arquivo(tamanho_bytes: int, max_mb: int = 5) -> dict:
     max_bytes = max_mb * 1024 * 1024

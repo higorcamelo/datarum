@@ -44,9 +44,7 @@ def salvar_em_excel(dados: List[Dict], caminho_planilha: str, configuracao: Dict
         workbook = writer.book
         worksheet = writer.sheets[nome_aba]
 
-        # ===============================
         # Estilo do Cabeçalho
-        # ===============================
         header_fill = PatternFill(start_color="1F4E78", end_color="1F4E78", fill_type="solid")
         header_font = Font(color="FFFFFF", bold=True)
 
@@ -56,9 +54,7 @@ def salvar_em_excel(dados: List[Dict], caminho_planilha: str, configuracao: Dict
             cell.font = header_font
             cell.alignment = Alignment(horizontal="center", vertical="center")
 
-        # ===============================
         # Auto ajuste correto de colunas
-        # ===============================
         for idx, col in enumerate(df.columns, 1):
             max_len = max(
                 df[col].astype(str).map(len).max(),
@@ -66,21 +62,15 @@ def salvar_em_excel(dados: List[Dict], caminho_planilha: str, configuracao: Dict
             ) + 2
 
             col_letter = get_column_letter(idx)
-            worksheet.column_dimensions[col_letter].width = min(max_len, 50)
+            worksheet.column_dimensions[col_letter].width = min(max_len, 500)
 
-        # ===============================
         # Filtro automático
-        # ===============================
         worksheet.auto_filter.ref = worksheet.dimensions
 
-        # ===============================
         # Congelar cabeçalho
-        # ===============================
         worksheet.freeze_panes = "A2"
 
-        # ===============================
         # Aba de Resumo
-        # ===============================
         if opcoes.get('incluirResumo'):
             label_total = CAMPOS_DISPONIVEIS.get("valor_total_item", {}).get("label")
             total_fin = df[label_total].sum() if label_total in df.columns else 0

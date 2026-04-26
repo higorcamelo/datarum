@@ -3,22 +3,25 @@
     <!-- Padrão de fundo -->
     <div class="absolute inset-0 opacity-[0.02] pointer-events-none" style="background-image: radial-gradient(circle at 1px 1px, currentColor 0.5px, transparent 0.5px); background-size: 40px 40px;"></div>
     
-      <header class="bg-white/95 fixed w-full top-0 z-50 border-b border-gray-200 backdrop-blur-sm">
+      <header class="bg-white/95 fixed w-full top-0 z-50 border-b border-orange-200 backdrop-blur-sm">
     <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center py-3">
         
         <router-link to="/" class="flex items-center gap-2 group">
-          <span class="inline-flex items-center justify-center w-10 h-10 bg-gradient-to-br from-orange-700 to-orange-800 rounded-lg text-white font-black text-base group-hover:shadow-lg transition-all duration-200">D</span>
-          <div>
-            <span class="text-lg font-black text-gray-900" style="letter-spacing: -0.5px;">Datarum</span>
+            <img 
+              src="../../assets/logo.svg" 
+              alt="Datarum"
+              class="w-10 h-10 rounded-lg object-contain group-hover:shadow-lg transition-all duration-200"
+            />         
+            <div>
+           <span class="text-lg font-black text-orange-800" style="letter-spacing: -0.5px;">Datarum</span>
           </div>
         </router-link>
 
         <button 
           aria-label="Começar" 
           @click="$router.push('/conversor')" 
-          class="bg-gradient-to-r from-orange-700 to-orange-800 text-white px-6 py-2.5 rounded-lg hover:shadow-lg hover:from-orange-800 hover:to-orange-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-700 transition-all duration-200 font-semibold text-sm"
-        >
+          class="bg-orange-800 text-white px-6 py-2.5 rounded-lg hover:bg-orange-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-800 transition-all duration-200 font-semibold text-sm">
           Abrir Aplicativo
         </button>
       </div>
@@ -29,9 +32,6 @@
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid lg:grid-cols-2 gap-12 items-center">
         <div class="z-10">
-          <div class="inline-block mb-6 px-3 py-1.5 bg-orange-100 text-orange-700 rounded-full text-xs font-bold tracking-wide">
-            ⚡ Sem complicações
-          </div>
           
           <h1 class="text-6xl sm:text-7xl font-black text-gray-900 leading-tight mb-6" style="letter-spacing: -1px;">
             Converta XMLs em segundos
@@ -306,61 +306,52 @@
       </div>
     </section>
 
-    <section id="roadmap" class="py-16 bg-gradient-to-b from-white to-gray-50 border-t border-gray-200">
-      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-20">
-          <h2 class="text-5xl sm:text-6xl font-black text-gray-900 mb-4" style="letter-spacing: -1px;">
-            Roadmap
+      <section id="roadmap" class="py-20 bg-white border-t border-slate-200">
+      <div class="max-w-4xl mx-auto px-6">
+
+        <div class="text-center mb-16">
+          <h2 class="text-5xl font-black text-slate-900">
+            Evolução do produto
           </h2>
-          <p class="text-xl text-gray-600">
-            Acompanhe o desenvolvimento
+          <p class="text-slate-600 mt-3">
+            Funcionalidades planejadas e possibilidades exploradas ao longo do tempo
           </p>
         </div>
 
-        <div class="max-w-2xl">
-          <!-- v1.0 -->
-          <RoadmapCard title="v1.0" status="✓ Disponível" type="success">
-            <li class="flex items-center gap-2">
-              <span class="w-1 h-1 bg-gray-600 rounded-full"></span>
-              <span>Extração de XML em Excel</span>
-            </li>
-            <li class="flex items-center gap-2">
-              <span class="w-1 h-1 bg-gray-600 rounded-full"></span>
-              <span>Interface simples</span>
-            </li>
-            <li class="flex items-center gap-2">
-              <span class="w-1 h-1 bg-gray-600 rounded-full"></span>
-              <span>Sem necessidade de login</span>
-            </li>
+        <div class="max-w-2xl space-y-2">
+
+          <!-- BASE -->
+          <RoadmapCard title="Base do sistema" status="✔ disponível" type="stable">
+            <li>Conversão de XML para Excel</li>
+            <li>Upload múltiplo de arquivos</li>
+            <li>Seleção de campos personalizados</li>
+            <li>Download imediato do resultado</li>
           </RoadmapCard>
 
-          <!-- v1.1 - -->
-          <RoadmapCard title="v1.1" status="→ Em desenvolvimento" type="info">
-            <li class="flex items-center gap-2">
-              <span class="w-1 h-1 bg-gray-600 rounded-full"></span>
-              <span>Mais personalizações de planilhas</span>
-            </li>
-            <li class="flex items-center gap-2">
-              <span class="w-1 h-1 bg-gray-600 rounded-full"></span>
-              <span>Geração de relatórios baseado nas notas fiscais</span>
-            </li>
+          <!-- EVOLUÇÃO NATURAL -->
+          <RoadmapCard title="Próximas evoluções naturais" status="em expansão" type="evolving">
+            <li>Templates de exportação por contexto (fiscal, contábil, análise)</li>
+            <li>Persistência de configurações de usuário</li>
+            <li>Histórico de conversões recentes</li>
+            <li>Pré-visualização antes do download</li>
           </RoadmapCard>
 
-          <!-- v2.0+ - -->
-          <RoadmapCard title="v2.0+" status="◯ Futuro" type="neutral">
-            <li class="flex items-center gap-2">
-              <span class="w-1 h-1 bg-gray-600 rounded-full"></span>
-              <span>Processamento de notas fiscais em imagens ou PDFs</span>
-            </li>
-            <li class="flex items-center gap-2">
-              <span class="w-1 h-1 bg-gray-600 rounded-full"></span>
-              <span>API para integrações</span>
-            </li>
-            <li class="flex items-center gap-2">
-              <span class="w-1 h-1 bg-gray-600 rounded-full"></span>
-              <span>Análise de dados avançada com IA</span>
-            </li>
+          <!-- IDEIAS EXPLORATÓRIAS -->
+          <RoadmapCard title="Direções em exploração" status="em avaliação" type="exploring">
+            <li>Leitura de PDF e imagens de notas fiscais</li>
+            <li>Detecção automática de campos relevantes</li>
+            <li>Exportação direta para Google Sheets</li>
+            <li>API pública para integrações externas</li>
           </RoadmapCard>
+
+          <!-- FUTURO MAIS ABERTO -->
+          <RoadmapCard title="Possibilidades futuras" status="em aberto" type="idea">
+            <li>Análise automática de padrões financeiros</li>
+            <li>Classificação inteligente de despesas</li>
+            <li>Dashboards analíticos simplificados</li>
+            <li>Assistente para interpretação de notas fiscais</li>
+          </RoadmapCard>
+
         </div>
       </div>
     </section>
@@ -374,16 +365,8 @@
               <span class="text-sm font-bold">Datarum</span>
             </div>
             <p class="text-gray-400 text-sm">
-              Converta XMLs em planilhas com velocidade e segurança. 100% local.
+              Converta XMLs em planilhas com velocidade e segurança.
             </p>
-          </div>
-          <div>
-            <h4 class="font-bold text-sm mb-4 text-orange-700">Produto</h4>
-            <ul class="space-y-2 text-sm">
-              <li><button @click="$router.push('/conversor')" class="text-gray-400 hover:text-white focus:outline-none focus:ring-1 focus:ring-orange-500 rounded px-1 transition-colors duration-200">Abrir Aplicativo</button></li>
-              <li><a href="#demo" @click="scrollTo('demo')" class="text-gray-400 hover:text-white focus:outline-none focus:ring-1 focus:ring-orange-500 rounded px-1 transition-colors duration-200">Ver Demo</a></li>
-              <li><a href="#roadmap" @click="scrollTo('roadmap')" class="text-gray-400 hover:text-white focus:outline-none focus:ring-1 focus:ring-orange-500 rounded px-1 transition-colors duration-200">Roadmap</a></li>
-            </ul>
           </div>
           <div>
             <h4 class="font-bold text-sm mb-4 text-orange-700">Sobre</h4>
@@ -395,7 +378,7 @@
           </div>
         </div>
         <div class="border-t border-gray-800 pt-8 flex flex-col sm:flex-row items-center justify-between">
-          <p class="text-gray-500 text-sm">© 2025 Datarum. Feito com ❤️ por Higor Camelo.</p>
+          <p class="text-gray-500 text-sm">© 2026 Datarum 1.0 - Koichi. Feito com ❤️ por Higor Camelo.</p>
         </div>
       </div>
     </footer>
