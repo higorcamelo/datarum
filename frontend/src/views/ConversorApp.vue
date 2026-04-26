@@ -302,9 +302,9 @@ const enviarArquivos = async () => {
   loading.value = true;
   const formData = new FormData();
   selectedFiles.value.forEach(f => formData.append('files', f));
-  formData.append('planilhaName', nomePlanilha.value);
-  formData.append('campos', JSON.stringify(camposSelecionados.value));
-
+  formData.append('planilha', nomePlanilha.value);
+  formData.append('campos_selecionados', JSON.stringify(camposSelecionados.value));
+  formData.append('preset', presetAtivo.value);
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 60000);
 
