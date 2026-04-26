@@ -46,13 +46,12 @@
               :key="campo.id"
               class="flex items-center gap-2 text-sm cursor-pointer"
             >
-              <input
-                type="checkbox"
-                :value="campo.id"
-                :checked="modelValue.includes(campo.id)"
-                @change="toggleField(campo.id)"
-                class="w-5 h-5 rounded border-2 border-orange-200 text-orange-800 focus:ring-2 focus:ring-orange-800 cursor-pointer"
-              >
+                <input
+                  type="checkbox"
+                  :value="campo.id"
+                  v-model="selected"
+                  class="w-5 h-5 rounded border-2 border-orange-200 text-orange-800 focus:ring-2 focus:ring-orange-800"
+                />
               <span class="text-orange-700 font-semibold text-xs">{{ campo.nome }}</span>
             </label>
           </div>
@@ -120,6 +119,12 @@ onMounted(async () => {
     loading.value = false;
   }
 });
+
+const selected = computed({
+  get: () => props.modelValue,
+  set: (val) => emit('update:modelValue', val)
+});
+
 
 watch(() => props.presetAtivo, (preset) => {
   if (!preset || preset === 'custom') return;

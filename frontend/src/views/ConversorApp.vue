@@ -314,12 +314,15 @@ const enviarArquivos = async () => {
     return;
   }
 
+  const presetValido = ['basico', 'completo', 'fiscal'].includes(presetAtivo.value)
+  ? presetAtivo.value
+  : 'basico';
   loading.value = true;
   const formData = new FormData();
   selectedFiles.value.forEach(f => formData.append('files', f));
   formData.append('planilha', nomePlanilha.value);
-  formData.append('campos_selecionados', JSON.stringify(camposSelecionados.value));
-  formData.append('preset', presetAtivo.value);
+  formData.append('campos_selecionados', JSON.stringify(camposSelecionados.value.filter(Boolean)));
+  formData.append('preset', presetValido);
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 60000);
 
