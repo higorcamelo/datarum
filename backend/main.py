@@ -7,8 +7,9 @@ import json
 from datetime import datetime
 from typing import List
 import uvicorn
+from api.config import CAMPOS_DISPONIVEIS
 
-from fastapi import FastAPI, File, UploadFile, Form, HTTPException, BackgroundTasks
+from fastapi import FastAPI, File, UploadFile, Form, HTTPException, BackgroundTasks, Request
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -52,7 +53,7 @@ logger = logging.getLogger("datarum")
 app = FastAPI(
     title="Datarum API",
     description="Conversor de XML NFe para Excel",
-    version="1.1.0"
+    version="1.0.0"
 )
 
 # CORS vindo do config
@@ -73,6 +74,25 @@ def remover_arquivo_temporario(path: str):
     except Exception as e:
         logger.error(f"Erro ao remover arquivo temporário {path}: {e}")
 
+@app.middleware("http")
+async def check_api_key(request: Request, call_next):
+    if request.url.path in ["/", "/health", "/docs"]:
+        return await call_next(request)
+
+    api_key = request.headers.get("x-api-key")
+
+    if api_key != os.getenv("GCP_KEY"):
+        raise HTTPException(status_code=403, detail="Forbidden")
+
+    return await call_next(request)
+
+@app.get("/config")
+async def get_config():
+    return {
+        "presets": PRESETS,
+        "campos": CAMPOS_DISPONIVEIS
+    }
+    
 @app.get("/")
 async def root():
     return {

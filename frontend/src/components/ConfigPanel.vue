@@ -26,6 +26,9 @@
     </div>
 
     <!-- Campos Personalizados -->
+     <div v-if="erroConfig" class="text-red-600 text-sm font-bold">
+      Erro ao carregar configurações. Tente recarregar a página.
+    </div>
     <div v-if="mostrarCustom">
       <div class="mb-3">
         <p class="text-xs font-black text-orange-800 uppercase tracking-widest">Colunas</p>
@@ -76,10 +79,15 @@
 import { ref, watch, computed, onMounted } from 'vue';
 
 const props = defineProps({
-  modelValue: Array,
-  presetAtivo: String
+  modelValue: {
+    type: Array,
+    default: () => []
+  },
+  presetAtivo: {
+    type: String,
+    default: 'basico'
+  }
 });
-
 
 const emit = defineEmits(['update:modelValue', 'update:presetAtivo']);
 
@@ -88,38 +96,53 @@ const mostrarCustom = ref(false);
 const presets = ref({});
 const camposDisponiveis = ref({});
 const loading = ref(true);
+const erroConfig = ref(false);
 
 onMounted(async () => {
-  const res = await fetch(`${import.meta.env.VITE_API_URL}/config`);
-  const config = await res.json();
+  try {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/config`);
 
-  presets.value = config.presets;
-  camposDisponiveis.value = config.campos;
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-  loading.value = false;
+    const config = await res.json();
+
+    presets.value = config?.presets ?? {};
+    camposDisponiveis.value = config?.campos ?? {};
+
+  } catch (e) {
+    console.error('Erro ao carregar /config:', e);
+    erroConfig.value = true;
+
+    // fallback seguro pra não quebrar UI
+    camposDisponiveis.value = {};
+    presets.value = {};
+  } finally {
+    loading.value = false;
+  }
 });
 
 watch(() => props.presetAtivo, (preset) => {
-  if (loading.value) return;
   if (!preset || preset === 'custom') return;
+  if (!presets.value[preset]) return;
 
-  const campos = presets.value?.[preset]?.campos;
-  if (campos) {
+  const campos = presets.value[preset]?.campos;
+
+  if (Array.isArray(campos)) {
     emit('update:modelValue', [...campos]);
   }
 });
 
-watch(() => props.modelValue, (val) => {
-  if (loading.value) return;
-
+watch(() => props.modelValue, (val = []) => {
   const isSameSet = (a, b) => {
+    if (!Array.isArray(a) || !Array.isArray(b)) return false;
     if (a.length !== b.length) return false;
+
     const setB = new Set(b);
     return a.every(x => setB.has(x));
   };
 
   const isPreset = Object.values(presets.value || {}).some(
-    p => isSameSet(p.campos || [], val)
+    p => isSameSet(p?.campos || [], val)
   );
 
   if (!isPreset && props.presetAtivo !== 'custom') {
@@ -128,7 +151,11 @@ watch(() => props.modelValue, (val) => {
 }, { deep: true });
 
 const toggleField = (id) => {
-  const set = new Set(props.modelValue);
+  const current = Array.isArray(props.modelValue)
+    ? props.modelValue
+    : [];
+
+  const set = new Set(current);
 
   if (set.has(id)) set.delete(id);
   else set.add(id);
@@ -136,5 +163,7 @@ const toggleField = (id) => {
   emit('update:modelValue', [...set]);
 };
 
-const totalSelecionados = computed(() => props.modelValue.length);
+const totalSelecionados = computed(() =>
+  Array.isArray(props.modelValue) ? props.modelValue.length : 0
+);
 </script>

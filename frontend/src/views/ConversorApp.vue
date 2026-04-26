@@ -251,12 +251,27 @@ const sugerirNome = () => {
 
 // Lógica de Presets
 watch(presetAtivo, (novo) => {
+  if (novo === 'custom') return;
+
   if (novo === 'basico') {
     camposSelecionados.value = ['numero_nf', 'data_emissao', 'valor_total_nf'];
   } else if (novo === 'completo') {
-    camposSelecionados.value = ['numero_nf', 'data_emissao', 'valor_total_nf', 'uf_destinatario', 'valor_desconto_item', 'valor_icms'];
+    camposSelecionados.value = [
+      'numero_nf',
+      'data_emissao',
+      'valor_total_nf',
+      'uf_destinatario',
+      'valor_desconto_item',
+      'valor_icms'
+    ];
   } else if (novo === 'fiscal') {
-    camposSelecionados.value = ['numero_nf', 'data_emissao', 'valor_desconto_item', 'valor_icms', 'valor_pis'];
+    camposSelecionados.value = [
+      'numero_nf',
+      'data_emissao',
+      'valor_desconto_item',
+      'valor_icms',
+      'valor_pis'
+    ];
   }
 });
 
@@ -301,7 +316,7 @@ const enviarArquivos = async () => {
 
   loading.value = true;
   const formData = new FormData();
-  selectedFiles.value.forEach(f => formData.append('xmls', f));
+  selectedFiles.value.forEach(f => formData.append('files', f));
   formData.append('planilha', nomePlanilha.value);
   formData.append('campos_selecionados', JSON.stringify(camposSelecionados.value));
   formData.append('preset', presetAtivo.value);
