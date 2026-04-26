@@ -28,19 +28,15 @@ from validador import validar_xml_nfe, validar_tamanho_arquivo
 
 
 def resolver_campos(preset: str, campos_personalizados=None):
-    if preset == "personalizado":
-        if not campos_personalizados:
-            raise HTTPException(
-                status_code=400,
-                detail="Campos personalizados não informados."
-            )
+    preset = (preset or "basico").strip().lower()
+
+    if campos_personalizados:
         return campos_personalizados
 
     if preset not in PRESETS:
         raise HTTPException(status_code=400, detail="Preset inválido.")
 
-    config = get_preset_config(preset)
-    return config["campos"]
+    return get_preset_config(preset)["campos"]
 
 
 # Configuração de Logging

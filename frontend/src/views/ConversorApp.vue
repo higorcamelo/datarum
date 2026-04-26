@@ -314,9 +314,11 @@ const enviarArquivos = async () => {
     return;
   }
 
-  const presetValido = ['basico', 'completo', 'fiscal'].includes(presetAtivo.value)
-  ? presetAtivo.value
-  : 'basico';
+  const presetValido =
+    presetAtivo.value === 'custom'
+      ? 'personalizado'
+      : presetAtivo.value;
+      
   loading.value = true;
   const formData = new FormData();
   selectedFiles.value.forEach(f => formData.append('files', f));

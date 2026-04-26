@@ -1,6 +1,5 @@
 <template>
   <div class="space-y-6">
-    <!-- Seleção de Presets -->
     <div>
       <div class="mb-4">
         <p class="text-base font-black text-orange-800 uppercase tracking-widest">
@@ -25,41 +24,42 @@
       </div>
     </div>
 
-    <!-- Campos Personalizados -->
-     <div v-if="erroConfig" class="text-red-600 text-sm font-bold">
+    <div v-if="erroConfig" class="text-red-600 text-sm font-bold">
       Erro ao carregar configurações. Tente recarregar a página.
     </div>
-    <div v-if="mostrarCustom">
+
+    <div v-if="mostrarCustom && Object.keys(camposAgrupados).length">
       <div class="mb-3">
         <p class="text-xs font-black text-orange-800 uppercase tracking-widest">Colunas</p>
       </div>
 
       <div class="space-y-4 bg-orange-50 p-4 rounded-xl border-2 border-orange-200">
-        <div v-for="(campos, grupo) in camposDisponiveis" :key="grupo" class="text-sm">
+        <div v-for="(campos, grupo) in camposAgrupados" :key="grupo" class="text-sm">
           <h4 class="font-black text-orange-800 mb-2 capitalize text-xs uppercase tracking-wide">
-            {{ grupo }}
+            {{ formatGrupo(grupo) }}
           </h4>
 
-          <div class="grid grid-cols-1 gap-2">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <label
               v-for="campo in campos"
               :key="campo.id"
-              class="flex items-center gap-2 text-sm cursor-pointer"
+              class="flex items-center gap-3 p-2 rounded-lg hover:bg-orange-100 cursor-pointer border border-transparent hover:border-orange-200 transition-all"
             >
-                <input
-                  type="checkbox"
-                  :value="campo.id"
-                  v-model="selected"
-                  class="w-5 h-5 rounded border-2 border-orange-200 text-orange-800 focus:ring-2 focus:ring-orange-800"
-                />
-              <span class="text-orange-700 font-semibold text-xs">{{ campo.nome }}</span>
+              <input
+                type="checkbox"
+                :checked="modelValue.includes(campo.id)"
+                @change="toggleField(campo.id)"
+                class="w-5 h-5 rounded border-2 border-orange-200 text-orange-800 focus:ring-2 focus:ring-orange-800"
+              />
+              <span class="text-orange-700 font-semibold text-xs">
+                {{ campo.nome }}
+              </span>
             </label>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Botão de Toggle -->
     <button
       @click="mostrarCustom = !mostrarCustom"
       :class="[
@@ -91,49 +91,64 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue', 'update:presetAtivo']);
 
 const mostrarCustom = ref(false);
-
 const presets = ref({});
 const camposDisponiveis = ref({});
-const loading = ref(true);
 const erroConfig = ref(false);
+
+const formatLabel = (id = '') => {
+  if (!id) return '';
+  return String(id)
+    .replaceAll('_', ' ')
+    .replace(/\b\w/g, (l) => l.toUpperCase());
+};
+
+const formatGrupo = (grupo = '') => {
+  return String(grupo)
+    .replaceAll('_', ' ')
+    .replace(/\b\w/g, (l) => l.toUpperCase());
+};
+
+const camposAgrupados = computed(() => {
+  const source = camposDisponiveis.value || {};
+
+  return Object.entries(source).reduce((acc, [id, meta]) => {
+    const grupo = meta?.categoria || 'outros';
+
+    if (!acc[grupo]) acc[grupo] = [];
+
+    acc[grupo].push({
+      id,
+      nome: meta?.label || formatLabel(id)
+    });
+
+    return acc;
+  }, {});
+});
 
 onMounted(async () => {
   try {
     const res = await fetch(`${import.meta.env.VITE_API_URL}/config`);
-
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
     const config = await res.json();
 
     presets.value = config?.presets ?? {};
     camposDisponiveis.value = config?.campos ?? {};
-
   } catch (e) {
     console.error('Erro ao carregar /config:', e);
     erroConfig.value = true;
-
-    // fallback seguro pra não quebrar UI
     camposDisponiveis.value = {};
     presets.value = {};
-  } finally {
-    loading.value = false;
   }
 });
-
-const selected = computed({
-  get: () => props.modelValue,
-  set: (val) => emit('update:modelValue', val)
-});
-
 
 watch(() => props.presetAtivo, (preset) => {
   if (!preset || preset === 'custom') return;
   if (!presets.value[preset]) return;
 
   const campos = presets.value[preset]?.campos;
-
   if (Array.isArray(campos)) {
-    emit('update:modelValue', [...campos]);
+    emit('update:modelValue', [...campos.filter(Boolean)]);
   }
 });
 
@@ -141,13 +156,12 @@ watch(() => props.modelValue, (val = []) => {
   const isSameSet = (a, b) => {
     if (!Array.isArray(a) || !Array.isArray(b)) return false;
     if (a.length !== b.length) return false;
-
     const setB = new Set(b);
-    return a.every(x => setB.has(x));
+    return a.every((x) => setB.has(x));
   };
 
   const isPreset = Object.values(presets.value || {}).some(
-    p => isSameSet(p?.campos || [], val)
+    (p) => isSameSet(p?.campos || [], val)
   );
 
   if (!isPreset && props.presetAtivo !== 'custom') {
@@ -156,10 +170,9 @@ watch(() => props.modelValue, (val = []) => {
 }, { deep: true });
 
 const toggleField = (id) => {
-  const current = Array.isArray(props.modelValue)
-    ? props.modelValue
-    : [];
+  if (!id) return;
 
+  const current = Array.isArray(props.modelValue) ? props.modelValue : [];
   const set = new Set(current);
 
   if (set.has(id)) set.delete(id);
@@ -167,8 +180,4 @@ const toggleField = (id) => {
 
   emit('update:modelValue', [...set]);
 };
-
-const totalSelecionados = computed(() =>
-  Array.isArray(props.modelValue) ? props.modelValue.length : 0
-);
 </script>
